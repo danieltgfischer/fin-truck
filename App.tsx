@@ -1,19 +1,20 @@
+import 'react-native-gesture-handler';
+import 'intl';
+import 'reflect-metadata';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+import { DatabaseConnectionProvider } from '@/hocs/databaseProvider';
+import { Navigation } from '@/navigation/stack';
+import store from '@/store';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
-}
+const App: React.FC = () => {
+	return (
+		<Provider store={store}>
+			<DatabaseConnectionProvider>
+				<Navigation />
+			</DatabaseConnectionProvider>
+		</Provider>
+	);
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

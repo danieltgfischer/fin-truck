@@ -1,0 +1,92 @@
+export const optionsObj = {
+	shipping: {
+		value: 'shipping',
+		label: 'Frete',
+		source: require('@/icons/shipping.png'),
+		big_name: false,
+	},
+	diesel: {
+		value: 'diesel',
+		label: 'Diesel',
+		source: require('@/icons/diesel.png'),
+		big_name: false,
+	},
+	maintenance: {
+		value: 'maintenance',
+		label: 'Manutenção',
+		source: require('@/icons/maintenance.png'),
+		big_name: true,
+	},
+	tire: {
+		value: 'tire',
+		label: 'Pneu',
+		source: require('@/icons/tire.png'),
+		big_name: false,
+	},
+	tracking: {
+		value: 'tracking',
+		label: 'Rastreamento',
+		source: require('@/icons/tracking.png'),
+		big_name: true,
+	},
+	salary: {
+		value: 'salary',
+		label: 'Salário',
+		source: require('@/icons/salary.png'),
+		big_name: false,
+	},
+	admExpenses: {
+		value: 'admExpenses',
+		label: 'Despesas Administrativas',
+		source: require('@/icons/admExpenses.png'),
+		big_name: true,
+	},
+	parcels: {
+		value: 'parcels',
+		label: 'Parcelas',
+		source: require('@/icons/parcels.png'),
+		big_name: false,
+	},
+	taxes: {
+		value: 'taxes',
+		label: 'Tributos',
+		source: require('@/icons/taxes.png'),
+		big_name: false,
+	},
+	insurance: {
+		value: 'insurance',
+		label: 'Seguro',
+		source: require('@/icons/insurance.png'),
+		big_name: false,
+	},
+	accountant: {
+		value: 'accountant',
+		label: 'Assessoria Contábil',
+		source: require('@/icons/accountant.png'),
+		big_name: true,
+	},
+	advance: {
+		value: 'advance',
+		label: 'Adiantamento',
+		source: require('@/icons/advance.png'),
+		big_name: true,
+	},
+	toll: {
+		value: 'toll',
+		label: 'Pedágio',
+		source: require('@/icons/toll.png'),
+		big_name: false,
+	},
+	restaurant: {
+		value: 'restaurant',
+		label: 'Restaurante',
+		source: require('@/icons/restaurant.png'),
+		big_name: true,
+	},
+	others: {
+		value: 'others',
+		label: 'Outros',
+		source: require('@/icons/others.png'),
+		big_name: false,
+	},
+};
