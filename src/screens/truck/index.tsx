@@ -67,10 +67,10 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 			<Container>
 				<ContainerButtons>
 					<ButtonIcon onPress={openEditModal}>
-						<SimpleLineIcons name="pencil" size={24} color="#333" />
+						<SimpleLineIcons name="pencil" size={20} color="#333" />
 					</ButtonIcon>
 					<ButtonIcon onPress={() => setDeleteModalVisible(true)}>
-						<FontAwesome5 name="trash-alt" size={24} color="#afafaf" />
+						<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
 					</ButtonIcon>
 				</ContainerButtons>
 				<Title>Escolha qual opção deseja adicionar à contabilidade:</Title>

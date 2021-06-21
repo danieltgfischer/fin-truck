@@ -6,6 +6,7 @@ const INITIAL_STATE = {
 	trucks: [],
 	current_truck: null,
 	locale: 'pt-BR',
+	years: [],
 };
 
 export const truckReducer: Reducer<IState> = (
@@ -29,6 +30,20 @@ export const truckReducer: Reducer<IState> = (
 					payload: { trucks },
 				} = action;
 				draft.trucks = trucks;
+				break;
+			}
+			case ActionTypes.UPDATE_YEARS: {
+				const {
+					payload: { years },
+				} = action;
+				draft.years = years;
+				break;
+			}
+			case ActionTypes.UPDATE_MONTH: {
+				const {
+					payload: { month, billings },
+				} = action;
+				draft[month] = billings;
 				break;
 			}
 			default:

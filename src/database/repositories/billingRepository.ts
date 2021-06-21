@@ -12,7 +12,9 @@ interface ICreateBilling {
 interface IEditBillingOption extends ICreateBilling {
 	id: string;
 }
-
+interface IYears {
+	years: string[];
+}
 export class BilliginRepository {
 	private billingepository: Repository<BillingOption>;
 
@@ -79,6 +81,23 @@ export class BilliginRepository {
 	public async deleteBilling(id: string): Promise<void> {
 		try {
 			await this.billingepository?.delete(id);
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getYears(id: string): Promise<IYears> {
+		try {
+			const dates = await this.billingepository
+				?.createQueryBuilder('billingOption')
+				.where('billingOption.truckId = :id', { id })
+				.select('billingOption.created_at')
+				.getMany();
+			const years = Array.from(dates).map(b => {
+				const date = new Date(b.created_at);
+				return String(date.getFullYear());
+			});
+			return { years: Array.from(new Set(years)) };
 		} catch (error) {
 			throw new Error(error);
 		}

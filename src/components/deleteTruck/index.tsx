@@ -2,11 +2,11 @@ import React, { useCallback } from 'react';
 import { Button } from '@/components/button';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateCurrentTruck, updateTrucks } from '@/store/actions';
+import { updateCurrentTruck, updateTrucks, updateYears } from '@/store/actions';
 import { useNavigation } from '@react-navigation/native';
 import { routeNames } from '@/navigation/types';
 import { IState } from '@/store/types';
-import { Container, Label, ContainerButtons } from './styles';
+import { Container, Label, ContainerButtons, Span } from './styles';
 
 interface IProps {
 	closeModal(): void;
@@ -25,14 +25,19 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 		dispatch(updateTrucks(trucks));
 		navigation.navigate(routeNames.Home);
 		dispatch(updateCurrentTruck(null));
+		dispatch(updateYears([]));
 	}, [closeModal, current_truck.id, dispatch, navigation, truckRepository]);
 
 	return (
 		<Container>
 			<Label>
-				Você está prestes a excluir o caminhão {current_truck.name}.
+				Você está prestes a excluir o caminhão <Span>{current_truck.name}</Span>
+				.
 			</Label>
-			<Label> Tem certeza disso?</Label>
+			<Label>
+				{' '}
+				Todos registros desse caminhão serão apagados. Tem certeza disso?
+			</Label>
 			<ContainerButtons>
 				<Button buttonLabel="Cancelar" onPress={closeModal} />
 				<Button buttonLabel="Excluir" cancel onPress={handleDeleteTruck} />

@@ -10,7 +10,7 @@ import { Board, Container, Name, Image } from './styles';
 interface IProps {
 	name: string;
 	board: string;
-	id: number;
+	id: string;
 }
 
 export const TruckItem: React.FC<IProps> = ({ board, name, id }: IProps) => {

@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
+import { Dimensions, Animated } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -10,26 +10,26 @@ export const Container = styled.View`
 	align-items: flex-end;
 	justify-content: flex-start;
 	background: ${({ even }) => (even ? '#fff' : '#fafafa')};
-	padding: 10px 0;
+	padding: 20px 0;
 `;
-export const TimelineContainer = styled.View`
+export const TimelineContainer = styled(Animated.View)`
 	position: relative;
 	align-items: center;
 	width: ${width * 0.25}px;
 	background: transparent;
 `;
 
-export const InfoContainer = styled.View`
+export const InfoContainer = styled(Animated.View)`
 	position: relative;
 	align-items: center;
 	top: 15px;
-	padding: 15px 0 20px;
+	padding: 20px 0 20px;
 	width: ${width * 0.75}px;
 	background: transparent;
 `;
 
 export const Line = styled.View`
-	height: 50px;
+	height: 100px;
 	width: 1px;
 	background-color: #333;
 `;
@@ -53,8 +53,8 @@ export const Date = styled.Text`
 	font-size: 18px;
 	font-family: Semi_Bold;
 	align-self: flex-start;
-	top: -30px;
-	left: -10px;
+	top: -25px;
+	left: -20px;
 	color: #333;
 `;
 export const Value = styled.Text`
@@ -62,7 +62,9 @@ export const Value = styled.Text`
 	position: relative;
 	align-self: center;
 	font-size: 22px;
-	top: -10px;
+	left: -20px;
+
+	top: -15px;
 	color: #333;
 `;
 
@@ -72,6 +74,30 @@ export const Description = styled.Text`
 	color: #333;
 	width: 100%;
 	top: -5px;
-	font-size: 16px;
+	left: -15px;
+	font-size: 18px;
 	font-family: Regular;
+	padding: 0 15px;
+`;
+
+export const ButtonIcon = styled.TouchableOpacity`
+	justify-content: center;
+	align-items: center;
+	margin: 0 20px 0 0;
+	padding: 5px 7px;
+	elevation: 7;
+	border-radius: 7px;
+	background-color: #fff;
+	padding: 10px;
+	z-index: 1;
+`;
+
+export const ContainerButtons = styled.View`
+	flex-direction: row;
+	justify-content: flex-end;
+	top: 0;
+	right: 0px;
+	padding: 0 10px 0 0;
+	top: -40px;
+	width: 100%;
 `;

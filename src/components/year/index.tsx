@@ -53,7 +53,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 						<MonthTimeline
 							month={m[locale]}
 							key={m[locale]}
-							delay={i * 50}
+							delay={i * 150}
 							monthNumber={m.monthNumber}
 						/>
 					))}

@@ -4,6 +4,8 @@ import styled from 'styled-components/native';
 const { width } = Dimensions.get('window');
 
 export const Container = styled.SafeAreaView`
+	align-items: center;
+	justify-content: center;
 	background-color: #fafafa;
 	flex: 1;
 `;
@@ -35,3 +37,11 @@ export const Title = styled.Text`
 `;
 
 export const ScrollView = styled.ScrollView``;
+
+export const Warning = styled.Text`
+	color: #ccc;
+	font-size: 20px;
+	font-family: Semi_Bold_Italic;
+	text-align: center;
+	padding: 0 20%;
+`;

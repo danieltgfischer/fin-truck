@@ -1,11 +1,4 @@
-import React, {
-	useMemo,
-	useEffect,
-	Dispatch,
-	SetStateAction,
-	useState,
-	useCallback,
-} from 'react';
+import React, { useMemo, useEffect, useState, useCallback } from 'react';
 import { Animated } from 'react-native';
 import { Easing } from 'react-native-reanimated';
 import { BillingItem } from '@/components/billingItem';
@@ -18,17 +11,16 @@ interface IProps {
 	monthNumber: number;
 }
 
-export const MonthTimeline: React.FC<IProps> = ({
-	month,
-	delay,
-	monthNumber,
-}: IProps) => {
-	const translateY = useMemo(() => new Animated.Value(-35), []);
-	const opacity = useMemo(() => new Animated.Value(0), []);
+export const MonthTimeline: React.FC<IProps> = (
+	{ month, delay, monthNumber }: IProps,
+	ref,
+) => {
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
+	const translateYMonth = useMemo(() => new Animated.Value(-35), []);
+	const opacity = useMemo(() => new Animated.Value(0), []);
 
 	useEffect(() => {
-		Animated.timing(translateY, {
+		Animated.timing(translateYMonth, {
 			toValue: 0,
 			duration: 200,
 			useNativeDriver: true,
@@ -41,7 +33,7 @@ export const MonthTimeline: React.FC<IProps> = ({
 			useNativeDriver: true,
 			delay,
 		}).start();
-	}, [delay, opacity, translateY]);
+	}, [delay, opacity, translateYMonth]);
 
 	const renderItem = useCallback(
 		({ item: { id, value, description, created_at, option }, index }) => {
@@ -54,7 +46,7 @@ export const MonthTimeline: React.FC<IProps> = ({
 						created_at,
 						source: optionsObj[option].source,
 						option,
-						delay: index * 200,
+						delay: index * 400,
 						index,
 					}}
 				/>
@@ -104,7 +96,11 @@ export const MonthTimeline: React.FC<IProps> = ({
 	return (
 		<>
 			<Animated.View
-				style={{ transform: [{ translateY }], zIndex: delay, opacity }}
+				style={{
+					transform: [{ translateY: translateYMonth }],
+					zIndex: delay,
+					opacity,
+				}}
 			>
 				<Container onPress={() => setIsOpen(!isOpen)}>
 					<Line />
@@ -115,9 +111,12 @@ export const MonthTimeline: React.FC<IProps> = ({
 			{isOpen && (
 				<FlatList
 					data={data}
+					initialNumToRender={0}
 					keyExtractor={item => String(item?.id)}
 					renderItem={renderItem}
 					nestedScrollEnabled
+					maxToRenderPerBatch={2}
+					onEndReachedThreshold={0.5}
 				/>
 			)}
 		</>

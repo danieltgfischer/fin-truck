@@ -53,7 +53,7 @@ export const Navigation: FC = () => {
 		<>
 			<StatusBar style="light" backgroundColor="#b63b34" />
 			<NavigationContainer>
-				<Stack.Navigator initialRouteName={routeNames.Timeline}>
+				<Stack.Navigator initialRouteName={routeNames.Home}>
 					<Stack.Screen
 						name={routeNames.Home}
 						component={HomeScreen}

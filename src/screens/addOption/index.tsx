@@ -205,7 +205,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 							/>
 						</Styled.Form>
 					</Animated.View>
-					<Animated.View
+					<Styled.ReviewContainer
 						style={{
 							transform: [{ translateX: translateXReview }],
 							position: 'absolute',
@@ -213,25 +213,22 @@ export const AddOptionScreen: React.FC<Props> = ({
 							right: 0,
 						}}
 					>
-						<Styled.ReviewContainer>
-							<Styled.Title>
-								Por favor, revise se os valores estão corretos antes de
-								adicionar:
-							</Styled.Title>
-							<Styled.ValueContainer>
-								<Styled.Label>Valor:</Styled.Label>
-								<Styled.Value>R$ {data?.value}</Styled.Value>
-							</Styled.ValueContainer>
-							<Styled.DescriptionContainer>
-								<Styled.LabelDescription>Descrição:</Styled.LabelDescription>
-								<Styled.Description>
-									{data?.description
-										? data?.description
-										: 'Nenhuma descrição adicionada'}
-								</Styled.Description>
-							</Styled.DescriptionContainer>
-						</Styled.ReviewContainer>
-					</Animated.View>
+						<Styled.Title>
+							Por favor, revise se os valores estão corretos antes de adicionar:
+						</Styled.Title>
+						<Styled.ValueContainer>
+							<Styled.Label>Valor:</Styled.Label>
+							<Styled.Value>R$ {data?.value}</Styled.Value>
+						</Styled.ValueContainer>
+						<Styled.DescriptionContainer>
+							<Styled.LabelDescription>Descrição:</Styled.LabelDescription>
+							<Styled.Description>
+								{data?.description
+									? data?.description
+									: 'Nenhuma descrição adicionada'}
+							</Styled.Description>
+						</Styled.DescriptionContainer>
+					</Styled.ReviewContainer>
 				</Styled.AnimetadeContainer>
 				<Styled.ButtonContainer>
 					<Button

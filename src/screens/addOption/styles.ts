@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Animated } from 'react-native';
 import { Form as UnForm } from '@unform/mobile';
 
 const { width } = Dimensions.get('window');
@@ -83,7 +83,7 @@ export const ModalDescription = styled.Text`
 	margin: 0 0 10%;
 `;
 
-export const ReviewContainer = styled.View`
+export const ReviewContainer = styled(Animated.View)`
 	padding: 15px 0 0;
 	align-items: center;
 	width: ${width}px;

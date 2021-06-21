@@ -1,5 +1,13 @@
 import { Truck } from '@/database/entities';
-import { ActionTypes, IAction, ITruck, ITrucks, ILocale } from '../types';
+import {
+	ActionTypes,
+	IAction,
+	ITruck,
+	ITrucks,
+	ILocale,
+	IYears,
+	IMonth,
+} from '../types';
 
 export function addTruck(truck: Truck): IAction<ITruck> {
 	return {
@@ -22,9 +30,23 @@ export function updateCurrentTruck(truck: Truck): IAction<ITruck> {
 	};
 }
 
-export function updateLOCALE(locale: string): IAction<ILocale> {
+export function updateLocale(locale: string): IAction<ILocale> {
 	return {
 		type: ActionTypes.UPDATE_LOCALE,
 		payload: { locale },
+	};
+}
+
+export function updateYears(years: string[]): IAction<IYears> {
+	return {
+		type: ActionTypes.UPDATE_YEARS,
+		payload: { years },
+	};
+}
+
+export function updateMonth({ month, billings }: IMonth): IAction<IMonth> {
+	return {
+		type: ActionTypes.UPDATE_MONTH,
+		payload: { month, billings },
 	};
 }

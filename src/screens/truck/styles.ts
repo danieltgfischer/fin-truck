@@ -36,7 +36,7 @@ export const ButtonIcon = styled.TouchableOpacity`
 	justify-content: center;
 	align-items: center;
 	margin: 0 20px 0 0;
-	padding: 5px 7px;
+	padding: 10px;
 	elevation: 7;
 	border-radius: 7px;
 	background-color: #fff;

@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 export const Container = styled.View`
-	width: ${width * 0.9}px;
+	width: ${width * 0.95}px;
 	height: ${height * 0.4}px;
 	background-color: #fff;
 	padding: 10% 0 0;
@@ -14,9 +14,16 @@ export const Container = styled.View`
 
 export const Label = styled.Text`
 	color: #333;
-	font-family: Semi_Bold;
-	font-size: 24px;
-	text-align: center;
+	font-family: Regular;
+	font-size: 20px;
+	padding: 0 25px;
+	text-align: left;
+`;
+
+export const Span = styled.Text`
+	color: #333;
+	font-family: Bold;
+	font-size: 20px;
 `;
 
 export const ContainerButtons = styled.View`
