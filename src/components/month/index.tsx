@@ -4,6 +4,7 @@ import React, {
 	Dispatch,
 	SetStateAction,
 	useState,
+	useCallback,
 } from 'react';
 import { Animated } from 'react-native';
 import { Easing } from 'react-native-reanimated';
@@ -42,19 +43,25 @@ export const MonthTimeline: React.FC<IProps> = ({
 		}).start();
 	}, [delay, opacity, translateY]);
 
-	const renderItem = ({ item: { value, description, created_at, option } }) => {
-		return (
-			<BillingItem
-				{...{
-					value,
-					description,
-					created_at,
-					source: optionsObj[option].source,
-					option,
-				}}
-			/>
-		);
-	};
+	const renderItem = useCallback(
+		({ item: { id, value, description, created_at, option }, index }) => {
+			return (
+				<BillingItem
+					{...{
+						id,
+						value,
+						description,
+						created_at,
+						source: optionsObj[option].source,
+						option,
+						delay: index * 200,
+						index,
+					}}
+				/>
+			);
+		},
+		[],
+	);
 
 	const data = useMemo(
 		() => [

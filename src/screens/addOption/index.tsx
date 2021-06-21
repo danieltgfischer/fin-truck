@@ -92,7 +92,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 		navigation.goBack();
 	}, [navigation, step, translateXForm, translateXReview, width]);
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// do not remove deps
 	const data = useMemo(() => formRef?.current?.getData(), [formState]);
 
 	const createBillingOption = useCallback(async () => {

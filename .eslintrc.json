@@ -61,7 +61,8 @@
 		"no-param-reassign": "off",
 		"no-duplicate-case": "off",
 		"react/require-default-props": "off",
-		"max-classes-per-file": "off"
+		"max-classes-per-file": "off",
+		"import/no-duplicates": "off"
 	},
 	"settings": {
     "import/resolver": {
