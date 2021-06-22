@@ -6,6 +6,5 @@ import { useContext } from 'react';
 
 export function useDatabaseConnection(): IDatabaseConnectionContext {
 	const context = useContext(DatabaseConnectionContext);
-
 	return context;
 }

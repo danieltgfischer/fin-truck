@@ -1,4 +1,7 @@
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+
+const { height } = Dimensions.get('window');
 
 export const Container = styled.TouchableOpacity`
 	flex-direction: row;

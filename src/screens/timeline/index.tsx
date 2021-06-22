@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import React, { useRef, useEffect, useState } from 'react';
+import { ActivityIndicator, Animated } from 'react-native';
 import { RootStackParamList, routeNames } from '@/navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Localization from 'expo-localization';
@@ -33,8 +33,6 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const { current_truck, years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const scrollTranslationY = useRef(0);
-
 	const title = current_truck?.name ?? '';
 
 	useEffect(() => {
@@ -66,11 +64,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 				<Image source={TimelineIcon} resizeMode="contain" />
 				<Title>{Localization.locale}</Title>
 			</SubHeader>
-			<ScrollView
-				onScroll={event => {
-					scrollTranslationY.current = event.nativeEvent.contentOffset.y;
-				}}
-			>
+			<ScrollView>
 				{isLoading ? (
 					<ActivityIndicator color="#B63B34" size="small" />
 				) : (

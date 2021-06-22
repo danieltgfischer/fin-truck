@@ -11,49 +11,14 @@ interface IProps {
 	monthNumber: number;
 }
 
-export const MonthTimeline: React.FC<IProps> = (
-	{ month, delay, monthNumber }: IProps,
-	ref,
-) => {
+export const MonthTimeline: React.FC<IProps> = ({
+	month,
+	delay,
+	monthNumber,
+}: IProps) => {
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
 	const translateYMonth = useMemo(() => new Animated.Value(-35), []);
 	const opacity = useMemo(() => new Animated.Value(0), []);
-
-	useEffect(() => {
-		Animated.timing(translateYMonth, {
-			toValue: 0,
-			duration: 200,
-			useNativeDriver: true,
-			delay,
-			easing: Easing.out(Easing.ease),
-		}).start();
-		Animated.timing(opacity, {
-			toValue: 1,
-			duration: 100,
-			useNativeDriver: true,
-			delay,
-		}).start();
-	}, [delay, opacity, translateYMonth]);
-
-	const renderItem = useCallback(
-		({ item: { id, value, description, created_at, option }, index }) => {
-			return (
-				<BillingItem
-					{...{
-						id,
-						value,
-						description,
-						created_at,
-						source: optionsObj[option].source,
-						option,
-						delay: index * 400,
-						index,
-					}}
-				/>
-			);
-		},
-		[],
-	);
 
 	const data = useMemo(
 		() => [
@@ -89,25 +54,61 @@ export const MonthTimeline: React.FC<IProps> = (
 					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
 				created_at: new Date(),
 			},
+			{
+				id: 5,
+				option: 'restaurant',
+				value: 1000.52,
+				description:
+					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
+				created_at: new Date(),
+			},
+			{
+				id: 6,
+				option: 'restaurant',
+				value: 1000.52,
+				description:
+					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
+				created_at: new Date(),
+			},
+			{
+				id: 7,
+				option: 'restaurant',
+				value: 1000.52,
+				description:
+					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
+				created_at: new Date(),
+			},
 		],
+		[],
+	);
+
+	const renderItem = useCallback(
+		({ item: { id, value, description, created_at, option }, index }) => {
+			return (
+				<BillingItem
+					{...{
+						id,
+						value,
+						description,
+						created_at,
+						source: optionsObj[option].source,
+						option,
+						delay: index * 200,
+						index,
+					}}
+				/>
+			);
+		},
 		[],
 	);
 
 	return (
 		<>
-			<Animated.View
-				style={{
-					transform: [{ translateY: translateYMonth }],
-					zIndex: delay,
-					opacity,
-				}}
-			>
-				<Container onPress={() => setIsOpen(!isOpen)}>
-					<Line />
-					<Month>{month}</Month>
-					<Line />
-				</Container>
-			</Animated.View>
+			<Container onPress={() => setIsOpen(!isOpen)}>
+				<Line />
+				<Month>{month}</Month>
+				<Line />
+			</Container>
 			{isOpen && (
 				<FlatList
 					data={data}
@@ -115,7 +116,7 @@ export const MonthTimeline: React.FC<IProps> = (
 					keyExtractor={item => String(item?.id)}
 					renderItem={renderItem}
 					nestedScrollEnabled
-					maxToRenderPerBatch={2}
+					maxToRenderPerBatch={1}
 					onEndReachedThreshold={0.5}
 				/>
 			)}
