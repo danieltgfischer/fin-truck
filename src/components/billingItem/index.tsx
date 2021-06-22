@@ -85,7 +85,9 @@ export const BillingItem: React.FC<IProps> = ({
 				</TimelineContainer>
 				<InfoContainer style={{ transform: [{ translateX: translateXInfo }] }}>
 					<ContainerButtons>
-						<ButtonIcon onPress={() => null}>
+						<ButtonIcon
+							onPress={() => setEditModalVisible(!isEditModalVisible)}
+						>
 							<SimpleLineIcons name="pencil" size={20} color="#333" />
 						</ButtonIcon>
 						<ButtonIcon onPress={() => console.log('del')}>
@@ -98,7 +100,7 @@ export const BillingItem: React.FC<IProps> = ({
 				</InfoContainer>
 			</Container>
 			<Modal visible={isEditModalVisible} animationType="slide">
-				<EditBilling closeModal={() => setEditModalVisible(false)} />
+				<EditBilling closeModal={() => setEditModalVisible(false)} id={id} />
 			</Modal>
 			<StyledModal
 				visible={isDeleteModalVisible}

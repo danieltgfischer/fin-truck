@@ -1,24 +1,18 @@
-import React, { useMemo, useEffect, useState, useCallback } from 'react';
-import { Animated } from 'react-native';
-import { Easing } from 'react-native-reanimated';
+import React, { useMemo, useState, useCallback } from 'react';
 import { BillingItem } from '@/components/billingItem';
 import { optionsObj } from './options';
 import { Container, Month, Line, FlatList } from './styles';
 
 interface IProps {
 	month: string;
-	delay: number;
 	monthNumber: number;
 }
 
 export const MonthTimeline: React.FC<IProps> = ({
 	month,
-	delay,
 	monthNumber,
 }: IProps) => {
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
-	const translateYMonth = useMemo(() => new Animated.Value(-35), []);
-	const opacity = useMemo(() => new Animated.Value(0), []);
 
 	const data = useMemo(
 		() => [

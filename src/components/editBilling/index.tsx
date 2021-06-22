@@ -24,9 +24,10 @@ interface IData {
 
 interface IProps {
 	closeModal(): void;
+	id: string;
 }
 
-export const EditBilling: React.FC<IProps> = ({ closeModal }: IProps) => {
+export const EditBilling: React.FC<IProps> = ({ closeModal, id }: IProps) => {
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
 	const { current_truck } = useSelector((state: IState) => state);
