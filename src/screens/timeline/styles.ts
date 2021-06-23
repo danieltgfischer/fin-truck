@@ -33,7 +33,7 @@ export const Title = styled.Text`
 	position: relative;
 	left: -15px;
 	font-size: 36px;
-	font-family: Semi_Bold_Italic;
+	font-family: Semi_Bold;
 `;
 
 export const ScrollView = styled.ScrollView``;

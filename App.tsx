@@ -6,7 +6,8 @@ import { Provider } from 'react-redux';
 import { DatabaseConnectionProvider } from '@/hocs/databaseProvider';
 import { Navigation } from '@/navigation/stack';
 import store from '@/store';
-
+// TODO preload icons
+// TODO intl
 const App: React.FC = () => {
 	return (
 		<Provider store={store}>

@@ -37,5 +37,5 @@ export const EmptyData = styled.Text`
 	font-size: 20px;
 	font-family: Italic;
 	text-align: center;
-	padding: 5% 5%;
+	padding: 5% 10%;
 `;

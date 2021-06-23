@@ -59,6 +59,9 @@ export class BilliginRepository {
 					month,
 					year,
 				},
+				order: {
+					created_at: 'DESC',
+				},
 			});
 			return billingOptions;
 		} catch (error) {

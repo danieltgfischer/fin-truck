@@ -62,7 +62,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 		<Container>
 			<SubHeader>
 				<Image source={TimelineIcon} resizeMode="contain" />
-				<Title>{Localization.locale}</Title>
+				<Title>Histórico</Title>
 			</SubHeader>
 			<ScrollView>
 				{isLoading ? (

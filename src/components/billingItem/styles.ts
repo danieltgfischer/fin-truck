@@ -21,7 +21,7 @@ export const TimelineContainer = styled(Animated.View)`
 
 export const InfoContainer = styled(Animated.View)`
 	position: relative;
-	align-items: center;
+	align-items: flex-start;
 	top: 15px;
 	padding: 20px 0 20px;
 	width: ${width * 0.75}px;
@@ -60,24 +60,26 @@ export const Date = styled.Text`
 export const Value = styled.Text`
 	font-family: Semi_Bold;
 	position: relative;
-	align-self: center;
 	font-size: 22px;
-	left: -20px;
-
+	left: 5px;
 	top: -15px;
 	color: #333;
 `;
 
 export const Description = styled.Text`
 	position: relative;
-	text-align: center;
+	text-align: left;
 	color: #333;
 	width: 100%;
-	top: -5px;
 	left: -15px;
 	font-size: 18px;
 	font-family: Regular;
-	padding: 0 15px;
+	padding: 0 15px 0 25px;
+	border-top-width: 1px;
+	border-top-color: #333;
+	margin: 0 5px;
+	padding: 5px 0;
+	flex: 1;
 `;
 
 export const ButtonIcon = styled.TouchableOpacity`

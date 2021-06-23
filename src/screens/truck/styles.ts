@@ -45,11 +45,33 @@ export const ButtonIcon = styled.TouchableOpacity`
 export const ContainerButtons = styled.View`
 	flex-direction: row;
 	width: ${width}px;
-	justify-content: flex-end;
+	justify-content: space-between;
 	margin: 10px 0 20px;
+	position: relative;
+`;
+
+export const RightView = styled.View`
+	flex-direction: row;
 `;
 
 export const Image = styled.Image`
-	height: 50px;
-	width: 50px;
+	height: 25px;
+	width: 25px;
+`;
+
+export const HistoryButton = styled.TouchableOpacity`
+	flex-direction: row;
+	elevation: 10;
+	align-items: center;
+	padding: 5px;
+	position: relative;
+	background-color: #fff;
+	border-radius: 7px;
+	margin: 0 0 0 20px;
+`;
+
+export const HistoryLabel = styled.Text`
+	font-family: Regular;
+	font-size: 20px;
+	color: #b63b34;
 `;

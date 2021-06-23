@@ -4,6 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { OptionItem } from '@/components/optionItem';
 import { routeNames, DrawerParamList } from '@/navigation/types';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
+import Timeline from '@/icons/Timeline.png';
 import { EditForm } from '@/components/editForm';
 import { Modal as StyledModal } from '@/components/modal';
 import { DeleteTruck } from '@/components/deleteTruck';
@@ -14,6 +15,10 @@ import {
 	Title,
 	ButtonIcon,
 	ContainerButtons,
+	HistoryButton,
+	HistoryLabel,
+	Image,
+	RightView,
 } from './styles';
 import { optionsObj } from './options';
 
@@ -66,12 +71,18 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		<>
 			<Container>
 				<ContainerButtons>
-					<ButtonIcon onPress={openEditModal}>
-						<SimpleLineIcons name="pencil" size={20} color="#333" />
-					</ButtonIcon>
-					<ButtonIcon onPress={() => setDeleteModalVisible(true)}>
-						<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
-					</ButtonIcon>
+					<HistoryButton onPress={() => navigate(routeNames.Timeline)}>
+						<Image source={Timeline} resizeMode="contain" />
+						<HistoryLabel>Histórico</HistoryLabel>
+					</HistoryButton>
+					<RightView>
+						<ButtonIcon onPress={openEditModal}>
+							<SimpleLineIcons name="pencil" size={20} color="#333" />
+						</ButtonIcon>
+						<ButtonIcon onPress={() => setDeleteModalVisible(true)}>
+							<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
+						</ButtonIcon>
+					</RightView>
 				</ContainerButtons>
 				<Title>Escolha qual opção deseja adicionar à contabilidade:</Title>
 				<FlatList

@@ -98,7 +98,7 @@ const MonthTimeline: React.FC<IProps> = ({
 				<Line />
 			</Container>
 			{!isLoading && isOpen && data.length === 0 && (
-				<EmptyData>Você não tem nenhum registro nesse mês ainda</EmptyData>
+				<EmptyData>Você não registrou nenhum valor nesse mês</EmptyData>
 			)}
 			{isLoading && isOpen && (
 				<ActivityIndicator color="#B63B34" size="small" />
