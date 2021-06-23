@@ -31,3 +31,11 @@ export const Line = styled.View`
 export const FlatList = styled.FlatList`
 	padding: 25px 0 50px;
 `;
+
+export const EmptyData = styled.Text`
+	color: #ccc;
+	font-size: 20px;
+	font-family: Italic;
+	text-align: center;
+	padding: 5% 5%;
+`;

@@ -1,4 +1,4 @@
-import { Connection, Repository } from 'typeorm';
+import { Between, Connection, Repository } from 'typeorm';
 import { BillingOption, Truck } from '@/database/entities';
 
 interface ICreateBilling {
@@ -7,13 +7,25 @@ interface ICreateBilling {
 	created_at: Date;
 	truck: Truck;
 	option: string;
+	month: number;
+	year: number;
+}
+
+interface IGetByMonth {
+	truckId: string;
+	month: number;
+	year: number;
+}
+
+interface IGetAll {
+	truckId: string;
 }
 
 interface IEditBillingOption extends ICreateBilling {
 	id: string;
 }
 interface IYears {
-	years: string[];
+	years: number[];
 }
 export class BilliginRepository {
 	private billingepository: Repository<BillingOption>;
@@ -22,10 +34,33 @@ export class BilliginRepository {
 		this.billingepository = connection.getRepository(BillingOption);
 	}
 
-	public async getAllBillingOptions(): Promise<BillingOption[]> {
+	public async getAllBillingOptions({
+		truckId,
+	}: IGetAll): Promise<BillingOption[]> {
 		try {
-			const bills = await this.billingepository?.find();
+			const bills = await this.billingepository?.find({
+				where: { truck: { id: truckId } },
+			});
 			return bills;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getBillingOptionsByMonth({
+		truckId,
+		month,
+		year,
+	}: IGetByMonth): Promise<BillingOption[]> {
+		try {
+			const billingOptions = await this.billingepository.find({
+				where: {
+					truck: { id: truckId },
+					month,
+					year,
+				},
+			});
+			return billingOptions;
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -45,6 +80,8 @@ export class BilliginRepository {
 		description,
 		created_at,
 		truck,
+		month,
+		year,
 		option,
 	}: ICreateBilling): Promise<BillingOption> {
 		try {
@@ -54,6 +91,8 @@ export class BilliginRepository {
 				created_at,
 				truck,
 				option,
+				month,
+				year,
 			});
 			await this.billingepository?.save(billingOption);
 			return billingOption;
@@ -86,16 +125,24 @@ export class BilliginRepository {
 		}
 	}
 
-	public async getYears(id: string): Promise<IYears> {
+	public async deleteAllBillings(billings: BillingOption[]): Promise<void> {
+		try {
+			await this.billingepository?.remove(billings);
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getYears(truckId: string): Promise<IYears> {
 		try {
 			const dates = await this.billingepository
 				?.createQueryBuilder('billingOption')
-				.where('billingOption.truckId = :id', { id })
+				.where('billingOption.truckId = :truckId', { truckId })
 				.select('billingOption.created_at')
 				.getMany();
 			const years = Array.from(dates).map(b => {
 				const date = new Date(b.created_at);
-				return String(date.getFullYear());
+				return date.getFullYear();
 			});
 			return { years: Array.from(new Set(years)) };
 		} catch (error) {

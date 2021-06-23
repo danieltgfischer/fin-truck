@@ -27,7 +27,7 @@ export class TruckRepository {
 	public async getTruck(id: string): Promise<Truck> {
 		try {
 			const truck = await this.truckRepository?.findOne(id, {
-				relations: ['billing_option'],
+				relations: ['billing_options'],
 			});
 			return truck;
 		} catch (error) {

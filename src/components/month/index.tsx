@@ -1,80 +1,72 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, memo } from 'react';
 import { BillingItem } from '@/components/billingItem';
+import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useDispatch, useSelector } from 'react-redux';
+import { IState } from '@/store/types';
+import { updateMonth } from '@/store/actions';
+import { ActivityIndicator } from 'react-native';
 import { optionsObj } from './options';
-import { Container, Month, Line, FlatList } from './styles';
+import { Container, Month, Line, FlatList, EmptyData } from './styles';
 
 interface IProps {
 	month: string;
 	monthNumber: number;
+	year: number;
 }
 
-export const MonthTimeline: React.FC<IProps> = ({
+const MonthTimeline: React.FC<IProps> = ({
 	month,
 	monthNumber,
+	year,
 }: IProps) => {
+	const { billingRepository } = useDatabaseConnection();
+	const { current_truck, months } = useSelector((state: IState) => state);
+	const dispatch = useDispatch();
+	const [isLoading, setIsLoading] = useState(false);
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
 
-	const data = useMemo(
-		() => [
-			{
-				id: 1,
-				option: 'shipping',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-			{
-				id: 2,
-				option: 'taxes',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-			{
-				id: 3,
-				option: 'tire',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-			{
-				id: 4,
-				option: 'restaurant',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-			{
-				id: 5,
-				option: 'restaurant',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-			{
-				id: 6,
-				option: 'restaurant',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-			{
-				id: 7,
-				option: 'restaurant',
-				value: 1000.52,
-				description:
-					'lorem ipsum lorem ipsumlorem ipsum lorem ipsumlorem ipsum lorem ipsum',
-				created_at: new Date(),
-			},
-		],
-		[],
-	);
+	const openMonth = useCallback(async () => {
+		setIsLoading(true);
+		setIsOpen(!isOpen);
+		const billings = await billingRepository.getBillingOptionsByMonth({
+			truckId: current_truck.id,
+			month: monthNumber,
+			year,
+		});
+		dispatch(updateMonth({ month: monthNumber, billings }));
+		setIsLoading(false);
+	}, [
+		billingRepository,
+		current_truck.id,
+		dispatch,
+		isOpen,
+		monthNumber,
+		year,
+	]);
+
+	useEffect(() => {
+		if (new Date().getMonth() === monthNumber) {
+			setIsLoading(true);
+			billingRepository
+				.getBillingOptionsByMonth({
+					truckId: current_truck.id,
+					month: monthNumber,
+					year,
+				})
+				.then(billings => {
+					dispatch(updateMonth({ month: monthNumber, billings }));
+					setIsLoading(false);
+				});
+		}
+	}, [
+		billingRepository,
+		current_truck.id,
+		dispatch,
+		isOpen,
+		monthNumber,
+		openMonth,
+		year,
+	]);
 
 	const renderItem = useCallback(
 		({ item: { id, value, description, created_at, option }, index }) => {
@@ -96,24 +88,30 @@ export const MonthTimeline: React.FC<IProps> = ({
 		[],
 	);
 
+	const data = months[monthNumber] ?? [];
+
 	return (
 		<>
-			<Container onPress={() => setIsOpen(!isOpen)}>
+			<Container onPress={openMonth}>
 				<Line />
 				<Month>{month}</Month>
 				<Line />
 			</Container>
-			{isOpen && (
+			{!isLoading && isOpen && data.length === 0 && (
+				<EmptyData>Você não tem nenhum registro nesse mês ainda</EmptyData>
+			)}
+			{isLoading && isOpen && (
+				<ActivityIndicator color="#B63B34" size="small" />
+			)}
+			{isOpen && !isLoading && data.length > 0 && (
 				<FlatList
 					data={data}
-					initialNumToRender={0}
 					keyExtractor={item => String(item?.id)}
 					renderItem={renderItem}
-					nestedScrollEnabled
-					maxToRenderPerBatch={1}
-					onEndReachedThreshold={0.5}
 				/>
 			)}
 		</>
 	);
 };
+
+export default MonthTimeline;

@@ -7,7 +7,7 @@ export const Container = styled.View`
 	width: ${width}px;
 	flex-direction: row;
 	position: relative;
-	align-items: flex-end;
+	align-items: flex-start;
 	justify-content: flex-start;
 	background: ${({ even }) => (even ? '#fff' : '#fafafa')};
 	padding: 20px 0;

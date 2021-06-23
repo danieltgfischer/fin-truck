@@ -1,11 +1,15 @@
 import { Truck, BillingOption } from '@/database/entities';
 
+type Month = {
+	[key: number]: BillingOption[];
+};
+
 export interface IState {
 	trucks: Truck[];
 	current_truck: Truck;
 	locale: string;
-	years: string[];
-	[key: number]: BillingOption[];
+	years: number[];
+	months: Month;
 }
 
 export interface IAction<T> {
@@ -22,7 +26,7 @@ export interface ILocale {
 }
 
 export interface IYears {
-	years: string[];
+	years: number[];
 }
 
 export interface IMonth {

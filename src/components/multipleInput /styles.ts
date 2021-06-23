@@ -21,6 +21,7 @@ export const TextInput = styled.TextInput`
 	height: 100%;
 	font-size: 24px;
 	color: #333;
+	padding: 0 0 0 5px;
 `;
 
 export const TextInputContainer = styled.View`

@@ -70,12 +70,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		},
 		[navigation],
 	);
-
+	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
 	return (
 		<Container>
 			<Title>Caminhões adicionados:</Title>
 			<FlatList
-				data={createRows(trucks, 3)}
+				data={data}
 				renderItem={renderItem}
 				keyExtractor={item => String(item.id)}
 				contentContainerStyle={flatListStyle.content}
@@ -86,7 +86,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
 					<AntDesign name="pluscircle" size={50} color="#b63b34" />
 				</ButtonIcon>
-				<FooterLabel>Click aqui para adicionar um caminhão</FooterLabel>
+				<FooterLabel>Toque aqui para adicionar um caminhão</FooterLabel>
 			</Footer>
 		</Container>
 	);

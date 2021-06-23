@@ -53,6 +53,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
 	const translateXForm = useRef(new Animated.Value(0)).current;
+	const warningOpacity = useRef(new Animated.Value(0)).current;
 	const translateXReview = useRef(new Animated.Value(width)).current;
 	const { billingRepository } = useDatabaseConnection();
 	const title = current_truck?.name ?? '';
@@ -69,6 +70,23 @@ export const AddOptionScreen: React.FC<Props> = ({
 	useEffect(() => {
 		formRef.current?.setData(formState);
 	}, [formState, step, isModalVisible]);
+
+	useEffect(() => {
+		if (step === 0) {
+			Animated.timing(warningOpacity, {
+				toValue: 1,
+				duration: 500,
+				delay: 500,
+				useNativeDriver: true,
+			}).start();
+			return;
+		}
+		Animated.timing(warningOpacity, {
+			toValue: 0,
+			duration: 100,
+			useNativeDriver: true,
+		}).start();
+	}, [step, warningOpacity]);
 
 	const navigate = useCallback(() => {
 		navigation.goBack();
@@ -93,16 +111,20 @@ export const AddOptionScreen: React.FC<Props> = ({
 	}, [navigation, step, translateXForm, translateXReview, width]);
 
 	// do not remove deps
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const data = useMemo(() => formRef?.current?.getData(), [formState]);
 
 	const createBillingOption = useCallback(async () => {
 		try {
+			const date = new Date();
 			await billingRepository.createBillingOption({
 				value: data?.value,
 				description: data?.description ?? '',
-				created_at: new Date(),
+				created_at: date,
 				truck: current_truck,
 				option,
+				month: date.getMonth(),
+				year: date.getFullYear(),
 			});
 			formRef.current.reset();
 			navigate();
@@ -117,6 +139,19 @@ export const AddOptionScreen: React.FC<Props> = ({
 		navigate,
 		option,
 	]);
+
+	const animate = useCallback(() => {
+		Animated.timing(translateXForm, {
+			toValue: -width,
+			duration: 500,
+			useNativeDriver: true,
+		}).start();
+		Animated.timing(translateXReview, {
+			toValue: 0,
+			duration: 500,
+			useNativeDriver: true,
+		}).start();
+	}, [translateXForm, translateXReview, width]);
 
 	const handleSubmit: SubmitHandler<IData> = useCallback(
 		async (data: IData) => {
@@ -133,16 +168,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				});
 				setFormState(formRef.current.getData());
 				formRef.current.setErrors({});
-				Animated.timing(translateXForm, {
-					toValue: -width,
-					duration: 500,
-					useNativeDriver: true,
-				}).start();
-				Animated.timing(translateXReview, {
-					toValue: 0,
-					duration: 500,
-					useNativeDriver: true,
-				}).start();
+				animate();
 				setStep(1);
 			} catch (error) {
 				if (error instanceof Yup.ValidationError) {
@@ -154,7 +180,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				}
 			}
 		},
-		[createBillingOption, step, translateXForm, translateXReview, width],
+		[animate, createBillingOption, step],
 	);
 
 	const submit = useCallback(() => {
@@ -176,7 +202,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 					/>
 					<Styled.Title>{optionsObj[option].title}</Styled.Title>
 				</Styled.Header>
-				<Styled.Warning>
+				<Styled.Warning style={{ opacity: warningOpacity }}>
 					Por favor, no <Styled.Span>valor</Styled.Span> utilize apenas ponto{' '}
 					<Styled.Span>(.)</Styled.Span> e apenas para separar os centavos
 				</Styled.Warning>
@@ -208,9 +234,6 @@ export const AddOptionScreen: React.FC<Props> = ({
 					<Styled.ReviewContainer
 						style={{
 							transform: [{ translateX: translateXReview }],
-							position: 'absolute',
-							top: 0,
-							right: 0,
 						}}
 					>
 						<Styled.Title>

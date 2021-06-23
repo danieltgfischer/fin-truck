@@ -23,6 +23,7 @@ export const TextInput = styled.TextInput`
 	height: 100%;
 	font-size: 24px;
 	color: #333;
+	padding: 0 0 0 5px;
 `;
 
 export const TextInputContainer = styled.View`
@@ -32,7 +33,6 @@ export const TextInputContainer = styled.View`
 	border: 2px solid ${({ isFocused }) => (isFocused ? '#9b3b34' : '#333')};
 	margin: 3px 0 20px;
 	border-radius: 7px;
-	padding: 0 0 0 5px;
 `;
 
 export const Error = styled.Text`

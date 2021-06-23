@@ -37,7 +37,7 @@ export function updateLocale(locale: string): IAction<ILocale> {
 	};
 }
 
-export function updateYears(years: string[]): IAction<IYears> {
+export function updateYears(years: number[]): IAction<IYears> {
 	return {
 		type: ActionTypes.UPDATE_YEARS,
 		payload: { years },

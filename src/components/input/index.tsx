@@ -93,6 +93,7 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 					onFocus={() => setIsFocused(true)}
 					onBlur={() => setIsFocused(false)}
 					ref={inputRef}
+					selectionColor="#333"
 					onChangeText={handleChangeText}
 					defaultValue={defaultValue}
 					{...rest}

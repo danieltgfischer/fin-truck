@@ -25,10 +25,15 @@ export class BillingOption extends BaseEntity {
 	@Column({ type: 'datetime' })
 	created_at: Date;
 
+	@Column()
+	month: number;
+
+	@Column()
+	year: number;
+
 	// eslint-disable-next-line @typescript-eslint/no-use-before-define
-	@ManyToOne(() => Truck, truck => truck.billing_option, {
-		cascade: true,
-		eager: true,
+	@ManyToOne(() => Truck, truck => truck.billing_options, {
+		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
 	truck: Truck;
@@ -45,8 +50,6 @@ export class Truck extends BaseEntity {
 	@Column()
 	board: string;
 
-	@OneToMany(() => BillingOption, billing_option => billing_option.truck, {
-		onDelete: 'CASCADE',
-	})
-	billing_option: BillingOption[];
+	@OneToMany(() => BillingOption, billing_options => billing_options.truck)
+	billing_options: BillingOption[];
 }

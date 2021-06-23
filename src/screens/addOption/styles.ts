@@ -84,9 +84,13 @@ export const ModalDescription = styled.Text`
 `;
 
 export const ReviewContainer = styled(Animated.View)`
+	position: absolute;
+	top: -60px;
+	left: 0;
 	padding: 15px 0 0;
 	align-items: center;
 	width: ${width}px;
+	margin: 16px 0 0;
 `;
 
 export const ValueContainer = styled.View`
@@ -138,15 +142,16 @@ export const Description = styled.Text`
 	padding: 5px 0 0 5px;
 `;
 
-export const AnimetadeContainer = styled.View`
+export const AnimetadeContainer = styled(Animated.View)`
 	position: relative;
 `;
 
-export const Warning = styled.Text`
+export const Warning = styled(Animated.Text)`
 	font-family: Regular;
 	font-size: 16px;
 	text-align: center;
 	color: #333;
+	margin: 15px 0 0;
 `;
 
 export const Span = styled.Text`

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
-import { MonthTimeline } from '@/components/month';
+import MonthTimeline from '@/components/month';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -14,7 +14,7 @@ import {
 } from './styles';
 
 interface IProps {
-	year: string;
+	year: number;
 }
 
 export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
@@ -52,6 +52,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 					{months.map((m, i) => (
 						<MonthTimeline
 							month={m[locale]}
+							year={year}
 							key={m[locale]}
 							monthNumber={m.monthNumber}
 						/>

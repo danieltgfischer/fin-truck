@@ -41,7 +41,7 @@ export const ScrollView = styled.ScrollView``;
 export const Warning = styled.Text`
 	color: #ccc;
 	font-size: 20px;
-	font-family: Semi_Bold_Italic;
+	font-family: Italic;
 	text-align: center;
-	padding: 0 20%;
+	padding: 0 15%;
 `;

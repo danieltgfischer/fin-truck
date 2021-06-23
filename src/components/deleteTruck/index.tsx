@@ -14,11 +14,15 @@ interface IProps {
 
 export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	const navigation = useNavigation();
-	const { truckRepository } = useDatabaseConnection();
+	const { truckRepository, billingRepository } = useDatabaseConnection();
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 
 	const handleDeleteTruck = useCallback(async () => {
+		const allBillings = await billingRepository.getAllBillingOptions({
+			truckId: current_truck.id,
+		});
+		await billingRepository.deleteAllBillings(allBillings);
 		await truckRepository.deleteTruck(current_truck.id);
 		closeModal();
 		const trucks = await truckRepository.getAllTrucks();
@@ -26,7 +30,14 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 		navigation.navigate(routeNames.Home);
 		dispatch(updateCurrentTruck(null));
 		dispatch(updateYears([]));
-	}, [closeModal, current_truck.id, dispatch, navigation, truckRepository]);
+	}, [
+		billingRepository,
+		closeModal,
+		current_truck.id,
+		dispatch,
+		navigation,
+		truckRepository,
+	]);
 
 	return (
 		<Container>

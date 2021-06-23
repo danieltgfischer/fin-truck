@@ -83,6 +83,7 @@ const MultiInput: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 			{label && <Label isFocused={isFocused}>{label}</Label>}
 			<TextInputContainer isFocused={isFocused}>
 				<TextInput
+					style={{ textAlignVertical: 'top' }}
 					multiline
 					selectionColor="#333"
 					onFocus={() => setIsFocused(true)}
