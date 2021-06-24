@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { updateMonth } from '@/store/actions';
 import { ActivityIndicator } from 'react-native';
+import { MonthInfoContext } from '@/contexts/montInfo';
 import { optionsObj } from './options';
 import { Container, Month, Line, FlatList, EmptyData } from './styles';
 
@@ -71,18 +72,20 @@ const MonthTimeline: React.FC<IProps> = ({
 	const renderItem = useCallback(
 		({ item: { id, value, description, created_at, option }, index }) => {
 			return (
-				<BillingItem
-					{...{
-						id,
-						value,
-						description,
-						created_at,
-						source: optionsObj[option].source,
-						option,
-						delay: index * 200,
-						index,
-					}}
-				/>
+				<MonthInfoContext.Provider value={{ monthNumber, year }}>
+					<BillingItem
+						{...{
+							id,
+							value,
+							description,
+							created_at,
+							source: optionsObj[option].source,
+							option,
+							delay: index * 200,
+							index,
+						}}
+					/>
+				</MonthInfoContext.Provider>
 			);
 		},
 		[],

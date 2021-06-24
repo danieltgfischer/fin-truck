@@ -30,6 +30,7 @@ export const Line = styled.View`
 
 export const FlatList = styled.FlatList`
 	padding: 25px 0 50px;
+	max-height: ${height * 2}px;
 `;
 
 export const EmptyData = styled.Text`

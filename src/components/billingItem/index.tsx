@@ -31,6 +31,7 @@ interface IProps {
 	created_at: Date;
 	source: string;
 	id: string;
+	option: string;
 	delay: number;
 	index: number;
 }
@@ -43,6 +44,7 @@ export const BillingItem: React.FC<IProps> = ({
 	source,
 	delay,
 	index,
+	option,
 }: IProps) => {
 	const { width } = useWindowDimensions();
 	const containerRef = useRef(0);
@@ -100,7 +102,13 @@ export const BillingItem: React.FC<IProps> = ({
 				</InfoContainer>
 			</Container>
 			<Modal visible={isEditModalVisible} animationType="slide">
-				<EditBilling closeModal={() => setEditModalVisible(false)} id={id} />
+				<EditBilling
+					closeModal={() => setEditModalVisible(false)}
+					id={id}
+					option={option}
+					value={value}
+					description={description}
+				/>
 			</Modal>
 			<StyledModal
 				visible={isDeleteModalVisible}

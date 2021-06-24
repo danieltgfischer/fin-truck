@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, Animated } from 'react-native';
 import { Form as UnForm } from '@unform/mobile';
 
 const { width } = Dimensions.get('window');
@@ -27,14 +27,16 @@ export const Title = styled.Text`
 	font-size: 24px;
 	text-align: center;
 	font-family: Italic;
-	padding: 0 15px;
+	padding: 0 25px;
 	margin: 0 0 15px;
 `;
 
 export const Image = styled.Image`
-	height: ${width * 0.3}px;
-	width: ${width * 0.3}px;
+	height: 80px;
+	width: 80px;
+	margin: 0 0 15px;
 	align-self: center;
+	margin: 0 0 15px;
 `;
 
 export const ButtonContainer = styled.View`
@@ -43,4 +45,19 @@ export const ButtonContainer = styled.View`
 	align-items: center;
 	width: ${width}px;
 	margin: 32px 0;
+`;
+
+export const Warning = styled(Animated.Text)`
+	font-family: Regular;
+	font-size: 16px;
+	text-align: center;
+	color: #333;
+	margin: 15px 0 0;
+`;
+
+export const Span = styled.Text`
+	font-family: Bold;
+	font-size: 16px;
+	text-align: center;
+	color: #222;
 `;

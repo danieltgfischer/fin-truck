@@ -9,6 +9,7 @@ import { routeNames, RootStackParamList } from '@/navigation/types';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import AddTruckIcon from '@/icons/CreateTruckIcon.png';
 import { Button } from '@/components/button';
+import { ToastAndroid } from 'react-native';
 import { Container, Image, Form, scrollView, ButtonContainer } from './styles';
 
 interface IData {
@@ -50,6 +51,11 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				dispatch(addTruck(newTruck));
 				formRef.current.setErrors({});
 				reset();
+				ToastAndroid.showWithGravity(
+					`O caminhão ${name}/${board} foi adicionado`,
+					ToastAndroid.LONG,
+					ToastAndroid.CENTER,
+				);
 				navigate();
 			} catch (error) {
 				if (error instanceof Yup.ValidationError) {

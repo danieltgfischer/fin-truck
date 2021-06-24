@@ -1,4 +1,4 @@
-import { Between, Connection, Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { BillingOption, Truck } from '@/database/entities';
 
 interface ICreateBilling {
@@ -21,8 +21,10 @@ interface IGetAll {
 	truckId: string;
 }
 
-interface IEditBillingOption extends ICreateBilling {
+interface IEditBillingOption {
 	id: string;
+	value: number;
+	description: string;
 }
 interface IYears {
 	years: number[];

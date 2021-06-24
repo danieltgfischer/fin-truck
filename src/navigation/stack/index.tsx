@@ -87,7 +87,7 @@ export const Navigation: FC = () => {
 						name={routeNames.Timeline}
 						component={Timeline}
 						options={{
-							title: 'Histórico',
+							title: '',
 							...options,
 						}}
 					/>
