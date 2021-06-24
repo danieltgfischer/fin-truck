@@ -29,10 +29,12 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 		const trucks = await truckRepository.getAllTrucks();
 		dispatch(updateTrucks(trucks));
 		navigation.navigate(routeNames.Home);
-		ToastAndroid.showWithGravity(
+		ToastAndroid.showWithGravityAndOffset(
 			`O caminhão ${current_truck.name}/${current_truck.board} foi excluido`,
 			ToastAndroid.LONG,
-			ToastAndroid.CENTER,
+			ToastAndroid.BOTTOM,
+			0,
+			150,
 		);
 		dispatch(updateCurrentTruck(null));
 		dispatch(updateYears([]));

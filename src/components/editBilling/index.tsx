@@ -9,7 +9,7 @@ import MultiInput, { IInputRef } from '@/components/multipleInput ';
 
 import { Button } from '@/components/button';
 import { optionsObj } from '@/screens/truck/options';
-import { updateCurrentTruck, updateMonth } from '@/store/actions';
+import { updateMonth } from '@/store/actions';
 import { Animated, ToastAndroid } from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import {
@@ -95,10 +95,12 @@ export const EditBilling: React.FC<IProps> = ({
 				formRef.current.setErrors({});
 				reset();
 				closeModal();
-				ToastAndroid.showWithGravity(
-					`A opção ${label} foi atualizada`,
+				ToastAndroid.showWithGravityAndOffset(
+					`Uma opção ${label} foi atualizada`,
 					ToastAndroid.LONG,
-					ToastAndroid.CENTER,
+					ToastAndroid.BOTTOM,
+					0,
+					150,
 				);
 			} catch (error) {
 				if (error instanceof Yup.ValidationError) {

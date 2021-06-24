@@ -38,7 +38,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 				dispatch(updateTrucks(response));
 			});
 		});
-
 		return unsubscribe;
 	}, [dispatch, navigation, truckRepository]);
 
@@ -70,7 +69,9 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		},
 		[navigation],
 	);
+
 	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
+
 	return (
 		<Container>
 			<Title>Caminhões adicionados:</Title>

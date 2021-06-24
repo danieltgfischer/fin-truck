@@ -5,7 +5,7 @@ import React, {
 	useState,
 	useMemo,
 } from 'react';
-import { Modal, Animated, Dimensions } from 'react-native';
+import { Modal, Animated, Dimensions, ToastAndroid } from 'react-native';
 import Input from '@/components/input';
 import MultiInput, { IInputRef } from '@/components/multipleInput ';
 import { FormHandles, SubmitHandler } from '@unform/core';
@@ -58,7 +58,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const { billingRepository } = useDatabaseConnection();
 	const title = current_truck?.name ?? '';
 	const option = route?.params?.option ?? '';
-
+	const { title: label } = optionsObj[option];
 	useEffect(() => {
 		navigation.addListener('focus', () => {
 			navigation.setOptions({
@@ -126,6 +126,13 @@ export const AddOptionScreen: React.FC<Props> = ({
 				month: date.getMonth(),
 				year: date.getFullYear(),
 			});
+			ToastAndroid.showWithGravityAndOffset(
+				`Você registrou um valor em ${label}`,
+				ToastAndroid.LONG,
+				ToastAndroid.BOTTOM,
+				0,
+				150,
+			);
 			formRef.current.reset();
 			navigate();
 		} catch (error) {
@@ -136,6 +143,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 		current_truck,
 		data?.description,
 		data?.value,
+		label,
 		navigate,
 		option,
 	]);

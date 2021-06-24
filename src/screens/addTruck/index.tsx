@@ -51,10 +51,12 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				dispatch(addTruck(newTruck));
 				formRef.current.setErrors({});
 				reset();
-				ToastAndroid.showWithGravity(
+				ToastAndroid.showWithGravityAndOffset(
 					`O caminhão ${name}/${board} foi adicionado`,
 					ToastAndroid.LONG,
-					ToastAndroid.CENTER,
+					ToastAndroid.BOTTOM,
+					0,
+					150,
 				);
 				navigate();
 			} catch (error) {

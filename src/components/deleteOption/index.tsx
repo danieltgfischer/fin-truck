@@ -1,43 +1,82 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Button } from '@/components/button';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
-import { useDispatch } from 'react-redux';
-import { updateCurrentTruck } from '@/store/actions';
-import { useNavigation } from '@react-navigation/native';
-import { routeNames } from '@/navigation/types';
-import { Container, Label, ContainerButtons, Image, Value } from './styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateMonth } from '@/store/actions';
+import { optionsObj } from '@/screens/truck/options';
+import { ToastAndroid } from 'react-native';
+import { IState } from '@/store/types';
+import { MonthInfoContext } from '@/contexts/montInfo';
+import {
+	Container,
+	Label,
+	ContainerButtons,
+	Image,
+	Value,
+	Description,
+} from './styles';
 
 interface IProps {
 	closeModal(): void;
 	id: string;
 	source: string;
+	description: string;
 	value: number;
+	option: string;
 }
 
 export const DeleteOption: React.FC<IProps> = ({
 	closeModal,
 	id,
 	source,
+	description,
 	value,
+	option,
 }: IProps) => {
-	const navigation = useNavigation();
 	const { billingRepository } = useDatabaseConnection();
+	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
+	const { label } = optionsObj[option];
+	const { year, monthNumber } = useContext(MonthInfoContext);
 
 	const handleDeleteOption = useCallback(async () => {
 		await billingRepository.deleteBilling(id);
 		closeModal();
-		// dispatch(updateTrucks(trucks)); TODO
-		navigation.navigate(routeNames.Home);
-		dispatch(updateCurrentTruck(null));
-	}, [billingRepository, closeModal, dispatch, id, navigation]);
+		ToastAndroid.showWithGravityAndOffset(
+			`Uma opção ${label} foi excluida`,
+			ToastAndroid.LONG,
+			ToastAndroid.BOTTOM,
+			0,
+			150,
+		);
+		billingRepository
+			.getBillingOptionsByMonth({
+				truckId: current_truck.id,
+				month: monthNumber,
+				year,
+			})
+			.then(billings => {
+				dispatch(updateMonth({ month: monthNumber, billings }));
+			});
+	}, [
+		billingRepository,
+		closeModal,
+		current_truck.id,
+		dispatch,
+		id,
+		label,
+		monthNumber,
+		year,
+	]);
 
 	return (
 		<Container>
 			<Image source={source} />
-			<Label>Você está prestes a excluir este registro.</Label>
-			<Label> Tem certeza disso?</Label>
+			<Label>
+				Você está prestes a excluir este registro. Tem certeza disso?
+			</Label>
 			<Value>R$ {value}</Value>
+			<Description>{description}</Description>
 			<ContainerButtons>
 				<Button buttonLabel="Cancelar" onPress={closeModal} />
 				<Button buttonLabel="Excluir" cancel onPress={handleDeleteOption} />

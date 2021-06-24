@@ -92,7 +92,7 @@ export const BillingItem: React.FC<IProps> = ({
 						>
 							<SimpleLineIcons name="pencil" size={20} color="#333" />
 						</ButtonIcon>
-						<ButtonIcon onPress={() => console.log('del')}>
+						<ButtonIcon onPress={() => setDeleteModalVisible(true)}>
 							<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
 						</ButtonIcon>
 					</ContainerButtons>
@@ -120,6 +120,8 @@ export const BillingItem: React.FC<IProps> = ({
 					closeModal={() => setDeleteModalVisible(false)}
 					id={id}
 					value={value}
+					option={option}
+					description={description}
 					source={source}
 				/>
 			</StyledModal>
