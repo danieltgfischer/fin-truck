@@ -7,7 +7,14 @@ import { updateMonth } from '@/store/actions';
 import { ActivityIndicator } from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { optionsObj } from './options';
-import { Container, Month, Line, FlatList, EmptyData } from './styles';
+import {
+	Container,
+	Month,
+	Line,
+	FlatList,
+	EmptyData,
+	flatListStyle,
+} from './styles';
 
 interface IProps {
 	month: string;
@@ -21,7 +28,7 @@ const MonthTimeline: React.FC<IProps> = ({
 	year,
 }: IProps) => {
 	const { billingRepository } = useDatabaseConnection();
-	const { current_truck, months } = useSelector((state: IState) => state);
+	const { current_truck, years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
@@ -34,7 +41,7 @@ const MonthTimeline: React.FC<IProps> = ({
 			month: monthNumber,
 			year,
 		});
-		dispatch(updateMonth({ month: monthNumber, billings }));
+		dispatch(updateMonth({ year, month: monthNumber, billings }));
 		setIsLoading(false);
 	}, [
 		billingRepository,
@@ -55,7 +62,7 @@ const MonthTimeline: React.FC<IProps> = ({
 					year,
 				})
 				.then(billings => {
-					dispatch(updateMonth({ month: monthNumber, billings }));
+					dispatch(updateMonth({ year, month: monthNumber, billings }));
 					setIsLoading(false);
 				});
 		}
@@ -88,10 +95,10 @@ const MonthTimeline: React.FC<IProps> = ({
 				</MonthInfoContext.Provider>
 			);
 		},
-		[],
+		[monthNumber, year],
 	);
 
-	const data = months[monthNumber] ?? [];
+	const data = years[year][monthNumber] ?? [];
 
 	return (
 		<>
@@ -108,9 +115,11 @@ const MonthTimeline: React.FC<IProps> = ({
 			)}
 			{isOpen && !isLoading && data.length > 0 && (
 				<FlatList
+					contentContainerStyle={flatListStyle.content}
 					data={data}
 					keyExtractor={item => String(item?.id)}
 					renderItem={renderItem}
+					nestedScrollEnabled
 				/>
 			)}
 		</>

@@ -1,7 +1,8 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import MonthTimeline from '@/components/month';
+import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -18,10 +19,16 @@ interface IProps {
 }
 
 export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
-	const { locale } = useSelector((state: IState) => state);
+	const { locale, current_truck } = useSelector((state: IState) => state);
+	const { billingRepository } = useDatabaseConnection();
+
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
 	);
+
+	useEffect(() => {
+		billingRepository.getYearInfo(year, current_truck.id);
+	}, [billingRepository, current_truck.id, year]);
 
 	const months = useMemo(
 		() => Object.keys(monthsNames).map(m => monthsNames[m]),

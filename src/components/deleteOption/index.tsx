@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react';
 import { Button } from '@/components/button';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateMonth } from '@/store/actions';
+import { updateTimeline } from '@/store/actions';
 import { optionsObj } from '@/screens/truck/options';
 import { ToastAndroid } from 'react-native';
 import { IState } from '@/store/types';
@@ -39,9 +39,33 @@ export const DeleteOption: React.FC<IProps> = ({
 	const { label } = optionsObj[option];
 	const { year, monthNumber } = useContext(MonthInfoContext);
 
+	const updateTimelineOnEdit = useCallback(async () => {
+		try {
+			const { monthBillings, monthResume, yearResume, total_years } =
+				await billingRepository.getTimelineYearAndMonthUpdated(
+					current_truck.id,
+					monthNumber,
+					year,
+				);
+			dispatch(
+				updateTimeline({
+					monthBillings,
+					monthResume,
+					yearResume,
+					total_years,
+					year,
+					month: monthNumber,
+				}),
+			);
+		} catch (error) {
+			throw new Error(error);
+		}
+	}, [billingRepository, current_truck.id, dispatch, monthNumber, year]);
+
 	const handleDeleteOption = useCallback(async () => {
 		await billingRepository.deleteBilling(id);
 		closeModal();
+		updateTimelineOnEdit();
 		ToastAndroid.showWithGravityAndOffset(
 			`Uma opção ${label} foi excluida`,
 			ToastAndroid.LONG,
@@ -49,25 +73,7 @@ export const DeleteOption: React.FC<IProps> = ({
 			0,
 			150,
 		);
-		billingRepository
-			.getBillingOptionsByMonth({
-				truckId: current_truck.id,
-				month: monthNumber,
-				year,
-			})
-			.then(billings => {
-				dispatch(updateMonth({ month: monthNumber, billings }));
-			});
-	}, [
-		billingRepository,
-		closeModal,
-		current_truck.id,
-		dispatch,
-		id,
-		label,
-		monthNumber,
-		year,
-	]);
+	}, [billingRepository, closeModal, id, label, updateTimelineOnEdit]);
 
 	return (
 		<Container>

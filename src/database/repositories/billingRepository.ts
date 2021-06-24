@@ -1,34 +1,7 @@
-import { Connection, Repository } from 'typeorm';
-import { BillingOption, Truck } from '@/database/entities';
+import { Connection, Repository, Not } from 'typeorm';
+import { BillingOption } from '@/database/entities';
+import * as Types from './types';
 
-interface ICreateBilling {
-	value: number;
-	description: string;
-	created_at: Date;
-	truck: Truck;
-	option: string;
-	month: number;
-	year: number;
-}
-
-interface IGetByMonth {
-	truckId: string;
-	month: number;
-	year: number;
-}
-
-interface IGetAll {
-	truckId: string;
-}
-
-interface IEditBillingOption {
-	id: string;
-	value: number;
-	description: string;
-}
-interface IYears {
-	years: number[];
-}
 export class BilliginRepository {
 	private billingepository: Repository<BillingOption>;
 
@@ -38,10 +11,11 @@ export class BilliginRepository {
 
 	public async getAllBillingOptions({
 		truckId,
-	}: IGetAll): Promise<BillingOption[]> {
+	}: Types.IGetAll): Promise<BillingOption[]> {
 		try {
 			const bills = await this.billingepository?.find({
 				where: { truck: { id: truckId } },
+				cache: true,
 			});
 			return bills;
 		} catch (error) {
@@ -53,7 +27,7 @@ export class BilliginRepository {
 		truckId,
 		month,
 		year,
-	}: IGetByMonth): Promise<BillingOption[]> {
+	}: Types.IGetByMonth): Promise<BillingOption[]> {
 		try {
 			const billingOptions = await this.billingepository.find({
 				where: {
@@ -64,17 +38,9 @@ export class BilliginRepository {
 				order: {
 					created_at: 'DESC',
 				},
+				cache: true,
 			});
 			return billingOptions;
-		} catch (error) {
-			throw new Error(error);
-		}
-	}
-
-	public async getBillingOption(id: number): Promise<BillingOption> {
-		try {
-			const billing = await this.billingepository?.findOne(id);
-			return billing;
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -88,7 +54,7 @@ export class BilliginRepository {
 		month,
 		year,
 		option,
-	}: ICreateBilling): Promise<BillingOption> {
+	}: Types.ICreateBilling): Promise<BillingOption> {
 		try {
 			const billingOption = await this.billingepository?.create({
 				value,
@@ -110,9 +76,12 @@ export class BilliginRepository {
 		id,
 		value,
 		description,
-	}: IEditBillingOption): Promise<BillingOption> {
+	}: Types.IEditBillingOption): Promise<BillingOption> {
 		try {
-			const billingOption = await this.billingepository?.findOne(id);
+			const billingOption = await this.billingepository?.findOne({
+				where: { id },
+				cache: true,
+			});
 			billingOption.value = value;
 			billingOption.description = description;
 			await this.billingepository?.save(billingOption);
@@ -138,18 +107,112 @@ export class BilliginRepository {
 		}
 	}
 
-	public async getYears(truckId: string): Promise<IYears> {
+	public async getYears(id: string): Promise<Types.IYears> {
 		try {
-			const dates = await this.billingepository
-				?.createQueryBuilder('billingOption')
-				.where('billingOption.truckId = :truckId', { truckId })
-				.select('billingOption.created_at')
-				.getMany();
+			const dates = await this.billingepository.find({
+				where: {
+					truck: { id },
+				},
+				select: ['created_at'],
+				cache: true,
+			});
 			const years = Array.from(dates).map(b => {
 				const date = new Date(b.created_at);
 				return date.getFullYear();
 			});
-			return { years: Array.from(new Set(years)) };
+			return { total_years: Array.from(new Set(years)) ?? [] };
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getYearInfo(
+		year: number,
+		id: string,
+	): Promise<Types.IResumeInfo> {
+		try {
+			const { costs } = await this.billingepository
+				.createQueryBuilder('billings')
+				.where('billings.truckId = :id', { id })
+				.andWhere('billings.year = :year', { year })
+				.andWhere('billings.option != :option', { option: 'shippign' })
+				.select('SUM(billings.value)', 'costs')
+				.cache(true)
+				.getRawOne();
+			const { gains } = await this.billingepository
+				.createQueryBuilder('billings')
+				.where('billings.truckId = :id', { id })
+				.andWhere('billings.year = :year', { year })
+				.andWhere('billings.option = :option', { option: 'shippign' })
+				.select('SUM(billings.value)', 'gains')
+				.cache(true)
+				.getRawOne();
+			const yearInfo = {
+				costs: costs ?? 0,
+				gains: gains ?? 0,
+				sub_total: gains - costs,
+			};
+			return yearInfo;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getMonthInfo(
+		year: number,
+		id: string,
+		month: number,
+	): Promise<Types.IResumeInfo> {
+		try {
+			const { costs } = await this.billingepository
+				.createQueryBuilder('billings')
+				.where('billings.truckId = :id', { id })
+				.andWhere('billings.year = :year', { year })
+				.andWhere('billings.month = :month', { month })
+				.andWhere('billings.option != :option', { option: 'shippign' })
+				.select('SUM(billings.value)', 'costs')
+				.cache(true)
+				.getRawOne();
+			const { gains } = await this.billingepository
+				.createQueryBuilder('billings')
+				.where('billings.truckId = :id', { id })
+				.andWhere('billings.year = :year', { year })
+				.andWhere('billings.month = :month', { month })
+				.andWhere('billings.option = :option', { option: 'shippign' })
+				.select('SUM(billings.value)', 'gains')
+				.cache(true)
+				.getRawOne();
+			const monthInfo = {
+				costs: costs ?? 0,
+				gains: gains ?? 0,
+				sub_total: gains - costs,
+			};
+			return monthInfo;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getTimelineYearAndMonthUpdated(
+		id: string,
+		month: number,
+		year: number,
+	): Promise<Types.ITimelineUpdated> {
+		try {
+			const monthBillings = await this.getBillingOptionsByMonth({
+				truckId: id,
+				month,
+				year,
+			});
+			const monthResume = await this.getMonthInfo(year, id, month);
+			const yearResume = await this.getYearInfo(year, id);
+			const { total_years } = await this.getYears(id);
+			return {
+				monthBillings,
+				monthResume,
+				yearResume,
+				total_years,
+			};
 		} catch (error) {
 			throw new Error(error);
 		}

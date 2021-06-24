@@ -82,7 +82,7 @@ export const BillingItem: React.FC<IProps> = ({
 				>
 					<Line />
 					<ImageContainer>
-						<Image source={source} />
+						<Image source={source} resizeMode="contain" />
 					</ImageContainer>
 				</TimelineContainer>
 				<InfoContainer style={{ transform: [{ translateX: translateXInfo }] }}>

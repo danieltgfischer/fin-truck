@@ -1,7 +1,13 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 const { width } = Dimensions.get('window');
+
+export const scrollViewStyle = StyleSheet.create({
+	content: {
+		paddingBottom: 25,
+	},
+});
 
 export const Container = styled.SafeAreaView`
 	align-items: center;
@@ -9,6 +15,7 @@ export const Container = styled.SafeAreaView`
 	background-color: #fafafa;
 	flex: 1;
 `;
+
 export const SubHeader = styled.View`
 	flex-direction: row;
 	width: ${width}px;
@@ -35,8 +42,6 @@ export const Title = styled.Text`
 	font-size: 36px;
 	font-family: Semi_Bold;
 `;
-
-export const ScrollView = styled.ScrollView``;
 
 export const Warning = styled.Text`
 	color: #ccc;

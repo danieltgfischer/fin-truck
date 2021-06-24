@@ -4,12 +4,24 @@ type Month = {
 	[key: number]: BillingOption[];
 };
 
+type Year = {
+	[key: number]: Month;
+};
+
+export type IResumeInfo = {
+	gains: number;
+	costs: number;
+	sub_total: number;
+};
 export interface IState {
 	trucks: Truck[];
 	current_truck: Truck;
 	locale: string;
-	years: number[];
-	months: Month;
+	total_years: number[];
+	years: Year;
+	monthResume: IResumeInfo;
+	yearResume: IResumeInfo;
+	[key: number]: Month;
 }
 
 export interface IAction<T> {
@@ -26,14 +38,20 @@ export interface ILocale {
 }
 
 export interface IYears {
-	years: number[];
+	total_years: number[];
 }
 
 export interface IMonth {
 	month: number;
+	year: number;
 	billings: BillingOption[];
 }
 
+export interface ITimeline {
+	yearResume: IResumeInfo;
+	monthResume: IResumeInfo;
+	monthBillings: BillingOption[];
+}
 export interface ITrucks {
 	trucks: Truck[];
 }
@@ -45,4 +63,5 @@ export enum ActionTypes {
 	UPDATE_LOCALE = 'UPDATE_LOCALE',
 	UPDATE_YEARS = 'UPDATE_YEARS',
 	UPDATE_MONTH = 'UPDATE_MONTH',
+	UPDATE_TIMELINE = 'UPDATE_TIMELINE',
 }

@@ -9,7 +9,7 @@ import MultiInput, { IInputRef } from '@/components/multipleInput ';
 
 import { Button } from '@/components/button';
 import { optionsObj } from '@/screens/truck/options';
-import { updateMonth } from '@/store/actions';
+import { updateTimeline } from '@/store/actions';
 import { Animated, ToastAndroid } from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import {
@@ -68,6 +68,29 @@ export const EditBilling: React.FC<IProps> = ({
 		});
 	}, [value, description]);
 
+	const updateTimelineOnEdit = useCallback(async () => {
+		try {
+			const { monthBillings, monthResume, yearResume, total_years } =
+				await billingRepository.getTimelineYearAndMonthUpdated(
+					current_truck.id,
+					monthNumber,
+					year,
+				);
+			dispatch(
+				updateTimeline({
+					monthBillings,
+					monthResume,
+					yearResume,
+					total_years,
+					year,
+					month: monthNumber,
+				}),
+			);
+		} catch (error) {
+			throw new Error(error);
+		}
+	}, [billingRepository, current_truck.id, dispatch, monthNumber, year]);
+
 	const handleSubmit: SubmitHandler<IData> = useCallback(
 		async (data: IData, { reset }) => {
 			try {
@@ -83,15 +106,7 @@ export const EditBilling: React.FC<IProps> = ({
 					value: Number(value),
 					description,
 				});
-				billingRepository
-					.getBillingOptionsByMonth({
-						truckId: current_truck.id,
-						month: monthNumber,
-						year,
-					})
-					.then(billings => {
-						dispatch(updateMonth({ month: monthNumber, billings }));
-					});
+				updateTimelineOnEdit();
 				formRef.current.setErrors({});
 				reset();
 				closeModal();
@@ -112,16 +127,7 @@ export const EditBilling: React.FC<IProps> = ({
 				}
 			}
 		},
-		[
-			billingRepository,
-			closeModal,
-			current_truck.id,
-			dispatch,
-			id,
-			label,
-			monthNumber,
-			year,
-		],
+		[billingRepository, closeModal, id, label, updateTimelineOnEdit],
 	);
 
 	const submit = useCallback(() => {

@@ -1,7 +1,13 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
 const { height } = Dimensions.get('window');
+
+export const flatListStyle = StyleSheet.create({
+	content: {
+		paddingVertical: 25,
+	},
+});
 
 export const Container = styled.TouchableOpacity`
 	flex-direction: row;
@@ -29,8 +35,7 @@ export const Line = styled.View`
 `;
 
 export const FlatList = styled.FlatList`
-	padding: 25px 0 50px;
-	max-height: ${height * 2}px;
+	max-height: ${height}px;
 `;
 
 export const EmptyData = styled.Text`

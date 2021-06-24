@@ -7,6 +7,7 @@ import {
 	ILocale,
 	IYears,
 	IMonth,
+	ITimeline,
 } from '../types';
 
 export function addTruck(truck: Truck): IAction<ITruck> {
@@ -37,16 +38,47 @@ export function updateLocale(locale: string): IAction<ILocale> {
 	};
 }
 
-export function updateYears(years: number[]): IAction<IYears> {
+export function updateYears(total_years: number[]): IAction<IYears> {
 	return {
 		type: ActionTypes.UPDATE_YEARS,
-		payload: { years },
+		payload: { total_years },
 	};
 }
 
-export function updateMonth({ month, billings }: IMonth): IAction<IMonth> {
+export function updateMonth({
+	month,
+	billings,
+	year,
+}: IMonth): IAction<IMonth> {
 	return {
 		type: ActionTypes.UPDATE_MONTH,
-		payload: { month, billings },
+		payload: { month, billings, year },
+	};
+}
+
+interface ITimelineAction extends ITimeline {
+	month: number;
+	year: number;
+	total_years: number[];
+}
+
+export function updateTimeline({
+	monthBillings,
+	monthResume,
+	yearResume,
+	month,
+	year,
+	total_years,
+}: ITimelineAction): IAction<ITimelineAction> {
+	return {
+		type: ActionTypes.UPDATE_TIMELINE,
+		payload: {
+			monthBillings,
+			monthResume,
+			yearResume,
+			month,
+			year,
+			total_years,
+		},
 	};
 }

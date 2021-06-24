@@ -1,8 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { ActivityIndicator, Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import { RootStackParamList, routeNames } from '@/navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
-import * as Localization from 'expo-localization';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { YearTimeline } from '@/components/year';
@@ -15,8 +14,8 @@ import {
 	Image,
 	SubHeader,
 	Title,
-	ScrollView,
 	Warning,
+	scrollViewStyle,
 } from './styles';
 
 type ScreenNavigationProp = StackNavigationProp<
@@ -31,7 +30,7 @@ type Props = {
 export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	const { billingRepository, truckRepository } = useDatabaseConnection();
 	const [isLoading, setIsLoading] = useState(true);
-	const { current_truck, years } = useSelector((state: IState) => state);
+	const { current_truck, total_years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const title = current_truck?.name ?? '';
 
@@ -43,8 +42,8 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
-			billingRepository.getYears(current_truck.id).then(response => {
-				dispatch(updateYears(response.years));
+			billingRepository.getYears(current_truck.id).then(({ total_years }) => {
+				dispatch(updateYears(total_years));
 				setIsLoading(false);
 			});
 		});
@@ -64,14 +63,14 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 				<Image source={TimelineIcon} resizeMode="contain" />
 				<Title>Histórico</Title>
 			</SubHeader>
-			<ScrollView>
+			<ScrollView contentContainerStyle={scrollViewStyle.content}>
 				{isLoading ? (
 					<ActivityIndicator color="#B63B34" size="small" />
 				) : (
 					<>
-						{years.length > 0 &&
-							years.map(year => <YearTimeline year={year} key={year} />)}
-						{years.length === 0 && (
+						{total_years.length > 0 &&
+							total_years.map(year => <YearTimeline year={year} key={year} />)}
+						{total_years.length === 0 && (
 							<Warning>Você não adicionou nenhum valor ainda.</Warning>
 						)}
 					</>
