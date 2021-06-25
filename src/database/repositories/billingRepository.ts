@@ -1,5 +1,6 @@
 import { Connection, Repository, Not } from 'typeorm';
 import { BillingOption } from '@/database/entities';
+import { optionsObj } from '@/screens/addOption/options';
 import * as Types from './types';
 
 export class BilliginRepository {
@@ -131,11 +132,14 @@ export class BilliginRepository {
 		id: string,
 	): Promise<Types.IResumeInfo> {
 		try {
+			const options = Object.keys(optionsObj);
 			const { costs } = await this.billingepository
 				.createQueryBuilder('billings')
 				.where('billings.truckId = :id', { id })
 				.andWhere('billings.year = :year', { year })
-				.andWhere('billings.option != :option', { option: 'shippign' })
+				.andWhere('billings.option IN (:...options)', {
+					options: options.filter(o => o !== 'shipping'),
+				})
 				.select('SUM(billings.value)', 'costs')
 				.cache(true)
 				.getRawOne();
@@ -143,7 +147,9 @@ export class BilliginRepository {
 				.createQueryBuilder('billings')
 				.where('billings.truckId = :id', { id })
 				.andWhere('billings.year = :year', { year })
-				.andWhere('billings.option = :option', { option: 'shippign' })
+				.andWhere('billings.option IN (:...options)', {
+					options: options.filter(o => o === 'shipping'),
+				})
 				.select('SUM(billings.value)', 'gains')
 				.cache(true)
 				.getRawOne();
@@ -164,24 +170,31 @@ export class BilliginRepository {
 		month: number,
 	): Promise<Types.IResumeInfo> {
 		try {
-			const { costs } = await this.billingepository
-				.createQueryBuilder('billings')
-				.where('billings.truckId = :id', { id })
-				.andWhere('billings.year = :year', { year })
-				.andWhere('billings.month = :month', { month })
-				.andWhere('billings.option != :option', { option: 'shippign' })
-				.select('SUM(billings.value)', 'costs')
-				.cache(true)
-				.getRawOne();
+			const options = Object.keys(optionsObj);
 			const { gains } = await this.billingepository
 				.createQueryBuilder('billings')
 				.where('billings.truckId = :id', { id })
-				.andWhere('billings.year = :year', { year })
 				.andWhere('billings.month = :month', { month })
-				.andWhere('billings.option = :option', { option: 'shippign' })
+				.andWhere('billings.year = :year', { year })
+				.andWhere('billings.option IN (:...options)', {
+					options: options.filter(o => o === 'shipping'),
+				})
 				.select('SUM(billings.value)', 'gains')
 				.cache(true)
 				.getRawOne();
+
+			const { costs } = await this.billingepository
+				.createQueryBuilder('billings')
+				.where('billings.truckId = :id', { id })
+				.andWhere('billings.month = :month', { month })
+				.andWhere('billings.year = :year', { year })
+				.andWhere('billings.option IN (:...options)', {
+					options: options.filter(o => o !== 'shipping'),
+				})
+				.select('SUM(billings.value)', 'costs')
+				.cache(true)
+				.getRawOne();
+
 			const monthInfo = {
 				costs: costs ?? 0,
 				gains: gains ?? 0,

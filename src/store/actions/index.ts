@@ -1,46 +1,39 @@
 import { Truck } from '@/database/entities';
-import {
-	ActionTypes,
-	IAction,
-	ITruck,
-	ITrucks,
-	ILocale,
-	IYears,
-	IMonth,
-	ITimeline,
-} from '../types';
+import * as Types from '../types';
 
-export function addTruck(truck: Truck): IAction<ITruck> {
+export function addTruck(truck: Truck): Types.IAction<Types.ITruck> {
 	return {
-		type: ActionTypes.ADD_TRUCK,
+		type: Types.ActionTypes.ADD_TRUCK,
 		payload: { truck },
 	};
 }
 
-export function updateTrucks(trucks: Truck[]): IAction<ITrucks> {
+export function updateTrucks(trucks: Truck[]): Types.IAction<Types.ITrucks> {
 	return {
-		type: ActionTypes.UPDATE_TRUCKS,
+		type: Types.ActionTypes.UPDATE_TRUCKS,
 		payload: { trucks },
 	};
 }
 
-export function updateCurrentTruck(truck: Truck): IAction<ITruck> {
+export function updateCurrentTruck(truck: Truck): Types.IAction<Types.ITruck> {
 	return {
-		type: ActionTypes.UPDATE_CURRENT_TRUCK,
+		type: Types.ActionTypes.UPDATE_CURRENT_TRUCK,
 		payload: { truck },
 	};
 }
 
-export function updateLocale(locale: string): IAction<ILocale> {
+export function updateLocale(locale: string): Types.IAction<Types.ILocale> {
 	return {
-		type: ActionTypes.UPDATE_LOCALE,
+		type: Types.ActionTypes.UPDATE_LOCALE,
 		payload: { locale },
 	};
 }
 
-export function updateYears(total_years: number[]): IAction<IYears> {
+export function updateYears(
+	total_years: number[],
+): Types.IAction<Types.IYears> {
 	return {
-		type: ActionTypes.UPDATE_YEARS,
+		type: Types.ActionTypes.UPDATE_YEARS,
 		payload: { total_years },
 	};
 }
@@ -49,14 +42,14 @@ export function updateMonth({
 	month,
 	billings,
 	year,
-}: IMonth): IAction<IMonth> {
+}: Types.IMonth): Types.IAction<Types.IMonth> {
 	return {
-		type: ActionTypes.UPDATE_MONTH,
+		type: Types.ActionTypes.UPDATE_MONTH,
 		payload: { month, billings, year },
 	};
 }
 
-interface ITimelineAction extends ITimeline {
+interface ITimelineAction extends Types.ITimeline {
 	month: number;
 	year: number;
 	total_years: number[];
@@ -69,9 +62,9 @@ export function updateTimeline({
 	month,
 	year,
 	total_years,
-}: ITimelineAction): IAction<ITimelineAction> {
+}: ITimelineAction): Types.IAction<ITimelineAction> {
 	return {
-		type: ActionTypes.UPDATE_TIMELINE,
+		type: Types.ActionTypes.UPDATE_TIMELINE,
 		payload: {
 			monthBillings,
 			monthResume,
@@ -79,6 +72,34 @@ export function updateTimeline({
 			month,
 			year,
 			total_years,
+		},
+	};
+}
+
+export function updateYearResume({
+	resume,
+	year,
+}: Types.IUpdateYearResume): Types.IAction<Types.IUpdateYearResume> {
+	return {
+		type: Types.ActionTypes.UPDATE_YEAR_RESUME,
+		payload: {
+			resume,
+			year,
+		},
+	};
+}
+
+export function updateMonthResume({
+	resume,
+	year,
+	month,
+}: Types.IUpdateMonthResume): Types.IAction<Types.IUpdateMonthResume> {
+	return {
+		type: Types.ActionTypes.UPDATE_MONTH_RESUME,
+		payload: {
+			resume,
+			year,
+			month,
 		},
 	};
 }

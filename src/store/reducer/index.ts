@@ -23,16 +23,8 @@ const INITIAL_STATE = {
 			11: [],
 		},
 	},
-	monthResume: {
-		costs: 0,
-		gains: 0,
-		sub_total: 0,
-	},
-	yearResume: {
-		costs: 0,
-		gains: 0,
-		sub_total: 0,
-	},
+	monthResume: {},
+	yearResume: {},
 };
 
 export const truckReducer: Reducer<IState> = (
@@ -84,9 +76,26 @@ export const truckReducer: Reducer<IState> = (
 					},
 				} = action;
 				draft.years[year][month] = monthBillings;
-				draft.monthResume = monthResume;
-				draft.yearResume = yearResume;
+				draft.monthResume[year][month] = monthResume;
+				draft.yearResume[year] = yearResume;
 				draft.total_years = total_years;
+				break;
+			}
+			case ActionTypes.UPDATE_YEAR_RESUME: {
+				const {
+					payload: { year, resume },
+				} = action;
+				draft.yearResume[year] = resume;
+				break;
+			}
+			case ActionTypes.UPDATE_MONTH_RESUME: {
+				const {
+					payload: { month, year, resume },
+				} = action;
+				draft.monthResume[year] = {
+					...draft.monthResume[year],
+					[month]: resume,
+				};
 				break;
 			}
 			default:

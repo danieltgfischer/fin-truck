@@ -71,6 +71,8 @@ export const BillingItem: React.FC<IProps> = ({
 	const localeFormat =
 		localeApp === 'pt-BR' ? "'Dia' d',' EEEE 'às ' HH:mm " : 'DD:MM a';
 	const locale = localeApp === 'pt-BR' ? ptLocale : usLocale;
+	const descriptionWithValue =
+		description !== '' ? description : 'Nenhuma descrição adicionada';
 
 	return (
 		<>
@@ -98,7 +100,7 @@ export const BillingItem: React.FC<IProps> = ({
 					</ContainerButtons>
 					<Date>{format(created_at, localeFormat, { locale })}</Date>
 					<Value>R$ {value}</Value>
-					<Description>{description}</Description>
+					<Description>{descriptionWithValue}</Description>
 				</InfoContainer>
 			</Container>
 			<Modal visible={isEditModalVisible} animationType="slide">

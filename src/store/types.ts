@@ -8,18 +8,35 @@ type Year = {
 	[key: number]: Month;
 };
 
-export type IResumeInfo = {
+export type IValuesResume = {
 	gains: number;
 	costs: number;
 	sub_total: number;
 };
+
+export interface IResumeInfo {
+	[key: number]: IValuesResume;
+}
+
+export interface IMonhtResumeInfo {
+	[key: number]: IResumeInfo;
+}
+export interface IUpdateYearResume {
+	year: number;
+	resume: IValuesResume;
+}
+
+export interface IUpdateMonthResume extends IUpdateYearResume {
+	month: number;
+}
+
 export interface IState {
 	trucks: Truck[];
 	current_truck: Truck;
 	locale: string;
 	total_years: number[];
 	years: Year;
-	monthResume: IResumeInfo;
+	monthResume: IMonhtResumeInfo;
 	yearResume: IResumeInfo;
 	[key: number]: Month;
 }
@@ -64,4 +81,6 @@ export enum ActionTypes {
 	UPDATE_YEARS = 'UPDATE_YEARS',
 	UPDATE_MONTH = 'UPDATE_MONTH',
 	UPDATE_TIMELINE = 'UPDATE_TIMELINE',
+	UPDATE_YEAR_RESUME = 'UPDATE_YEAR_RESUME',
+	UPDATE_MONTH_RESUME = 'UPDATE_MONTH_RESUME',
 }

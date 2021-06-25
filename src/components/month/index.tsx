@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect, memo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { BillingItem } from '@/components/billingItem';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
-import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
-import { updateMonth } from '@/store/actions';
-import { ActivityIndicator } from 'react-native';
+import { updateMonth, updateMonthResume } from '@/store/actions';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { optionsObj } from './options';
 import {
@@ -14,6 +14,9 @@ import {
 	FlatList,
 	EmptyData,
 	flatListStyle,
+	SubHeader,
+	Value,
+	Label,
 } from './styles';
 
 interface IProps {
@@ -28,7 +31,9 @@ const MonthTimeline: React.FC<IProps> = ({
 	year,
 }: IProps) => {
 	const { billingRepository } = useDatabaseConnection();
-	const { current_truck, years } = useSelector((state: IState) => state);
+	const { current_truck, years, monthResume } = useSelector(
+		(state: IState) => state,
+	);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
@@ -43,6 +48,12 @@ const MonthTimeline: React.FC<IProps> = ({
 		});
 		dispatch(updateMonth({ year, month: monthNumber, billings }));
 		setIsLoading(false);
+		const resume = await billingRepository.getMonthInfo(
+			year,
+			current_truck.id,
+			monthNumber,
+		);
+		dispatch(updateMonthResume({ resume, year, month: monthNumber }));
 	}, [
 		billingRepository,
 		current_truck.id,
@@ -64,6 +75,11 @@ const MonthTimeline: React.FC<IProps> = ({
 				.then(billings => {
 					dispatch(updateMonth({ year, month: monthNumber, billings }));
 					setIsLoading(false);
+				});
+			billingRepository
+				.getMonthInfo(year, current_truck.id, monthNumber)
+				.then(resume => {
+					dispatch(updateMonthResume({ resume, year, month: monthNumber }));
 				});
 		}
 	}, [
@@ -99,7 +115,17 @@ const MonthTimeline: React.FC<IProps> = ({
 	);
 
 	const data = years[year][monthNumber] ?? [];
-
+	const monthYear = monthResume[year] ?? {
+		[month]: {},
+	};
+	const { gains, costs, sub_total } = monthYear[monthNumber] ?? {
+		gains: null,
+		costs: null,
+		sub_total: null,
+	};
+	if (monthNumber === 5) {
+		console.log(monthYear);
+	}
 	return (
 		<>
 			<Container onPress={openMonth}>
@@ -114,13 +140,29 @@ const MonthTimeline: React.FC<IProps> = ({
 				<ActivityIndicator color="#B63B34" size="small" />
 			)}
 			{isOpen && !isLoading && data.length > 0 && (
-				<FlatList
-					contentContainerStyle={flatListStyle.content}
-					data={data}
-					keyExtractor={item => String(item?.id)}
-					renderItem={renderItem}
-					nestedScrollEnabled
-				/>
+				<>
+					<SubHeader>
+						<Label>Total de ganhos de {month}:</Label>
+						<Value color="#00b300">
+							{gains || <ActivityIndicator color="#B63B34" size="small" />}
+						</Value>
+						<Label>Total de gastos de {month}:</Label>
+						<Value color="#ff0000">
+							{costs || <ActivityIndicator color="#B63B34" size="small" />}
+						</Value>
+						<Label>Subtotal:</Label>
+						<Value color="#ff6600">
+							{sub_total || <ActivityIndicator color="#B63B34" size="small" />}
+						</Value>
+					</SubHeader>
+					<FlatList
+						contentContainerStyle={flatListStyle.content}
+						data={data}
+						keyExtractor={item => String(item?.id)}
+						renderItem={renderItem}
+						nestedScrollEnabled
+					/>
+				</>
 			)}
 		</>
 	);

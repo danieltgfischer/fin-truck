@@ -45,3 +45,23 @@ export const EmptyData = styled.Text`
 	text-align: center;
 	padding: 5% 10%;
 `;
+
+export const SubHeader = styled.View`
+	padding: 0 15px 18px;
+`;
+
+export const Label = styled.Text`
+	font-family: Semi_Bold;
+	font-size: 18px;
+	color: #333;
+`;
+
+interface IValue {
+	color: string;
+}
+export const Value = styled.Text`
+	color: ${({ color }: IValue) => color};
+	padding: 0 0 0 15px;
+	font-family: Semi_Bold_Italic;
+	font-size: 24px;
+`;
