@@ -210,10 +210,6 @@ export const AddOptionScreen: React.FC<Props> = ({
 					/>
 					<Styled.Title>{optionsObj[option].title}</Styled.Title>
 				</Styled.Header>
-				<Styled.Warning style={{ opacity: warningOpacity }}>
-					Por favor, no <Styled.Span>valor</Styled.Span> utilize apenas ponto{' '}
-					<Styled.Span>(.)</Styled.Span> e apenas para separar os centavos
-				</Styled.Warning>
 				<Styled.AnimetadeContainer>
 					<Animated.View
 						style={{

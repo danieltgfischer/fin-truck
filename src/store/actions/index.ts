@@ -49,12 +49,6 @@ export function updateMonth({
 	};
 }
 
-interface ITimelineAction extends Types.ITimeline {
-	month: number;
-	year: number;
-	total_years: number[];
-}
-
 export function updateTimeline({
 	monthBillings,
 	monthResume,
@@ -62,7 +56,7 @@ export function updateTimeline({
 	month,
 	year,
 	total_years,
-}: ITimelineAction): Types.IAction<ITimelineAction> {
+}: Types.ITimelineAction): Types.IAction<Types.ITimelineAction> {
 	return {
 		type: Types.ActionTypes.UPDATE_TIMELINE,
 		payload: {

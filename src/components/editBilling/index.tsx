@@ -133,6 +133,7 @@ export const EditBilling: React.FC<IProps> = ({
 	const submit = useCallback(() => {
 		formRef.current?.submitForm();
 	}, []);
+
 	return (
 		<Container ontentContainerStyle={scrollView.content}>
 			<Title>Você está editando um registro para {label}</Title>
@@ -146,6 +147,7 @@ export const EditBilling: React.FC<IProps> = ({
 					name="value"
 					label="Editar o valor para essa opção"
 					numeric
+					currency
 					returnKeyType="next"
 					maxLength={16}
 					keyboardType="numeric"

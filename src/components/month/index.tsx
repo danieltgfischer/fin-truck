@@ -169,13 +169,9 @@ const MonthTimeline: React.FC<IProps> = ({
 						</Value>
 						<Label>Subtotal:</Label>
 						<Value color="#ff6600">
-							{I18n.toCurrency(sub_total, {
-								precision: 2,
-								separator: ',',
-								delimiter: '.',
-								unit: 'R$ ',
-								strip_insignificant_zeros: false,
-							}) || <ActivityIndicator color="#B63B34" size="small" />}
+							{I18n.toCurrency(sub_total) || (
+								<ActivityIndicator color="#B63B34" size="small" />
+							)}
 						</Value>
 					</SubHeader>
 					<FlatList
