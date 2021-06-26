@@ -151,6 +151,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				return;
 			}
 			try {
+				console.log(data);
 				const schema = Yup.object().shape({
 					value: Yup.string().required('O valor é obrigatório'),
 				});

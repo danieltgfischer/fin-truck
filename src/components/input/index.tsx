@@ -121,7 +121,9 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 	const handleChangeText = useCallback(
 		(value: string) => {
 			if (currency && inputRef.current) {
-				inputRef.current.value = String(currencyValue);
+				inputRef.current.value = currencyValue
+					? String(currencyValue)
+					: undefined;
 				return;
 			}
 			if (inputRef.current) inputRef.current.value = value;
