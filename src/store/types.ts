@@ -18,7 +18,7 @@ export interface IResumeInfo {
 	[key: number]: IValuesResume;
 }
 
-export interface IReduxResumeInfo {
+export interface IMonthResumeInfo {
 	[key: number]: IResumeInfo;
 }
 export interface IUpdateYearResume {
@@ -36,8 +36,8 @@ export interface IState {
 	locale: string;
 	total_years: number[];
 	years: Year;
-	monthResume: IReduxResumeInfo;
-	yearResume: IReduxResumeInfo;
+	monthResume: IMonthResumeInfo; // ok
+	yearResume: IResumeInfo;
 	[key: number]: Month;
 }
 
@@ -65,10 +65,17 @@ export interface IMonth {
 }
 
 export interface ITimeline {
-	yearResume: IResumeInfo;
-	monthResume: IResumeInfo;
+	yearResume: IValuesResume;
+	monthResume: IValuesResume;
 	monthBillings: BillingOption[];
 }
+
+export interface ITimelineAction extends ITimeline {
+	month: number;
+	year: number;
+	total_years: number[];
+}
+
 export interface ITrucks {
 	trucks: Truck[];
 }

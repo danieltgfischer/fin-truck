@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
+import RNCurrencyInput from 'react-native-currency-input';
 
 const { width } = Dimensions.get('window');
 
@@ -20,6 +21,13 @@ export const Label = styled.Text`
 `;
 
 export const TextInput = styled.TextInput`
+	height: 100%;
+	font-size: 24px;
+	color: #333;
+	padding: 0 0 0 5px;
+`;
+
+export const CurrencyInput = styled(RNCurrencyInput)`
 	height: 100%;
 	font-size: 24px;
 	color: #333;

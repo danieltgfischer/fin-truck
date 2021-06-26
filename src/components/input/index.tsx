@@ -9,6 +9,7 @@ import React, {
 import { TextInputProps, TextInput as TextInputNative } from 'react-native';
 import { useField } from '@unform/core';
 import I18n from 'i18n-js';
+import { formatNumber } from 'react-native-currency-input';
 import {
 	Container,
 	Error,
@@ -16,6 +17,7 @@ import {
 	TextInput,
 	TextInputContainer,
 	Span,
+	CurrencyInput,
 } from './styles';
 
 interface InputProps extends TextInputProps {
@@ -40,13 +42,14 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 		label,
 		numeric = false,
 		requiredLabel = false,
-		currency,
+		currency = false,
 		...rest
 	}: InputProps,
 	ref,
 ) => {
 	const inputRef = useRef<InputReference>(null);
 	const [isFocused, setIsFocused] = useState<boolean>(false);
+	const [currencyValue, setValue] = useState();
 
 	function focus() {
 		inputRef.current.focus();
@@ -67,6 +70,19 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				return '';
 			},
 			setValue(ref, value) {
+				if (currency && value) {
+					inputRef.current.value = value;
+					inputRef.current.setNativeProps({
+						text: formatNumber(Number(value), {
+							separator: ',',
+							prefix: 'R$ ',
+							precision: 2,
+							delimiter: '.',
+							signPosition: 'beforePrefix',
+						}),
+					});
+					return;
+				}
 				if (inputRef.current) {
 					inputRef.current.setNativeProps({ text: value });
 					inputRef.current.value = value;
@@ -79,12 +95,20 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				}
 			},
 		});
-	}, [fieldName, numeric, registerField]);
+	}, [currency, fieldName, numeric, registerField]);
 
-	const handleChangeText = useCallback((value: string) => {
-		if (inputRef.current) inputRef.current.value = value;
-	}, []);
-
+	const handleChangeText = useCallback(
+		(value: string) => {
+			if (currency && inputRef.current) {
+				inputRef.current.value = String(currencyValue);
+				return;
+			}
+			if (inputRef.current) inputRef.current.value = value;
+		},
+		[currency, currencyValue],
+	);
+	// br R$ 1.000,00
+	// en $ 1,000.00
 	return (
 		<Container>
 			{label && (
@@ -94,14 +118,31 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				</Label>
 			)}
 			<TextInputContainer isFocused={isFocused}>
-				<TextInput
-					onFocus={() => setIsFocused(true)}
-					onBlur={() => setIsFocused(false)}
-					ref={inputRef}
-					selectionColor="#333"
-					onChangeText={handleChangeText}
-					{...rest}
-				/>
+				{currency ? (
+					<CurrencyInput
+						value={currencyValue}
+						delimiter="."
+						separator=","
+						prefix="R$ "
+						precision={2}
+						onChangeValue={setValue}
+						onFocus={() => setIsFocused(true)}
+						onBlur={() => setIsFocused(false)}
+						ref={inputRef}
+						selectionColor="#333"
+						onChangeText={handleChangeText}
+						{...rest}
+					/>
+				) : (
+					<TextInput
+						onFocus={() => setIsFocused(true)}
+						onBlur={() => setIsFocused(false)}
+						ref={inputRef}
+						selectionColor="#333"
+						onChangeText={handleChangeText}
+						{...rest}
+					/>
+				)}
 				{error && <Error>{error}</Error>}
 			</TextInputContainer>
 		</Container>
