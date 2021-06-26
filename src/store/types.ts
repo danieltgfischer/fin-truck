@@ -18,7 +18,7 @@ export interface IResumeInfo {
 	[key: number]: IValuesResume;
 }
 
-export interface IMonhtResumeInfo {
+export interface IReduxResumeInfo {
 	[key: number]: IResumeInfo;
 }
 export interface IUpdateYearResume {
@@ -36,8 +36,8 @@ export interface IState {
 	locale: string;
 	total_years: number[];
 	years: Year;
-	monthResume: IMonhtResumeInfo;
-	yearResume: IResumeInfo;
+	monthResume: IReduxResumeInfo;
+	yearResume: IReduxResumeInfo;
 	[key: number]: Month;
 }
 

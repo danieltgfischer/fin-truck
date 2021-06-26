@@ -1,8 +1,9 @@
-import 'react-native-gesture-handler';
 import 'intl';
+import 'react-native-gesture-handler';
 import 'reflect-metadata';
 import React, { useCallback, useState } from 'react';
 import * as Font from 'expo-font';
+import I18n from 'i18n-js';
 import AppLoading from 'expo-app-loading';
 import { Provider } from 'react-redux';
 import { DatabaseConnectionProvider } from '@/hocs/databaseProvider';
@@ -13,7 +14,7 @@ import { LoadingContainer } from '@/navigation/style';
 import { ActivityIndicator } from 'react-native';
 
 // TODO intl
-// TODO preload icons
+// TODO preload images
 // TODO change ActiveIndicator to expo AppLoafind
 
 const App: React.FC = () => {
@@ -45,6 +46,25 @@ const App: React.FC = () => {
 			</LoadingContainer>
 		);
 	}
+
+	I18n.translations = {
+		ru: {
+			NUMBER_FORMAT: {
+				precision: 2,
+				separator: ',',
+				delimiter: ' ',
+				strip_insignificant_zeros: false,
+			},
+		},
+		en: {
+			NUMBER_FORMAT: {
+				precision: 2,
+				delimiter: '.',
+				separator: ',',
+				strip_insignificant_zeros: false,
+			},
+		},
+	};
 
 	return (
 		<Provider store={store}>

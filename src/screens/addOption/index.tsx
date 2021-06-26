@@ -227,6 +227,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 								label="Adicione um valor para essa opção"
 								returnKeyType="next"
 								maxLength={16}
+								currency
 								keyboardType="numeric"
 								requiredLabel
 								onSubmitEditing={() => nextInputRef.current?.focus()}

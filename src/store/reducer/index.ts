@@ -85,7 +85,10 @@ export const truckReducer: Reducer<IState> = (
 				const {
 					payload: { year, resume },
 				} = action;
-				draft.yearResume[year] = resume;
+				draft.yearResume = {
+					...draft.yearResume,
+					[year]: resume,
+				};
 				break;
 			}
 			case ActionTypes.UPDATE_MONTH_RESUME: {

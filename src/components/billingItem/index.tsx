@@ -69,7 +69,7 @@ export const BillingItem: React.FC<IProps> = ({
 		}).start();
 	}, [translateXInfo, timelineOpacity, delay]);
 	const localeFormat =
-		localeApp === 'pt-BR' ? "'Dia' d',' EEEE 'às ' HH:mm " : 'DD:MM a';
+		localeApp === 'pt-BR' ? "'Dia' d',' EEEE 'às' HH:mm " : 'DD:MM a';
 	const locale = localeApp === 'pt-BR' ? ptLocale : usLocale;
 	const descriptionWithValue =
 		description !== '' ? description : 'Nenhuma descrição adicionada';

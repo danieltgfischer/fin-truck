@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, memo, useMemo } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import I18n from 'i18n-js';
 import { BillingItem } from '@/components/billingItem';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
@@ -114,18 +115,30 @@ const MonthTimeline: React.FC<IProps> = ({
 		[monthNumber, year],
 	);
 
-	const data = years[year][monthNumber] ?? [];
-	const monthYear = monthResume[year] ?? {
-		[month]: {},
-	};
-	const { gains, costs, sub_total } = monthYear[monthNumber] ?? {
-		gains: null,
-		costs: null,
-		sub_total: null,
-	};
-	if (monthNumber === 5) {
-		console.log(monthYear);
-	}
+	const data = useMemo(
+		() => years[year][monthNumber] ?? [],
+		[monthNumber, year, years],
+	);
+
+	const monthYear = useMemo(
+		() =>
+			monthResume[year] ?? {
+				[month]: {},
+			},
+
+		[month, monthResume, year],
+	);
+
+	const { gains, costs, sub_total } = useMemo(
+		() =>
+			monthYear[monthNumber] ?? {
+				gains: null,
+				costs: null,
+				sub_total: null,
+			},
+		[monthNumber, monthYear],
+	);
+
 	return (
 		<>
 			<Container onPress={openMonth}>
@@ -144,15 +157,25 @@ const MonthTimeline: React.FC<IProps> = ({
 					<SubHeader>
 						<Label>Total de ganhos de {month}:</Label>
 						<Value color="#00b300">
-							{gains || <ActivityIndicator color="#B63B34" size="small" />}
+							{I18n.toCurrency(gains) || (
+								<ActivityIndicator color="#B63B34" size="small" />
+							)}
 						</Value>
 						<Label>Total de gastos de {month}:</Label>
 						<Value color="#ff0000">
-							{costs || <ActivityIndicator color="#B63B34" size="small" />}
+							{I18n.toCurrency(costs, {}) || (
+								<ActivityIndicator color="#B63B34" size="small" />
+							)}
 						</Value>
 						<Label>Subtotal:</Label>
 						<Value color="#ff6600">
-							{sub_total || <ActivityIndicator color="#B63B34" size="small" />}
+							{I18n.toCurrency(sub_total, {
+								precision: 2,
+								separator: ',',
+								delimiter: '.',
+								unit: 'R$ ',
+								strip_insignificant_zeros: false,
+							}) || <ActivityIndicator color="#B63B34" size="small" />}
 						</Value>
 					</SubHeader>
 					<FlatList
@@ -168,4 +191,4 @@ const MonthTimeline: React.FC<IProps> = ({
 	);
 };
 
-export default MonthTimeline;
+export default memo(MonthTimeline);

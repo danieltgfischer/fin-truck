@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { TextInputProps, TextInput as TextInputNative } from 'react-native';
 import { useField } from '@unform/core';
+import I18n from 'i18n-js';
 import {
 	Container,
 	Error,
@@ -22,6 +23,7 @@ interface InputProps extends TextInputProps {
 	label: string;
 	numeric?: boolean;
 	requiredLabel?: boolean;
+	currency?: boolean;
 }
 
 interface InputReference extends TextInputNative {
@@ -33,7 +35,14 @@ export interface IInputRef {
 }
 
 const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
-	{ name, label, numeric = false, requiredLabel = false, ...rest }: InputProps,
+	{
+		name,
+		label,
+		numeric = false,
+		requiredLabel = false,
+		currency,
+		...rest
+	}: InputProps,
 	ref,
 ) => {
 	const inputRef = useRef<InputReference>(null);
@@ -47,11 +56,7 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 		focus,
 	}));
 
-	const { fieldName, registerField, defaultValue = '', error } = useField(name);
-
-	useEffect(() => {
-		if (inputRef.current) inputRef.current.value = defaultValue;
-	}, [defaultValue]);
+	const { fieldName, registerField, error } = useField(name);
 
 	useEffect(() => {
 		registerField<string>({
@@ -95,7 +100,6 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 					ref={inputRef}
 					selectionColor="#333"
 					onChangeText={handleChangeText}
-					defaultValue={defaultValue}
 					{...rest}
 				/>
 				{error && <Error>{error}</Error>}

@@ -5,7 +5,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { YearTimeline } from '@/components/year';
-
 import TimelineIcon from '@/icons/TimelineIcon.png';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYears } from '@/store/actions';
