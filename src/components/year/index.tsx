@@ -5,6 +5,7 @@ import { IState } from '@/store/types';
 import MonthTimeline from '@/components/month';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYearResume } from '@/store/actions';
+import I18n from 'i18n-js';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -26,13 +27,14 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	);
 	const dispatch = useDispatch();
 	const { billingRepository } = useDatabaseConnection();
-
+	const [isLoading, setIsLoading] = useState(true);
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
 	);
 
 	useEffect(() => {
 		billingRepository.getYearInfo(year, current_truck.id).then(resume => {
+			setIsLoading(false);
 			dispatch(updateYearResume({ year, resume }));
 		});
 	}, [billingRepository, current_truck.id, dispatch, year]);
@@ -51,6 +53,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		sub_total: null,
 	};
 
+	const countryCode = locale.country_code.split('-')[0];
 	return (
 		<Container>
 			<Button onPress={toogleOpen}>
@@ -62,23 +65,35 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 				<>
 					<SubHeader>
 						<Label>Total de ganhos de {year}:</Label>
-						<Value color="#00b300">
-							{gains || <ActivityIndicator color="#B63B34" size="small" />}
+						<Value color="#85bb65">
+							{isLoading ? (
+								<ActivityIndicator color="#B63B34" size="small" />
+							) : (
+								I18n.toCurrency(gains, locale[countryCode].CURRENCY_FORMAT)
+							)}
 						</Value>
 						<Label>Total de gastos de {year}:</Label>
-						<Value color="#ff0000">
-							{costs || <ActivityIndicator color="#B63B34" size="small" />}
+						<Value color="#FF616D">
+							{isLoading ? (
+								<ActivityIndicator color="#B63B34" size="small" />
+							) : (
+								I18n.toCurrency(costs, locale[countryCode].CURRENCY_FORMAT)
+							)}
 						</Value>
 						<Label>Subtotal:</Label>
-						<Value color="#ff6600">
-							{sub_total || <ActivityIndicator color="#B63B34" size="small" />}
+						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
+							{isLoading ? (
+								<ActivityIndicator color="#B63B34" size="small" />
+							) : (
+								I18n.toCurrency(sub_total, locale[countryCode].CURRENCY_FORMAT)
+							)}
 						</Value>
 					</SubHeader>
 					{months.map(m => (
 						<MonthTimeline
-							month={m[locale]}
+							month={m[locale.country_code]}
 							year={year}
-							key={m[locale]}
+							key={m[locale.country_code]}
 							monthNumber={m.monthNumber}
 						/>
 					))}

@@ -19,8 +19,6 @@ import {
 	ButtonContainer,
 	Title,
 	scrollView,
-	Warning,
-	Span,
 } from './styles';
 
 interface IData {
@@ -138,10 +136,6 @@ export const EditBilling: React.FC<IProps> = ({
 		<Container ontentContainerStyle={scrollView.content}>
 			<Title>Você está editando um registro para {label}</Title>
 			<Image source={source} resizeMode="contain" />
-			<Warning style={{ opacity: warningOpacity }}>
-				Por favor, no <Span>valor</Span> utilize apenas ponto <Span>(.)</Span> e
-				apenas para separar os centavos
-			</Warning>
 			<Form ref={formRef} onSubmit={handleSubmit}>
 				<Input
 					name="value"

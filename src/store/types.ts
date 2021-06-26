@@ -30,10 +30,25 @@ export interface IUpdateMonthResume extends IUpdateYearResume {
 	month: number;
 }
 
+type Currenty = {
+	separator: string;
+	precision: number;
+	unit: string;
+	delimiter: string;
+};
+
+type NamedCurrency = {
+	CURRENCY_FORMAT: Currenty;
+};
+export interface ILocace {
+	country_code: string;
+	en: NamedCurrency;
+	pt: NamedCurrency;
+}
 export interface IState {
 	trucks: Truck[];
+	locale: ILocace;
 	current_truck: Truck;
-	locale: string;
 	total_years: number[];
 	years: Year;
 	monthResume: IMonthResumeInfo; // ok

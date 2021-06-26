@@ -18,6 +18,7 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { Button } from '@/components/button';
 import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
+import I18n from 'i18n-js';
 import * as Styled from './styles';
 import { optionsObj } from './options';
 
@@ -49,11 +50,10 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [step, setStep] = useState(0);
 	const [formState, setFormState] = useState({});
-	const { current_truck } = useSelector((state: IState) => state);
+	const { current_truck, locale } = useSelector((state: IState) => state);
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
 	const translateXForm = useRef(new Animated.Value(0)).current;
-	const warningOpacity = useRef(new Animated.Value(0)).current;
 	const translateXReview = useRef(new Animated.Value(width)).current;
 	const { billingRepository } = useDatabaseConnection();
 	const title = current_truck?.name ?? '';
@@ -70,23 +70,6 @@ export const AddOptionScreen: React.FC<Props> = ({
 	useEffect(() => {
 		formRef.current?.setData(formState);
 	}, [formState, step, isModalVisible]);
-
-	useEffect(() => {
-		if (step === 0) {
-			Animated.timing(warningOpacity, {
-				toValue: 1,
-				duration: 500,
-				delay: 500,
-				useNativeDriver: true,
-			}).start();
-			return;
-		}
-		Animated.timing(warningOpacity, {
-			toValue: 0,
-			duration: 100,
-			useNativeDriver: true,
-		}).start();
-	}, [step, warningOpacity]);
 
 	const navigate = useCallback(() => {
 		navigation.goBack();
@@ -194,7 +177,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const submit = useCallback(() => {
 		formRef.current.submitForm();
 	}, []);
-
+	const countryCode = locale.country_code.split('-')[0];
 	return (
 		<>
 			<Styled.Container contentContainerStyle={Styled.scrollView.content}>
@@ -246,7 +229,12 @@ export const AddOptionScreen: React.FC<Props> = ({
 						</Styled.Title>
 						<Styled.ValueContainer>
 							<Styled.Label>Valor:</Styled.Label>
-							<Styled.Value>R$ {data?.value}</Styled.Value>
+							<Styled.Value>
+								{I18n.toCurrency(
+									data?.value,
+									locale[countryCode].CURRENCY_FORMAT,
+								)}
+							</Styled.Value>
 						</Styled.ValueContainer>
 						<Styled.DescriptionContainer>
 							<Styled.LabelDescription>Descrição:</Styled.LabelDescription>

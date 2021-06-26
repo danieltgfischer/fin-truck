@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { Modal as StyledModal } from '@/components/modal';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
+import I18n from 'i18n-js';
 import { EditBilling } from '../editBilling';
 import { DeleteOption } from '../deleteOption';
 import {
@@ -50,7 +51,7 @@ export const BillingItem: React.FC<IProps> = ({
 	const containerRef = useRef(0);
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-	const { locale: localeApp } = useSelector((state: IState) => state);
+	const { locale } = useSelector((state: IState) => state);
 	const timelineOpacity = useRef(new Animated.Value(0)).current;
 	const translateXInfo = useRef(new Animated.Value(width)).current;
 
@@ -69,10 +70,11 @@ export const BillingItem: React.FC<IProps> = ({
 		}).start();
 	}, [translateXInfo, timelineOpacity, delay]);
 	const localeFormat =
-		localeApp === 'pt-BR' ? "'Dia' d',' EEEE 'às' HH:mm " : 'DD:MM a';
-	const locale = localeApp === 'pt-BR' ? ptLocale : usLocale;
+		locale.country_code === 'pt-BR' ? "'Dia' d',' EEEE 'às' HH:mm " : 'dd:MM a';
+	const dateLocale = locale.country_code === 'pt-BR' ? ptLocale : usLocale;
 	const descriptionWithValue =
 		description !== '' ? description : 'Nenhuma descrição adicionada';
+	const countryCode = locale.country_code.split('-')[0];
 
 	return (
 		<>
@@ -98,8 +100,12 @@ export const BillingItem: React.FC<IProps> = ({
 							<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
 						</ButtonIcon>
 					</ContainerButtons>
-					<Date>{format(created_at, localeFormat, { locale })}</Date>
-					<Value>R$ {value}</Value>
+					<Date>
+						{format(created_at, localeFormat, { locale: dateLocale })}
+					</Date>
+					<Value>
+						{I18n.toCurrency(value, locale[countryCode].CURRENCY_FORMAT)}
+					</Value>
 					<Description>{descriptionWithValue}</Description>
 				</InfoContainer>
 			</Container>

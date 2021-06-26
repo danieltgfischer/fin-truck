@@ -1,11 +1,38 @@
+import * as Localization from 'expo-localization';
 import produce from 'immer';
 import { Reducer } from 'redux';
 import { ActionTypes, IState } from '../types';
 
+const locales = {
+	'pt-BR': 'pt-BR',
+	'en-US': 'en-US',
+};
+const country_code = Object.keys(locales).includes(Localization.locale)
+	? locales[Localization.locale]
+	: locales[1];
+console.log(country_code);
 const INITIAL_STATE = {
 	trucks: [],
 	current_truck: null,
-	locale: 'pt-BR',
+	locale: {
+		country_code: 'pt-BR',
+		en: {
+			CURRENCY_FORMAT: {
+				separator: '.',
+				precision: 2,
+				unit: '$',
+				delimiter: ',',
+			},
+		},
+		pt: {
+			CURRENCY_FORMAT: {
+				separator: ',',
+				precision: 2,
+				unit: 'R$',
+				delimiter: '.',
+			},
+		},
+	},
 	total_years: [],
 	years: {
 		[new Date().getFullYear()]: {

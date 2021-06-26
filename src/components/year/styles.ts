@@ -44,9 +44,9 @@ export const Value = styled.Text`
 `;
 
 export const Label = styled.Text`
-	font-family: Semi_Bold;
+	font-family: Bold;
 	font-size: 18px;
-	color: #333;
+	color: ${({ color }) => color || '#333'};
 `;
 
 export const FlatList = styled.FlatList``;

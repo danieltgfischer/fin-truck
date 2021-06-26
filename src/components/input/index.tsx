@@ -10,6 +10,9 @@ import { TextInputProps, TextInput as TextInputNative } from 'react-native';
 import { useField } from '@unform/core';
 import I18n from 'i18n-js';
 import { formatNumber } from 'react-native-currency-input';
+import { useSelector } from 'react-redux';
+import { IState } from '@/store/types';
+import { useMemo } from 'react';
 import {
 	Container,
 	Error,
@@ -47,9 +50,30 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 	}: InputProps,
 	ref,
 ) => {
+	const { locale } = useSelector((state: IState) => state);
 	const inputRef = useRef<InputReference>(null);
 	const [isFocused, setIsFocused] = useState<boolean>(false);
 	const [currencyValue, setValue] = useState();
+
+	const currencyOption = useMemo(
+		() => ({
+			'pt-BR': {
+				separator: ',',
+				prefix: 'R$ ',
+				precision: 2,
+				delimiter: '.',
+				signPosition: 'beforePrefix',
+			},
+			'en-US': {
+				separator: '.',
+				prefix: '$ ',
+				precision: 2,
+				delimiter: ',',
+				signPosition: 'beforePrefix',
+			},
+		}),
+		[],
+	);
 
 	function focus() {
 		inputRef.current.focus();
@@ -73,13 +97,10 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				if (currency && value) {
 					inputRef.current.value = value;
 					inputRef.current.setNativeProps({
-						text: formatNumber(Number(value), {
-							separator: ',',
-							prefix: 'R$ ',
-							precision: 2,
-							delimiter: '.',
-							signPosition: 'beforePrefix',
-						}),
+						text: formatNumber(
+							Number(value),
+							currencyOption[locale.country_code],
+						),
 					});
 					return;
 				}
@@ -95,7 +116,7 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				}
 			},
 		});
-	}, [currency, fieldName, numeric, registerField]);
+	}, [currency, currencyOption, fieldName, locale, numeric, registerField]);
 
 	const handleChangeText = useCallback(
 		(value: string) => {
@@ -107,8 +128,11 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 		},
 		[currency, currencyValue],
 	);
-	// br R$ 1.000,00
-	// en $ 1,000.00
+
+	const delimiter = locale.country_code === 'pt-BR' ? '.' : ',';
+	const separator = locale.country_code === 'pt-BR' ? ',' : '.';
+	const prefix = locale.country_code === 'pt-BR' ? 'R$' : '$';
+
 	return (
 		<Container>
 			{label && (
@@ -121,9 +145,9 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				{currency ? (
 					<CurrencyInput
 						value={currencyValue}
-						delimiter="."
-						separator=","
-						prefix="R$ "
+						delimiter={delimiter}
+						separator={separator}
+						prefix={prefix}
 						precision={2}
 						onChangeValue={setValue}
 						onFocus={() => setIsFocused(true)}

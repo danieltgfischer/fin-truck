@@ -32,15 +32,14 @@ const MonthTimeline: React.FC<IProps> = ({
 	year,
 }: IProps) => {
 	const { billingRepository } = useDatabaseConnection();
-	const { current_truck, years, monthResume } = useSelector(
+	const { current_truck, years, monthResume, locale } = useSelector(
 		(state: IState) => state,
 	);
 	const dispatch = useDispatch();
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
 
 	const openMonth = useCallback(async () => {
-		setIsLoading(true);
 		setIsOpen(!isOpen);
 		const billings = await billingRepository.getBillingOptionsByMonth({
 			truckId: current_truck.id,
@@ -129,15 +128,13 @@ const MonthTimeline: React.FC<IProps> = ({
 		[month, monthResume, year],
 	);
 
-	const { gains, costs, sub_total } = useMemo(
-		() =>
-			monthYear[monthNumber] ?? {
-				gains: null,
-				costs: null,
-				sub_total: null,
-			},
-		[monthNumber, monthYear],
-	);
+	const { gains, costs, sub_total } = monthYear[monthNumber] ?? {
+		gains: null,
+		costs: null,
+		sub_total: null,
+	};
+
+	const countryCode = locale.country_code.split('-')[0];
 
 	return (
 		<>
@@ -155,21 +152,27 @@ const MonthTimeline: React.FC<IProps> = ({
 			{isOpen && !isLoading && data.length > 0 && (
 				<>
 					<SubHeader>
-						<Label>Total de ganhos de {month}:</Label>
-						<Value color="#00b300">
-							{I18n.toCurrency(gains) || (
+						<Label>Total de ganhos de {year}:</Label>
+						<Value color="#85bb65">
+							{gains ? (
+								I18n.toCurrency(gains, locale[countryCode].CURRENCY_FORMAT)
+							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
-						<Label>Total de gastos de {month}:</Label>
-						<Value color="#ff0000">
-							{I18n.toCurrency(costs, {}) || (
+						<Label>Total de gastos de {year}:</Label>
+						<Value color="#FF616D">
+							{costs ? (
+								I18n.toCurrency(costs, locale[countryCode].CURRENCY_FORMAT)
+							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
 						<Label>Subtotal:</Label>
-						<Value color="#ff6600">
-							{I18n.toCurrency(sub_total) || (
+						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
+							{sub_total ? (
+								I18n.toCurrency(sub_total, locale[countryCode].CURRENCY_FORMAT)
+							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
@@ -187,4 +190,4 @@ const MonthTimeline: React.FC<IProps> = ({
 	);
 };
 
-export default memo(MonthTimeline);
+export default MonthTimeline;

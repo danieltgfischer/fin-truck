@@ -46,18 +46,3 @@ export const ButtonContainer = styled.View`
 	width: ${width}px;
 	margin: 32px 0;
 `;
-
-export const Warning = styled(Animated.Text)`
-	font-family: Regular;
-	font-size: 16px;
-	text-align: center;
-	color: #333;
-	margin: 15px 0 0;
-`;
-
-export const Span = styled.Text`
-	font-family: Bold;
-	font-size: 16px;
-	text-align: center;
-	color: #222;
-`;
