@@ -53,7 +53,6 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		sub_total: null,
 	};
 
-	const countryCode = locale.country_code.split('-')[0];
 	return (
 		<Container>
 			<Button onPress={toogleOpen}>
@@ -69,7 +68,10 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
-								I18n.toCurrency(gains, locale[countryCode].CURRENCY_FORMAT)
+								I18n.toCurrency(
+									gains,
+									locale[locale.country_code].CURRENCY_FORMAT,
+								)
 							)}
 						</Value>
 						<Label>Total de gastos de {year}:</Label>
@@ -77,7 +79,10 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
-								I18n.toCurrency(costs, locale[countryCode].CURRENCY_FORMAT)
+								I18n.toCurrency(
+									costs,
+									locale[locale.country_code].CURRENCY_FORMAT,
+								)
 							)}
 						</Value>
 						<Label>Subtotal:</Label>
@@ -85,7 +90,10 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
-								I18n.toCurrency(sub_total, locale[countryCode].CURRENCY_FORMAT)
+								I18n.toCurrency(
+									sub_total,
+									locale[locale.country_code].CURRENCY_FORMAT,
+								)
 							)}
 						</Value>
 					</SubHeader>

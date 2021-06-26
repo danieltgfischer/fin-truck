@@ -151,7 +151,6 @@ export const AddOptionScreen: React.FC<Props> = ({
 				return;
 			}
 			try {
-				console.log(data);
 				const schema = Yup.object().shape({
 					value: Yup.string().required('O valor é obrigatório'),
 				});
@@ -178,7 +177,6 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const submit = useCallback(() => {
 		formRef.current.submitForm();
 	}, []);
-	const countryCode = locale.country_code.split('-')[0];
 	return (
 		<>
 			<Styled.Container contentContainerStyle={Styled.scrollView.content}>
@@ -233,7 +231,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 							<Styled.Value>
 								{I18n.toCurrency(
 									data?.value,
-									locale[countryCode].CURRENCY_FORMAT,
+									locale[locale.country_code].CURRENCY_FORMAT,
 								)}
 							</Styled.Value>
 						</Styled.ValueContainer>

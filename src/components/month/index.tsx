@@ -134,8 +134,6 @@ const MonthTimeline: React.FC<IProps> = ({
 		sub_total: null,
 	};
 
-	const countryCode = locale.country_code.split('-')[0];
-
 	return (
 		<>
 			<Container onPress={openMonth}>
@@ -155,7 +153,10 @@ const MonthTimeline: React.FC<IProps> = ({
 						<Label>Total de ganhos de {year}:</Label>
 						<Value color="#85bb65">
 							{gains || gains === 0 ? (
-								I18n.toCurrency(gains, locale[countryCode].CURRENCY_FORMAT)
+								I18n.toCurrency(
+									gains,
+									locale[locale.country_code].CURRENCY_FORMAT,
+								)
 							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
@@ -163,7 +164,10 @@ const MonthTimeline: React.FC<IProps> = ({
 						<Label>Total de gastos de {year}:</Label>
 						<Value color="#FF616D">
 							{costs || costs === 0 ? (
-								I18n.toCurrency(costs, locale[countryCode].CURRENCY_FORMAT)
+								I18n.toCurrency(
+									costs,
+									locale[locale.country_code].CURRENCY_FORMAT,
+								)
 							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
@@ -171,7 +175,10 @@ const MonthTimeline: React.FC<IProps> = ({
 						<Label>Subtotal:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
 							{sub_total || sub_total === 0 ? (
-								I18n.toCurrency(sub_total, locale[countryCode].CURRENCY_FORMAT)
+								I18n.toCurrency(
+									sub_total,
+									locale[locale.country_code].CURRENCY_FORMAT,
+								)
 							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}

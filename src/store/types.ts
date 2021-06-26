@@ -42,16 +42,17 @@ type NamedCurrency = {
 };
 export interface ILocace {
 	country_code: string;
-	en: NamedCurrency;
-	pt: NamedCurrency;
+	'en-US': NamedCurrency;
+	'pt-BR': NamedCurrency;
 }
+
 export interface IState {
 	trucks: Truck[];
 	locale: ILocace;
 	current_truck: Truck;
 	total_years: number[];
 	years: Year;
-	monthResume: IMonthResumeInfo; // ok
+	monthResume: IMonthResumeInfo;
 	yearResume: IResumeInfo;
 	[key: number]: Month;
 }

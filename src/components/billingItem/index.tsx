@@ -74,7 +74,6 @@ export const BillingItem: React.FC<IProps> = ({
 	const dateLocale = locale.country_code === 'pt-BR' ? ptLocale : usLocale;
 	const descriptionWithValue =
 		description !== '' ? description : 'Nenhuma descrição adicionada';
-	const countryCode = locale.country_code.split('-')[0];
 
 	return (
 		<>
@@ -104,7 +103,10 @@ export const BillingItem: React.FC<IProps> = ({
 						{format(created_at, localeFormat, { locale: dateLocale })}
 					</Date>
 					<Value>
-						{I18n.toCurrency(value, locale[countryCode].CURRENCY_FORMAT)}
+						{I18n.toCurrency(
+							value,
+							locale[locale.country_code].CURRENCY_FORMAT,
+						)}
 					</Value>
 					<Description>{descriptionWithValue}</Description>
 				</InfoContainer>

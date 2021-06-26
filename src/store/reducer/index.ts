@@ -16,7 +16,7 @@ const INITIAL_STATE = {
 	current_truck: null,
 	locale: {
 		country_code: 'pt-BR',
-		en: {
+		'en-US': {
 			CURRENCY_FORMAT: {
 				separator: '.',
 				precision: 2,
@@ -24,7 +24,7 @@ const INITIAL_STATE = {
 				delimiter: ',',
 			},
 		},
-		pt: {
+		'pt-BR': {
 			CURRENCY_FORMAT: {
 				separator: ',',
 				precision: 2,

@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import { TextInputProps, TextInput as TextInputNative } from 'react-native';
 import { useField } from '@unform/core';
-import I18n from 'i18n-js';
 import { formatNumber } from 'react-native-currency-input';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
