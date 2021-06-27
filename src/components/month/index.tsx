@@ -42,7 +42,6 @@ const MonthTimeline: React.FC<IProps> = ({
 	const [isOpen, setIsOpen] = useState(
 		thisYear.getMonth() === monthNumber && thisYear.getFullYear() === year,
 	);
-
 	const openMonth = useCallback(async () => {
 		setIsOpen(!isOpen);
 		setIsLoading(true);
@@ -86,6 +85,7 @@ const MonthTimeline: React.FC<IProps> = ({
 					dispatch(updateMonthResume({ resume, year, month: monthNumber }));
 				});
 		}
+		return () => setIsLoading(false);
 	}, [
 		billingRepository,
 		current_truck.id,

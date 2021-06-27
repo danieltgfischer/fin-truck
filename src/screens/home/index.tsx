@@ -46,6 +46,13 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		return unsubscribe;
 	}, [dispatch, navigation, truckRepository]);
 
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('blur', () => {
+			setIsModalVisible(false);
+		});
+		return unsubscribe;
+	}, [dispatch, navigation, truckRepository]);
+
 	function createRows(trucks, columns) {
 		const data = Array.from(trucks);
 		const rows = Math.floor(data.length / columns);

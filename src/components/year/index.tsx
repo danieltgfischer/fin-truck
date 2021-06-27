@@ -23,7 +23,7 @@ interface IProps {
 }
 
 export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
-	const { locale, current_truck, yearResume } = useSelector(
+	const { locale, current_truck, yearResume, monthResume } = useSelector(
 		(state: IState) => state,
 	);
 	const dispatch = useDispatch();
@@ -34,12 +34,17 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	);
 
 	useEffect(() => {
+		const ac = new AbortController();
 		billingRepository.getYearInfo(year, current_truck.id).then(resume => {
 			setIsLoading(false);
+			if (!monthResume[year]) {
+				dispatch(addYearKeyAtYears({ year }));
+				console.log(monthResume, year, monthResume[year]);
+			}
 			dispatch(updateYearResume({ year, resume }));
-			dispatch(addYearKeyAtYears({ year }));
 		});
-	}, [billingRepository, current_truck.id, dispatch, year]);
+		return () => ac.abort();
+	}, [billingRepository, current_truck.id, dispatch, monthResume, year]);
 
 	const months = useMemo(
 		() => Object.keys(monthsNames).map(m => monthsNames[m]),
