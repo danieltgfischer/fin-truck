@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import TrucksIcon from '@/icons/TrucksIcon.png';
-import Timeline from '@/icons/Timeline.png';
+import TrucksIcon from '@/icons/TrucksIconBlack.png';
+import Timeline from '@/icons/TimelineBlack.png';
 import { useNavigation } from '@react-navigation/native';
 import { routeNames } from '@/navigation/types';
 import I18n from 'i18n-js';

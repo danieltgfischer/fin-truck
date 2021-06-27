@@ -29,3 +29,8 @@ export const Label = styled.Text`
 	font-family: Semi_Bold;
 	margin: 0 0 0 15px;
 `;
+
+export const ContainerLanguageSwitch = styled.View`
+	width: 100%;
+	padding: 0 10%;
+`;

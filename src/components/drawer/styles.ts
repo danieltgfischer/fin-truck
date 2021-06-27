@@ -46,7 +46,7 @@ export const HeaderContainer = styled.View`
 	border: none;
 	border-bottom-width: 1px;
 	position: relative;
-	border-color: #b63b34;
+	border-color: #ccc;
 	border-style: solid;
 `;
 

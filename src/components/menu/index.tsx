@@ -4,7 +4,13 @@ import { AntDesign } from '@expo/vector-icons';
 import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
 import { LanguageSwitch } from '../languageSwitch';
-import { Container, ButtonIcon, Rotate, Label } from './styles';
+import {
+	Container,
+	ButtonIcon,
+	Rotate,
+	Label,
+	ContainerLanguageSwitch,
+} from './styles';
 
 interface IProps {
 	isModalVisible: boolean;
@@ -72,7 +78,9 @@ export const Menu: React.FC<IProps> = ({
 				</Rotate>
 			</ButtonIcon>
 			<Label>{I18n.t(TranslationsValues.language)}:</Label>
-			<LanguageSwitch />
+			<ContainerLanguageSwitch>
+				<LanguageSwitch />
+			</ContainerLanguageSwitch>
 		</Container>
 	);
 };

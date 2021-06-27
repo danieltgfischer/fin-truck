@@ -13,7 +13,7 @@ import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import {
 	ButtonIcon,
-	Container,
+	HomeContainer,
 	EmptyCell,
 	FlatList,
 	flatListStyle,
@@ -22,6 +22,7 @@ import {
 	Title,
 	FooterAddContainer,
 	CloseMenuContainer,
+	Container,
 } from './styles';
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -86,35 +87,37 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
 
 	return (
-		<CloseMenuContainer onPress={() => setIsModalVisible(false)}>
-			<Container>
-				<Title>{I18n.t(TranslationsValues.title_home)}:</Title>
-				<FlatList
-					data={data}
-					renderItem={renderItem}
-					keyExtractor={item => String(item.id)}
-					contentContainerStyle={flatListStyle.content}
-					numColumns={3}
-					ListEmptyComponent={EmptyTrucks}
-				/>
-				<Footer>
-					<FooterAddContainer>
-						<FooterLabel>
-							{I18n.t(TranslationsValues.button_label_home)}
-						</FooterLabel>
-						<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
-							<AntDesign name="pluscircle" size={50} color="#b63b34" />
+		<Container>
+			<CloseMenuContainer onPress={() => setIsModalVisible(false)}>
+				<HomeContainer>
+					<Title>{I18n.t(TranslationsValues.title_home)}:</Title>
+					<FlatList
+						data={data}
+						renderItem={renderItem}
+						keyExtractor={item => String(item.id)}
+						contentContainerStyle={flatListStyle.content}
+						numColumns={3}
+						ListEmptyComponent={EmptyTrucks}
+					/>
+					<Footer>
+						<FooterAddContainer>
+							<FooterLabel>
+								{I18n.t(TranslationsValues.button_label_home)}
+							</FooterLabel>
+							<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
+								<AntDesign name="pluscircle" size={50} color="#b63b34" />
+							</ButtonIcon>
+						</FooterAddContainer>
+						<ButtonIcon onPress={() => setIsModalVisible(true)}>
+							<AntDesign name="setting" size={50} color="#ccc" />
 						</ButtonIcon>
-					</FooterAddContainer>
-					<ButtonIcon onPress={() => setIsModalVisible(true)}>
-						<AntDesign name="setting" size={50} color="#ccc" />
-					</ButtonIcon>
-				</Footer>
-				<Menu
-					isModalVisible={isModalVisible}
-					setIsModalVisible={setIsModalVisible}
-				/>
-			</Container>
-		</CloseMenuContainer>
+					</Footer>
+				</HomeContainer>
+			</CloseMenuContainer>
+			<Menu
+				isModalVisible={isModalVisible}
+				setIsModalVisible={setIsModalVisible}
+			/>
+		</Container>
 	);
 };

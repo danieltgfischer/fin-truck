@@ -12,7 +12,12 @@ export const FlatList = styled.FlatList`
 `;
 
 export const Container = styled.SafeAreaView`
-	display: flex;
+	height: 100%;
+	width: 100%;
+	position: relative;
+`;
+
+export const HomeContainer = styled.View`
 	height: 100%;
 	width: 100%;
 	background-color: #fff;
