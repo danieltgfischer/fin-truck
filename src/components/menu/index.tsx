@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { updateCountryCode } from '@/store/actions';
 import { useCallback } from 'react';
+import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import {
 	Container,
 	ButtonIcon,
@@ -94,7 +96,7 @@ export const Menu: React.FC<IProps> = ({
 					<AntDesign name="setting" size={50} color="#ccc" />
 				</Rotate>
 			</ButtonIcon>
-			<Label>Idioma:</Label>
+			<Label>{I18n.t(TranslationsValues.language)}:</Label>
 			<LanguageContainer>
 				<Image source={Usa} resizeMode="contain" />
 				<Switch

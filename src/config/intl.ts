@@ -58,6 +58,7 @@ export enum TranslationsValues {
 	edit_option_description_label = 'edit_option_description_label',
 	edit_option_title = 'edit_option_title',
 	delete_option_title = 'delete_option_title',
+	language = 'language',
 }
 
 export const translations = {
@@ -123,6 +124,7 @@ export const translations = {
 		edit_option_title: 'You are editing a record for %{value}',
 		delete_option_title:
 			'You are about to delete this record. Are you sure about that?',
+		language: 'Language',
 	},
 	'pt-BR': {
 		title_home: 'Caminhões adicionados',
@@ -187,5 +189,6 @@ export const translations = {
 		edit_option_title: 'Você está editando um registro para {value}',
 		delete_option_title:
 			'Você está prestes a excluir este registro. Tem certeza disso?',
+		language: 'Idioma',
 	},
 };
