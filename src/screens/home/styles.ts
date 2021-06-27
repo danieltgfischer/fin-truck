@@ -59,3 +59,5 @@ export const EmptyCell = styled.View`
 export const FooterAddContainer = styled.View`
 	position: relative;
 `;
+
+export const CloseMenuContainer = styled.TouchableWithoutFeedback``;

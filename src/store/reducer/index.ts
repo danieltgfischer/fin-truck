@@ -100,7 +100,7 @@ export const truckReducer: Reducer<IState> = (
 				} = action;
 				draft.years = {
 					...draft.years,
-					[year]: {},
+					[year]: { ...draft.years[year] },
 				};
 				break;
 			}

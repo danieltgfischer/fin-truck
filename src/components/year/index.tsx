@@ -37,10 +37,6 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		const ac = new AbortController();
 		billingRepository.getYearInfo(year, current_truck.id).then(resume => {
 			setIsLoading(false);
-			if (!monthResume[year]) {
-				dispatch(addYearKeyAtYears({ year }));
-				console.log(monthResume, year, monthResume[year]);
-			}
 			dispatch(updateYearResume({ year, resume }));
 		});
 		return () => ac.abort();
