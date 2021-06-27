@@ -14,6 +14,9 @@ export type IValuesResume = {
 	sub_total: number;
 };
 
+export interface IAddYear {
+	year: number;
+}
 export interface IResumeInfo {
 	[key: number]: IValuesResume;
 }
@@ -107,4 +110,5 @@ export enum ActionTypes {
 	UPDATE_TIMELINE = 'UPDATE_TIMELINE',
 	UPDATE_YEAR_RESUME = 'UPDATE_YEAR_RESUME',
 	UPDATE_MONTH_RESUME = 'UPDATE_MONTH_RESUME',
+	ADD_YEAR_IN_YEARS = 'ADD_YEAR_IN_YEARS',
 }

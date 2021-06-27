@@ -38,7 +38,10 @@ const MonthTimeline: React.FC<IProps> = ({
 	);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(true);
-	const [isOpen, setIsOpen] = useState(new Date().getMonth() === monthNumber);
+	const thisYear = new Date();
+	const [isOpen, setIsOpen] = useState(
+		thisYear.getMonth() === monthNumber && thisYear.getFullYear() === year,
+	);
 
 	const openMonth = useCallback(async () => {
 		setIsOpen(!isOpen);

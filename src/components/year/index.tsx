@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import MonthTimeline from '@/components/month';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
-import { updateYearResume } from '@/store/actions';
+import { addYearKeyAtYears, updateYearResume } from '@/store/actions';
 import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
 import { monthsNames } from './months';
@@ -37,6 +37,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		billingRepository.getYearInfo(year, current_truck.id).then(resume => {
 			setIsLoading(false);
 			dispatch(updateYearResume({ year, resume }));
+			dispatch(addYearKeyAtYears({ year }));
 		});
 	}, [billingRepository, current_truck.id, dispatch, year]);
 

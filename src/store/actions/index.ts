@@ -49,6 +49,15 @@ export function updateMonth({
 	};
 }
 
+export function addYearKeyAtYears({
+	year,
+}: Types.IAddYear): Types.IAction<Types.IAddYear> {
+	return {
+		type: Types.ActionTypes.ADD_YEAR_IN_YEARS,
+		payload: { year },
+	};
+}
+
 export function updateTimeline({
 	monthBillings,
 	monthResume,

@@ -121,7 +121,9 @@ export class BilliginRepository {
 				const date = new Date(b.created_at);
 				return date.getFullYear();
 			});
-			return { total_years: Array.from(new Set(years)) ?? [] };
+			return {
+				total_years: Array.from(new Set(years)).sort((a, b) => b - a) ?? [],
+			};
 		} catch (error) {
 			throw new Error(error);
 		}

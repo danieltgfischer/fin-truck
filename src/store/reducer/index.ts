@@ -94,6 +94,16 @@ export const truckReducer: Reducer<IState> = (
 				draft.years[year][month] = billings;
 				break;
 			}
+			case ActionTypes.ADD_YEAR_IN_YEARS: {
+				const {
+					payload: { year },
+				} = action;
+				draft.years = {
+					...draft.years,
+					[year]: {},
+				};
+				break;
+			}
 			case ActionTypes.UPDATE_TIMELINE: {
 				const {
 					payload: {
@@ -125,9 +135,12 @@ export const truckReducer: Reducer<IState> = (
 				const {
 					payload: { month, year, resume },
 				} = action;
-				draft.monthResume[year] = {
-					...draft.monthResume[year],
-					[month]: resume,
+				draft.monthResume = {
+					...draft.monthResume,
+					[year]: {
+						...draft.monthResume[year], // clone another months
+						[month]: resume,
+					},
 				};
 				break;
 			}

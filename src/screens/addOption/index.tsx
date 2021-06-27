@@ -20,7 +20,7 @@ import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
 import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
-import * as Styled from './styles';
+import * as _ from './styles';
 import { optionsObj } from './options';
 
 interface IData {
@@ -59,7 +59,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const { billingRepository } = useDatabaseConnection();
 	const title = current_truck?.name ?? '';
 	const option = route?.params?.option ?? '';
-	const { title: label, value } = optionsObj[option];
+	const { value } = optionsObj[option];
 	useEffect(() => {
 		navigation.addListener('focus', () => {
 			navigation.setOptions({
@@ -100,6 +100,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 
 	const createBillingOption = useCallback(async () => {
 		try {
+			// const date = new Date(2019, 11, 31, 20, 30);
 			const date = new Date();
 			await billingRepository.createBillingOption({
 				value: data?.value,
@@ -182,26 +183,23 @@ export const AddOptionScreen: React.FC<Props> = ({
 	}, []);
 	return (
 		<>
-			<Styled.Container contentContainerStyle={Styled.scrollView.content}>
-				<Styled.ButtonHeaderContainer>
-					<Styled.IconButton onPress={() => setModalVisible(!isModalVisible)}>
+			<_.Container contentContainerStyle={_.scrollView.content}>
+				<_.ButtonHeaderContainer>
+					<_.IconButton onPress={() => setModalVisible(!isModalVisible)}>
 						<Feather name="help-circle" size={24} color="#b63b34" />
-					</Styled.IconButton>
-				</Styled.ButtonHeaderContainer>
-				<Styled.Header>
-					<Styled.Image
-						source={optionsObj[option].source}
-						resizeMode="contain"
-					/>
-					<Styled.Title>{I18n.t(value)}</Styled.Title>
-				</Styled.Header>
-				<Styled.AnimetadeContainer>
+					</_.IconButton>
+				</_.ButtonHeaderContainer>
+				<_.Header>
+					<_.Image source={optionsObj[option].source} resizeMode="contain" />
+					<_.Title>{I18n.t(value)}</_.Title>
+				</_.Header>
+				<_.AnimetadeContainer>
 					<Animated.View
 						style={{
 							transform: [{ translateX: translateXForm }],
 						}}
 					>
-						<Styled.Form ref={formRef} onSubmit={handleSubmit}>
+						<_.Form ref={formRef} onSubmit={handleSubmit}>
 							<Input
 								numeric
 								name="value"
@@ -219,38 +217,36 @@ export const AddOptionScreen: React.FC<Props> = ({
 								maxLength={60}
 								ref={nextInputRef}
 							/>
-						</Styled.Form>
+						</_.Form>
 					</Animated.View>
-					<Styled.ReviewContainer
+					<_.ReviewContainer
 						style={{
 							transform: [{ translateX: translateXReview }],
 						}}
 					>
-						<Styled.Title>
-							{I18n.t(TranslationsValues.review_title)}:
-						</Styled.Title>
-						<Styled.ValueContainer>
-							<Styled.Label>{I18n.t(TranslationsValues.value)}:</Styled.Label>
-							<Styled.Value>
+						<_.Title>{I18n.t(TranslationsValues.review_title)}:</_.Title>
+						<_.ValueContainer>
+							<_.Label>{I18n.t(TranslationsValues.value)}:</_.Label>
+							<_.Value>
 								{I18n.toCurrency(
 									data?.value,
 									locale[locale.country_code].CURRENCY_FORMAT,
 								)}
-							</Styled.Value>
-						</Styled.ValueContainer>
-						<Styled.DescriptionContainer>
-							<Styled.LabelDescription>
+							</_.Value>
+						</_.ValueContainer>
+						<_.DescriptionContainer>
+							<_.LabelDescription>
 								{I18n.t(TranslationsValues.description)}:
-							</Styled.LabelDescription>
-							<Styled.Description>
+							</_.LabelDescription>
+							<_.Description>
 								{data?.description
 									? data?.description
 									: I18n.t(TranslationsValues.empty_description)}
-							</Styled.Description>
-						</Styled.DescriptionContainer>
-					</Styled.ReviewContainer>
-				</Styled.AnimetadeContainer>
-				<Styled.ButtonContainer>
+							</_.Description>
+						</_.DescriptionContainer>
+					</_.ReviewContainer>
+				</_.AnimetadeContainer>
+				<_.ButtonContainer>
 					<Button
 						onPress={goBack}
 						buttonLabel={
@@ -268,23 +264,23 @@ export const AddOptionScreen: React.FC<Props> = ({
 						}
 						next
 					/>
-				</Styled.ButtonContainer>
-			</Styled.Container>
+				</_.ButtonContainer>
+			</_.Container>
 			<Modal visible={isModalVisible} animationType="fade">
-				<Styled.ModalContainer>
-					<Styled.Title>{I18n.t(value)}</Styled.Title>
-					<Styled.ModalImage
+				<_.ModalContainer>
+					<_.Title>{I18n.t(value)}</_.Title>
+					<_.ModalImage
 						source={optionsObj[option].source}
 						resizeMode="stretch"
 					/>
-					<Styled.ModalDescription>
+					<_.ModalDescription>
 						{optionsObj[option].description}
-					</Styled.ModalDescription>
+					</_.ModalDescription>
 					<Button
 						onPress={() => setModalVisible(!isModalVisible)}
 						buttonLabel={I18n.t(TranslationsValues.close)}
 					/>
-				</Styled.ModalContainer>
+				</_.ModalContainer>
 			</Modal>
 		</>
 	);
