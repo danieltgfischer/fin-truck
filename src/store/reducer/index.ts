@@ -104,6 +104,13 @@ export const truckReducer: Reducer<IState> = (
 				};
 				break;
 			}
+			case ActionTypes.UPDATE_COUNTRY_CODE: {
+				const {
+					payload: { country_code },
+				} = action;
+				draft.locale.country_code = country_code;
+				break;
+			}
 			case ActionTypes.UPDATE_TIMELINE: {
 				const {
 					payload: {

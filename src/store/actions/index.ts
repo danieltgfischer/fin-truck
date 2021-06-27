@@ -22,13 +22,6 @@ export function updateCurrentTruck(truck: Truck): Types.IAction<Types.ITruck> {
 	};
 }
 
-export function updateLocale(locale: string): Types.IAction<Types.ILocale> {
-	return {
-		type: Types.ActionTypes.UPDATE_LOCALE,
-		payload: { locale },
-	};
-}
-
 export function updateYears(
 	total_years: number[],
 ): Types.IAction<Types.IYears> {
@@ -104,5 +97,14 @@ export function updateMonthResume({
 			year,
 			month,
 		},
+	};
+}
+
+export function updateCountryCode({
+	country_code,
+}: Types.ICountryCode): Types.IAction<Types.ICountryCode> {
+	return {
+		type: Types.ActionTypes.UPDATE_COUNTRY_CODE,
+		payload: { country_code },
 	};
 }

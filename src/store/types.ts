@@ -14,6 +14,10 @@ export type IValuesResume = {
 	sub_total: number;
 };
 
+export interface ICountryCode {
+	country_code: string;
+}
+
 export interface IAddYear {
 	year: number;
 }
@@ -70,10 +74,6 @@ export interface ITruck {
 	truck: Truck;
 }
 
-export interface ILocale {
-	locale: string;
-}
-
 export interface IYears {
 	total_years: number[];
 }
@@ -104,11 +104,11 @@ export enum ActionTypes {
 	UPDATE_TRUCKS = 'UPDATE_TRUCKS',
 	ADD_TRUCK = 'ADD_TRUCK',
 	UPDATE_CURRENT_TRUCK = 'UPDATE_CURRENT_TRUCK',
-	UPDATE_LOCALE = 'UPDATE_LOCALE',
 	UPDATE_YEARS = 'UPDATE_YEARS',
 	UPDATE_MONTH = 'UPDATE_MONTH',
 	UPDATE_TIMELINE = 'UPDATE_TIMELINE',
 	UPDATE_YEAR_RESUME = 'UPDATE_YEAR_RESUME',
 	UPDATE_MONTH_RESUME = 'UPDATE_MONTH_RESUME',
 	ADD_YEAR_IN_YEARS = 'ADD_YEAR_IN_YEARS',
+	UPDATE_COUNTRY_CODE = 'UPDATE_COUNTRY_CODE',
 }

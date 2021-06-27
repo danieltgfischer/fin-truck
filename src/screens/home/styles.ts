@@ -27,14 +27,16 @@ export const Title = styled.Text`
 `;
 
 export const Footer = styled.View`
+	flex-direction: row;
 	position: relative;
-	justify-content: center;
+	justify-content: space-between;
+	align-items: center;
 	height: 100px;
 	padding: 15px 0 0;
 `;
 
 export const ButtonIcon = styled.TouchableOpacity`
-	margin: 0 0 0 30px;
+	margin: 0 30px;
 `;
 
 export const FooterLabel = styled.Text`
@@ -44,7 +46,7 @@ export const FooterLabel = styled.Text`
 	text-align: center;
 	width: ${width * 0.55}px;
 	left: 50px;
-	top: 0px;
+	top: -35px;
 `;
 
 export const EmptyCell = styled.View`
@@ -52,4 +54,8 @@ export const EmptyCell = styled.View`
 	height: 125px;
 	background: transparent;
 	margin: 3%;
+`;
+
+export const FooterAddContainer = styled.View`
+	position: relative;
 `;

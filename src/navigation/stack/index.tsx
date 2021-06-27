@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Fonts from '@expo-google-fonts/source-sans-pro';
 import { ActivityIndicator } from 'react-native';
@@ -13,16 +14,20 @@ import { AddTruckScreen } from '@/screens/addTruck';
 import { AddOptionScreen } from '@/screens/addOption';
 import { Timeline } from '@/screens/timeline';
 import { translations } from '@/config/intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
+import { useCallback } from 'react';
+import { updateCountryCode } from '@/store/actions';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
 import { LoadingContainer } from '../style';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const Navigation: FC = () => {
+export const Navigation: React.FC = () => {
 	const { locale } = useSelector((state: IState) => state);
+	const dispatch = useDispatch();
+
 	const [fontsLoaded] = Fonts.useFonts({
 		Light: Fonts.SourceSansPro_300Light,
 		Light_Italic: Fonts.SourceSansPro_300Light_Italic,
@@ -33,6 +38,22 @@ export const Navigation: FC = () => {
 		Bold: Fonts.SourceSansPro_700Bold,
 	});
 
+	const updateLanguage = useCallback(async () => {
+		const country_code = await AsyncStorage.getItem('@CountryCode');
+		if (!country_code) {
+			try {
+				await AsyncStorage.setItem('@CountryCode', locale.country_code);
+			} catch (error) {
+				console.warn(error);
+			}
+		}
+		dispatch(updateCountryCode({ country_code }));
+	}, [dispatch, locale.country_code]);
+
+	useEffect(() => {
+		updateLanguage();
+	}, [updateLanguage]);
+
 	if (!fontsLoaded) {
 		return (
 			<LoadingContainer>
@@ -40,6 +61,7 @@ export const Navigation: FC = () => {
 			</LoadingContainer>
 		);
 	}
+
 	const options: StackNavigationOptions = {
 		headerTitleAlign: 'center',
 		headerTitleStyle: {

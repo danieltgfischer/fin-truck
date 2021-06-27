@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,6 +10,7 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateTrucks } from '@/store/actions';
 import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { Menu } from '@/components/menu';
 import {
 	ButtonIcon,
 	Container,
@@ -19,6 +20,7 @@ import {
 	Footer,
 	FooterLabel,
 	Title,
+	FooterAddContainer,
 } from './styles';
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -31,6 +33,7 @@ type Props = {
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
@@ -86,13 +89,22 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 				ListEmptyComponent={EmptyTrucks}
 			/>
 			<Footer>
-				<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
-					<AntDesign name="pluscircle" size={50} color="#b63b34" />
+				<FooterAddContainer>
+					<FooterLabel>
+						{I18n.t(TranslationsValues.button_label_home)}
+					</FooterLabel>
+					<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
+						<AntDesign name="pluscircle" size={50} color="#b63b34" />
+					</ButtonIcon>
+				</FooterAddContainer>
+				<ButtonIcon onPress={() => setIsModalVisible(true)}>
+					<AntDesign name="setting" size={50} color="#ccc" />
 				</ButtonIcon>
-				<FooterLabel>
-					{I18n.t(TranslationsValues.button_label_home)}
-				</FooterLabel>
 			</Footer>
+			<Menu
+				isModalVisible={isModalVisible}
+				setIsModalVisible={setIsModalVisible}
+			/>
 		</Container>
 	);
 };
