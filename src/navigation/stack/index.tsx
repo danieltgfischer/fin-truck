@@ -78,7 +78,6 @@ export const Navigation: React.FC = () => {
 
 	I18n.translations = translations;
 	I18n.locale = locale.country_code;
-	I18n.fallbacks = true;
 
 	return (
 		<>

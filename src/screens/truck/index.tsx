@@ -9,6 +9,8 @@ import { EditTruck } from '@/components/editTruck';
 import { Modal as StyledModal } from '@/components/modal';
 import { DeleteTruck } from '@/components/deleteTruck';
 import I18n from 'i18n-js';
+import { useSelector } from 'react-redux';
+import { IState } from '@/store/types';
 import {
 	Container,
 	FlatList,
@@ -35,6 +37,7 @@ type Props = {
 export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+	useSelector((state: IState) => state);
 
 	const renderItem = ({ item: { source, big_name, value }, index }) => {
 		return (

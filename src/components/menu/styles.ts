@@ -29,15 +29,3 @@ export const Label = styled.Text`
 	font-family: Semi_Bold;
 	margin: 0 0 0 15px;
 `;
-
-export const Image = styled.Image`
-	width: 50px;
-	height: 50px;
-`;
-
-export const LanguageContainer = styled.View`
-	width: ${width}px;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-around;
-`;

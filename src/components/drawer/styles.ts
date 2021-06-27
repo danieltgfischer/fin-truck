@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
+	position: relative;
 	height: 100%;
 	width: 100%;
 `;
@@ -47,4 +48,15 @@ export const HeaderContainer = styled.View`
 	position: relative;
 	border-color: #b63b34;
 	border-style: solid;
+`;
+
+export const LanguageContainer = styled.View`
+	align-self: center;
+	background-color: #fafafa;
+	width: 100%;
+	justify-content: center;
+	position: absolute;
+	height: 15%;
+	bottom: 0;
+	/* padding: 0 5%; */
 `;

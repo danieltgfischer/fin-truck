@@ -6,7 +6,13 @@ import { routeNames } from '@/navigation/types';
 import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
 import { DrawerItem } from './DrawerItem';
-import { Container, HeaderContainer, HeaderLabel } from './styles';
+import {
+	Container,
+	HeaderContainer,
+	HeaderLabel,
+	LanguageContainer,
+} from './styles';
+import { LanguageSwitch } from '../languageSwitch';
 
 export const DrawerComponent: React.FC = () => {
 	const navigation = useNavigation();
@@ -33,6 +39,9 @@ export const DrawerComponent: React.FC = () => {
 				name={I18n.t(TranslationsValues.history)}
 				onPress={() => navigate(routeNames.Timeline)}
 			/>
+			<LanguageContainer>
+				<LanguageSwitch />
+			</LanguageContainer>
 		</Container>
 	);
 };

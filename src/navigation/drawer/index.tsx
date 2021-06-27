@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-	createDrawerNavigator,
-	DrawerContentComponentProps,
-} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { TruckScreen } from '@/screens/truck';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
