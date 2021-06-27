@@ -26,7 +26,7 @@ export const Title = styled.Text`
 	color: #000;
 	font-size: 24px;
 	text-align: center;
-	font-family: Italic;
+	font-family: Regular;
 	padding: 0 15px;
 	margin: 0 0 15px;
 `;
@@ -43,4 +43,10 @@ export const ButtonContainer = styled.View`
 	align-items: center;
 	width: ${width}px;
 	margin: 32px 0;
+`;
+
+export const Span = styled.Text`
+	color: #333;
+	font-size: 24px;
+	font-family: Bold;
 `;

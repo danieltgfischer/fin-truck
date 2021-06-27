@@ -12,6 +12,8 @@ import { optionsObj } from '@/screens/truck/options';
 import { updateTimeline } from '@/store/actions';
 import { Animated, ToastAndroid } from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
+import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import {
 	Container,
 	Form,
@@ -48,7 +50,7 @@ export const EditBilling: React.FC<IProps> = ({
 	const dispatch = useDispatch();
 	const { year, monthNumber } = useContext(MonthInfoContext);
 	const { billingRepository } = useDatabaseConnection();
-	const { source, label } = optionsObj[option];
+	const { source, label, value: optionValue } = optionsObj[option];
 
 	useEffect(() => {
 		Animated.timing(warningOpacity, {
@@ -93,7 +95,9 @@ export const EditBilling: React.FC<IProps> = ({
 		async (data: IData, { reset }) => {
 			try {
 				const schema = Yup.object().shape({
-					value: Yup.string().required('O valor é obrigatório'),
+					value: Yup.string().required(
+						I18n.t(TranslationsValues.value_required),
+					),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -109,7 +113,9 @@ export const EditBilling: React.FC<IProps> = ({
 				reset();
 				closeModal();
 				ToastAndroid.showWithGravityAndOffset(
-					`Uma opção ${label} foi atualizada`,
+					I18n.t(TranslationsValues.toast_edit_option, {
+						value: I18n.t(optionValue),
+					}),
 					ToastAndroid.LONG,
 					ToastAndroid.BOTTOM,
 					0,
@@ -125,7 +131,7 @@ export const EditBilling: React.FC<IProps> = ({
 				}
 			}
 		},
-		[billingRepository, closeModal, id, label, updateTimelineOnEdit],
+		[billingRepository, closeModal, id, optionValue, updateTimelineOnEdit],
 	);
 
 	const submit = useCallback(() => {
@@ -134,12 +140,16 @@ export const EditBilling: React.FC<IProps> = ({
 
 	return (
 		<Container ontentContainerStyle={scrollView.content}>
-			<Title>Você está editando um registro para {label}</Title>
+			<Title>
+				{I18n.t(TranslationsValues.edit_option_title, {
+					value: I18n.t(optionValue),
+				})}
+			</Title>
 			<Image source={source} resizeMode="contain" />
 			<Form ref={formRef} onSubmit={handleSubmit}>
 				<Input
 					name="value"
-					label="Editar o valor para essa opção"
+					label={I18n.t(TranslationsValues.edit_option_value_label)}
 					numeric
 					currency
 					returnKeyType="next"
@@ -150,14 +160,21 @@ export const EditBilling: React.FC<IProps> = ({
 				/>
 				<MultiInput
 					name="description"
-					label="Editar a descrição para esse valor"
+					label={I18n.t(TranslationsValues.edit_option_description_label)}
 					maxLength={60}
 					ref={nextInputRef}
 				/>
 			</Form>
 			<ButtonContainer>
-				<Button buttonLabel="Cancelar" onPress={closeModal} />
-				<Button buttonLabel="Salvar" onPress={submit} next />
+				<Button
+					buttonLabel={I18n.t(TranslationsValues.cancel)}
+					onPress={closeModal}
+				/>
+				<Button
+					buttonLabel={I18n.t(TranslationsValues.save)}
+					onPress={submit}
+					next
+				/>
 			</ButtonContainer>
 		</Container>
 	);

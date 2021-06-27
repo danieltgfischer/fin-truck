@@ -19,6 +19,7 @@ import { Button } from '@/components/button';
 import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
 import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import * as Styled from './styles';
 import { optionsObj } from './options';
 
@@ -58,7 +59,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const { billingRepository } = useDatabaseConnection();
 	const title = current_truck?.name ?? '';
 	const option = route?.params?.option ?? '';
-	const { title: label } = optionsObj[option];
+	const { title: label, value } = optionsObj[option];
 	useEffect(() => {
 		navigation.addListener('focus', () => {
 			navigation.setOptions({
@@ -110,7 +111,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				year: date.getFullYear(),
 			});
 			ToastAndroid.showWithGravityAndOffset(
-				`Você registrou um valor em ${label}`,
+				I18n.t(TranslationsValues.toast_add_option, { value: I18n.t(value) }),
 				ToastAndroid.LONG,
 				ToastAndroid.BOTTOM,
 				0,
@@ -126,9 +127,9 @@ export const AddOptionScreen: React.FC<Props> = ({
 		current_truck,
 		data?.description,
 		data?.value,
-		label,
 		navigate,
 		option,
+		value,
 	]);
 
 	const animate = useCallback(() => {
@@ -152,7 +153,9 @@ export const AddOptionScreen: React.FC<Props> = ({
 			}
 			try {
 				const schema = Yup.object().shape({
-					value: Yup.string().required('O valor é obrigatório'),
+					value: Yup.string().required(
+						I18n.t(TranslationsValues.value_required),
+					),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -190,7 +193,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 						source={optionsObj[option].source}
 						resizeMode="contain"
 					/>
-					<Styled.Title>{optionsObj[option].title}</Styled.Title>
+					<Styled.Title>{I18n.t(value)}</Styled.Title>
 				</Styled.Header>
 				<Styled.AnimetadeContainer>
 					<Animated.View
@@ -202,7 +205,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 							<Input
 								numeric
 								name="value"
-								label="Adicione um valor para essa opção"
+								label={I18n.t(TranslationsValues.add_option_value_label)}
 								returnKeyType="next"
 								maxLength={16}
 								currency
@@ -212,7 +215,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 							/>
 							<MultiInput
 								name="description"
-								label="Adicione uma descrição para esse valor"
+								label={I18n.t(TranslationsValues.add_option_description_label)}
 								maxLength={60}
 								ref={nextInputRef}
 							/>
@@ -224,10 +227,10 @@ export const AddOptionScreen: React.FC<Props> = ({
 						}}
 					>
 						<Styled.Title>
-							Por favor, revise se os valores estão corretos antes de adicionar:
+							{I18n.t(TranslationsValues.review_title)}:
 						</Styled.Title>
 						<Styled.ValueContainer>
-							<Styled.Label>Valor:</Styled.Label>
+							<Styled.Label>{I18n.t(TranslationsValues.value)}:</Styled.Label>
 							<Styled.Value>
 								{I18n.toCurrency(
 									data?.value,
@@ -236,11 +239,13 @@ export const AddOptionScreen: React.FC<Props> = ({
 							</Styled.Value>
 						</Styled.ValueContainer>
 						<Styled.DescriptionContainer>
-							<Styled.LabelDescription>Descrição:</Styled.LabelDescription>
+							<Styled.LabelDescription>
+								{I18n.t(TranslationsValues.description)}:
+							</Styled.LabelDescription>
 							<Styled.Description>
 								{data?.description
 									? data?.description
-									: 'Nenhuma descrição adicionada'}
+									: I18n.t(TranslationsValues.empty_description)}
 							</Styled.Description>
 						</Styled.DescriptionContainer>
 					</Styled.ReviewContainer>
@@ -248,18 +253,26 @@ export const AddOptionScreen: React.FC<Props> = ({
 				<Styled.ButtonContainer>
 					<Button
 						onPress={goBack}
-						buttonLabel={step > 0 ? 'Editar' : 'Cancelar'}
+						buttonLabel={
+							step > 0
+								? I18n.t(TranslationsValues.edit)
+								: I18n.t(TranslationsValues.cancel)
+						}
 					/>
 					<Button
 						onPress={submit}
-						buttonLabel={step > 0 ? 'Salvar' : 'Adicionar'}
+						buttonLabel={
+							step > 0
+								? I18n.t(TranslationsValues.save)
+								: I18n.t(TranslationsValues.add)
+						}
 						next
 					/>
 				</Styled.ButtonContainer>
 			</Styled.Container>
 			<Modal visible={isModalVisible} animationType="fade">
 				<Styled.ModalContainer>
-					<Styled.Title>{optionsObj[option].title}</Styled.Title>
+					<Styled.Title>{I18n.t(value)}</Styled.Title>
 					<Styled.ModalImage
 						source={optionsObj[option].source}
 						resizeMode="stretch"
@@ -269,7 +282,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 					</Styled.ModalDescription>
 					<Button
 						onPress={() => setModalVisible(!isModalVisible)}
-						buttonLabel="Fechar"
+						buttonLabel={I18n.t(TranslationsValues.close)}
 					/>
 				</Styled.ModalContainer>
 			</Modal>

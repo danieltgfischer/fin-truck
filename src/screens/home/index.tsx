@@ -8,6 +8,8 @@ import { routeNames, RootStackParamList } from '@/navigation/types';
 import { IState } from '@/store/types';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateTrucks } from '@/store/actions';
+import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import {
 	ButtonIcon,
 	Container,
@@ -74,7 +76,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
 	return (
 		<Container>
-			<Title>Caminhões adicionados:</Title>
+			<Title>{I18n.t(TranslationsValues.title_home)}:</Title>
 			<FlatList
 				data={data}
 				renderItem={renderItem}
@@ -87,7 +89,9 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
 					<AntDesign name="pluscircle" size={50} color="#b63b34" />
 				</ButtonIcon>
-				<FooterLabel>Toque aqui para adicionar um caminhão</FooterLabel>
+				<FooterLabel>
+					{I18n.t(TranslationsValues.button_label_home)}
+				</FooterLabel>
 			</Footer>
 		</Container>
 	);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
+import I18n from 'i18n-js';
 import { RootStackParamList, routeNames } from '@/navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +9,7 @@ import { YearTimeline } from '@/components/year';
 import TimelineIcon from '@/icons/TimelineIcon.png';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYears } from '@/store/actions';
+import { TranslationsValues } from '@/config/intl';
 import {
 	Container,
 	Image,
@@ -60,7 +62,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 		<Container>
 			<SubHeader>
 				<Image source={TimelineIcon} resizeMode="contain" />
-				<Title>Histórico</Title>
+				<Title>{I18n.t(TranslationsValues.history)}</Title>
 			</SubHeader>
 			<ScrollView contentContainerStyle={scrollViewStyle.content}>
 				{isLoading ? (
@@ -70,7 +72,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 						{total_years.length > 0 &&
 							total_years.map(year => <YearTimeline year={year} key={year} />)}
 						{total_years.length === 0 && (
-							<Warning>Você não adicionou nenhum valor ainda.</Warning>
+							<Warning>{I18n.t(TranslationsValues.empty_timeline)}</Warning>
 						)}
 					</>
 				)}

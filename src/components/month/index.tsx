@@ -7,6 +7,7 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
 import { updateMonth, updateMonthResume } from '@/store/actions';
 import { MonthInfoContext } from '@/contexts/montInfo';
+import { TranslationsValues } from '@/config/intl';
 import { optionsObj } from './options';
 import {
 	Container,
@@ -41,6 +42,7 @@ const MonthTimeline: React.FC<IProps> = ({
 
 	const openMonth = useCallback(async () => {
 		setIsOpen(!isOpen);
+		setIsLoading(true);
 		const billings = await billingRepository.getBillingOptionsByMonth({
 			truckId: current_truck.id,
 			month: monthNumber,
@@ -65,7 +67,6 @@ const MonthTimeline: React.FC<IProps> = ({
 
 	useEffect(() => {
 		if (new Date().getMonth() === monthNumber) {
-			setIsLoading(true);
 			billingRepository
 				.getBillingOptionsByMonth({
 					truckId: current_truck.id,
@@ -142,7 +143,7 @@ const MonthTimeline: React.FC<IProps> = ({
 				<Line />
 			</Container>
 			{!isLoading && isOpen && data.length === 0 && (
-				<EmptyData>Você não registrou nenhum valor nesse mês</EmptyData>
+				<EmptyData>{I18n.t(TranslationsValues.empty_month)}</EmptyData>
 			)}
 			{isLoading && isOpen && (
 				<ActivityIndicator color="#B63B34" size="small" />
@@ -150,7 +151,9 @@ const MonthTimeline: React.FC<IProps> = ({
 			{isOpen && !isLoading && data.length > 0 && (
 				<>
 					<SubHeader>
-						<Label>Total de ganhos de {year}:</Label>
+						<Label>
+							{I18n.t(TranslationsValues.total_gains, { value: month })}:
+						</Label>
 						<Value color="#85bb65">
 							{gains || gains === 0 ? (
 								I18n.toCurrency(
@@ -161,7 +164,9 @@ const MonthTimeline: React.FC<IProps> = ({
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
-						<Label>Total de gastos de {year}:</Label>
+						<Label>
+							{I18n.t(TranslationsValues.total_costs, { value: month })}:
+						</Label>
 						<Value color="#FF616D">
 							{costs || costs === 0 ? (
 								I18n.toCurrency(
@@ -172,7 +177,7 @@ const MonthTimeline: React.FC<IProps> = ({
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
-						<Label>Subtotal:</Label>
+						<Label>{I18n.t(TranslationsValues.subtotal)}:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
 							{sub_total || sub_total === 0 ? (
 								I18n.toCurrency(

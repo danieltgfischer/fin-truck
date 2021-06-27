@@ -7,16 +7,18 @@ const locales = {
 	'pt-BR': 'pt-BR',
 	'en-US': 'en-US',
 };
+
 const country_code = Object.keys(locales).includes(Localization.locale)
 	? locales[Localization.locale]
 	: locales[1];
-console.log(country_code);
+
 const INITIAL_STATE = {
 	trucks: [],
 	current_truck: null,
 	locale: {
-		country_code: 'pt-BR',
+		country_code,
 		'en-US': {
+			code: 'en',
 			CURRENCY_FORMAT: {
 				separator: '.',
 				precision: 2,
@@ -25,6 +27,7 @@ const INITIAL_STATE = {
 			},
 		},
 		'pt-BR': {
+			code: 'pt',
 			CURRENCY_FORMAT: {
 				separator: ',',
 				precision: 2,

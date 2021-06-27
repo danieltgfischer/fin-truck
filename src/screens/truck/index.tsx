@@ -5,9 +5,10 @@ import { OptionItem } from '@/components/optionItem';
 import { routeNames, DrawerParamList } from '@/navigation/types';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
 import Timeline from '@/icons/Timeline.png';
-import { EditForm } from '@/components/editForm';
+import { EditTruck } from '@/components/editTruck';
 import { Modal as StyledModal } from '@/components/modal';
 import { DeleteTruck } from '@/components/deleteTruck';
+import I18n from 'i18n-js';
 import {
 	Container,
 	FlatList,
@@ -35,11 +36,10 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
-	const renderItem = ({ item: { label, source, big_name, value }, index }) => {
+	const renderItem = ({ item: { source, big_name, value }, index }) => {
 		return (
 			<OptionItem
 				source={source}
-				label={label}
 				big_name={big_name}
 				value={value}
 				delay={index * 150}
@@ -73,7 +73,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<ContainerButtons>
 					<HistoryButton onPress={() => navigate(routeNames.Timeline)}>
 						<Image source={Timeline} resizeMode="contain" />
-						<HistoryLabel>Histórico</HistoryLabel>
+						<HistoryLabel>{I18n.t('history')}</HistoryLabel>
 					</HistoryButton>
 					<RightView>
 						<ButtonIcon onPress={openEditModal}>
@@ -84,7 +84,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 						</ButtonIcon>
 					</RightView>
 				</ContainerButtons>
-				<Title>Escolha qual opção deseja adicionar à contabilidade:</Title>
+				<Title>{I18n.t('title_truck')}:</Title>
 				<FlatList
 					data={data}
 					renderItem={renderItem}
@@ -94,7 +94,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				/>
 			</Container>
 			<Modal visible={isEditModalVisible} animationType="slide">
-				<EditForm closeModal={() => setEditModalVisible(false)} />
+				<EditTruck closeModal={() => setEditModalVisible(false)} />
 			</Modal>
 			<StyledModal
 				visible={isDeleteModalVisible}

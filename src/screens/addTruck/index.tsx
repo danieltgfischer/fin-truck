@@ -10,6 +10,8 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import AddTruckIcon from '@/icons/CreateTruckIcon.png';
 import { Button } from '@/components/button';
 import { ToastAndroid } from 'react-native';
+import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import { Container, Image, Form, scrollView, ButtonContainer } from './styles';
 
 interface IData {
@@ -40,8 +42,10 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		async (data: IData, { reset }) => {
 			try {
 				const schema = Yup.object().shape({
-					name: Yup.string().required('O nome é obrigatório'),
-					board: Yup.string().required('A placa é obrigatório'),
+					name: Yup.string().required(I18n.t(TranslationsValues.name_required)),
+					board: Yup.string().required(
+						I18n.t(TranslationsValues.board_required),
+					),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -52,7 +56,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				formRef.current.setErrors({});
 				reset();
 				ToastAndroid.showWithGravityAndOffset(
-					`O caminhão ${name}/${board} foi adicionado`,
+					I18n.t(TranslationsValues.toast_add_truck, { name, board }),
 					ToastAndroid.LONG,
 					ToastAndroid.BOTTOM,
 					0,
@@ -83,7 +87,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<Form ref={formRef} onSubmit={handleSubmit}>
 					<Input
 						name="name"
-						label="Adicionar um nome para o caminhão"
+						label={I18n.t(TranslationsValues.add_name_truck_label)}
 						returnKeyType="next"
 						requiredLabel
 						maxLength={16}
@@ -91,7 +95,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					/>
 					<Input
 						name="board"
-						label="Adicionar a placa do caminhão"
+						label={I18n.t(TranslationsValues.add_board_truck_label)}
 						maxLength={12}
 						requiredLabel
 						returnKeyType="send"
@@ -100,8 +104,8 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					/>
 				</Form>
 				<ButtonContainer>
-					<Button onPress={navigate} buttonLabel="Cancelar" />
-					<Button onPress={submit} buttonLabel="Adicionar" next />
+					<Button onPress={navigate} buttonLabel={I18n.t('cancel')} />
+					<Button onPress={submit} buttonLabel={I18n.t('add')} next />
 				</ButtonContainer>
 			</Container>
 		</>

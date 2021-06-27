@@ -10,6 +10,7 @@ import { IState } from '@/store/types';
 import { Modal as StyledModal } from '@/components/modal';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
 import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import { EditBilling } from '../editBilling';
 import { DeleteOption } from '../deleteOption';
 import {
@@ -70,10 +71,14 @@ export const BillingItem: React.FC<IProps> = ({
 		}).start();
 	}, [translateXInfo, timelineOpacity, delay]);
 	const localeFormat =
-		locale.country_code === 'pt-BR' ? "'Dia' d',' EEEE 'às' HH:mm " : 'dd:MM a';
+		locale.country_code === 'pt-BR'
+			? "'Dia' d',' EEEE 'às' HH:mm "
+			: "'Day' d',' EEEE 'at' HH:mm aaaa";
 	const dateLocale = locale.country_code === 'pt-BR' ? ptLocale : usLocale;
 	const descriptionWithValue =
-		description !== '' ? description : 'Nenhuma descrição adicionada';
+		description !== ''
+			? description
+			: I18n.t(TranslationsValues.empty_description);
 
 	return (
 		<>

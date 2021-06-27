@@ -6,6 +6,7 @@ import MonthTimeline from '@/components/month';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYearResume } from '@/store/actions';
 import I18n from 'i18n-js';
+import { TranslationsValues } from '@/config/intl';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -63,7 +64,9 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 			{isOpen && (
 				<>
 					<SubHeader>
-						<Label>Total de ganhos de {year}:</Label>
+						<Label>
+							{I18n.t(TranslationsValues.total_gains, { value: year })}:
+						</Label>
 						<Value color="#85bb65">
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
@@ -74,7 +77,9 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 								)
 							)}
 						</Value>
-						<Label>Total de gastos de {year}:</Label>
+						<Label>
+							{I18n.t(TranslationsValues.total_costs, { value: year })}:
+						</Label>
 						<Value color="#FF616D">
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
@@ -85,7 +90,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 								)
 							)}
 						</Value>
-						<Label>Subtotal:</Label>
+						<Label> {I18n.t(TranslationsValues.subtotal)}:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />

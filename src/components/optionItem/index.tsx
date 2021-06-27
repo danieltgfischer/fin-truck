@@ -2,10 +2,10 @@ import React, { useCallback, FC, useEffect, useMemo } from 'react';
 import { Animated, Easing } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { routeNames } from '@/navigation/types';
+import I18n from 'i18n-js';
 import { Container, Name, Image } from './styles';
 
 interface IProps {
-	label: string;
 	big_name: boolean;
 	source: string;
 	value: string;
@@ -14,7 +14,6 @@ interface IProps {
 
 export const OptionItem: FC<IProps> = ({
 	big_name,
-	label,
 	source,
 	value,
 	delay,
@@ -40,7 +39,7 @@ export const OptionItem: FC<IProps> = ({
 		<Animated.View style={{ transform: [{ scale }] }}>
 			<Container onPress={navigate}>
 				<Image source={source} resizeMode="contain" />
-				<Name big_name={big_name}>{label}</Name>
+				<Name big_name={big_name}>{I18n.t(value)}</Name>
 			</Container>
 		</Animated.View>
 	);

@@ -7,6 +7,8 @@ import { optionsObj } from '@/screens/truck/options';
 import { ToastAndroid } from 'react-native';
 import { IState } from '@/store/types';
 import { MonthInfoContext } from '@/contexts/montInfo';
+import { TranslationsValues } from '@/config/intl';
+import I18n from 'i18n-js';
 import {
 	Container,
 	Label,
@@ -36,7 +38,7 @@ export const DeleteOption: React.FC<IProps> = ({
 	const { billingRepository } = useDatabaseConnection();
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const { label } = optionsObj[option];
+	const { value: optionValue, label } = optionsObj[option];
 	const { year, monthNumber } = useContext(MonthInfoContext);
 
 	const updateTimelineOnEdit = useCallback(async () => {
@@ -67,25 +69,32 @@ export const DeleteOption: React.FC<IProps> = ({
 		closeModal();
 		updateTimelineOnEdit();
 		ToastAndroid.showWithGravityAndOffset(
-			`Uma opção ${label} foi excluida`,
+			I18n.t(TranslationsValues.toast_delete_option, {
+				value: I18n.t(optionValue),
+			}),
 			ToastAndroid.LONG,
 			ToastAndroid.BOTTOM,
 			0,
 			150,
 		);
-	}, [billingRepository, closeModal, id, label, updateTimelineOnEdit]);
+	}, [billingRepository, closeModal, id, optionValue, updateTimelineOnEdit]);
 
 	return (
 		<Container>
 			<Image source={source} />
-			<Label>
-				Você está prestes a excluir este registro. Tem certeza disso?
-			</Label>
+			<Label>{I18n.t(TranslationsValues.delete_option_title)}</Label>
 			<Value>R$ {value}</Value>
 			<Description>{description}</Description>
 			<ContainerButtons>
-				<Button buttonLabel="Cancelar" onPress={closeModal} />
-				<Button buttonLabel="Excluir" cancel onPress={handleDeleteOption} />
+				<Button
+					buttonLabel={I18n.t(TranslationsValues.cancel)}
+					onPress={closeModal}
+				/>
+				<Button
+					buttonLabel={I18n.t(TranslationsValues.delete)}
+					cancel
+					onPress={handleDeleteOption}
+				/>
 			</ContainerButtons>
 		</Container>
 	);

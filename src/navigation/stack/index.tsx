@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Fonts from '@expo-google-fonts/source-sans-pro';
 import { ActivityIndicator } from 'react-native';
+import I18n from 'i18n-js';
 import { StatusBar } from 'expo-status-bar';
 import {
 	createStackNavigator,
@@ -11,13 +12,17 @@ import { HomeScreen } from '@/screens/home';
 import { AddTruckScreen } from '@/screens/addTruck';
 import { AddOptionScreen } from '@/screens/addOption';
 import { Timeline } from '@/screens/timeline';
+import { translations } from '@/config/intl';
+import { useSelector } from 'react-redux';
+import { IState } from '@/store/types';
 import { DrawerScreen } from '../drawer';
-import { LoadingContainer } from '../style';
 import { RootStackParamList, routeNames } from '../types';
+import { LoadingContainer } from '../style';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const Navigation: FC = () => {
+	const { locale } = useSelector((state: IState) => state);
 	const [fontsLoaded] = Fonts.useFonts({
 		Light: Fonts.SourceSansPro_300Light,
 		Light_Italic: Fonts.SourceSansPro_300Light_Italic,
@@ -49,6 +54,10 @@ export const Navigation: FC = () => {
 		},
 	};
 
+	I18n.translations = translations;
+	I18n.locale = locale.country_code;
+	I18n.fallbacks = true;
+
 	return (
 		<>
 			<StatusBar style="light" backgroundColor="#b63b34" />
@@ -71,7 +80,7 @@ export const Navigation: FC = () => {
 						name={routeNames.AddTruck}
 						component={AddTruckScreen}
 						options={{
-							title: 'Adicionar Caminhão',
+							title: I18n.t('add_truck_header_title'),
 							...options,
 						}}
 					/>

@@ -39,6 +39,7 @@ type Currenty = {
 
 type NamedCurrency = {
 	CURRENCY_FORMAT: Currenty;
+	code: string;
 };
 export interface ILocace {
 	country_code: string;

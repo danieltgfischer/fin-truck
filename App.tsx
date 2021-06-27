@@ -13,8 +13,8 @@ import { LoadingContainer } from '@/navigation/style';
 import { ActivityIndicator } from 'react-native';
 
 // TODO intl
-// TODO preload images
 // TODO change ActiveIndicator to expo AppLoafind
+// TODO dark theme #18191A #F5F6F7
 
 const App: React.FC = () => {
 	const [isReady, setIsReady] = useState(false);
