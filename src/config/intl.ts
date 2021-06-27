@@ -186,7 +186,7 @@ export const translations = {
 		toast_delete_option: 'Uma opção %{value} foi excluida',
 		edit_option_value_label: 'Editar o valor para essa opção',
 		edit_option_description_label: 'Editar a descrição para esse valor',
-		edit_option_title: 'Você está editando um registro para {value}',
+		edit_option_title: 'Você está editando um registro para %{value}',
 		delete_option_title:
 			'Você está prestes a excluir este registro. Tem certeza disso?',
 		language: 'Idioma',

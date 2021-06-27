@@ -12,9 +12,9 @@ import * as Icons from '@expo/vector-icons';
 import { LoadingContainer } from '@/navigation/style';
 import { ActivityIndicator } from 'react-native';
 
-// TODO intl
-// TODO change ActiveIndicator to expo AppLoafind
 // TODO dark theme #18191A #F5F6F7
+// TODO export db to xls
+// TODO push notification
 
 const App: React.FC = () => {
 	const [isReady, setIsReady] = useState(false);

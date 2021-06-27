@@ -81,7 +81,7 @@ export const DeleteOption: React.FC<IProps> = ({
 
 	return (
 		<Container>
-			<Image source={source} />
+			<Image source={source} resizeMode="contain" />
 			<Label>{I18n.t(TranslationsValues.delete_option_title)}</Label>
 			<Value>R$ {value}</Value>
 			<Description>{description}</Description>
