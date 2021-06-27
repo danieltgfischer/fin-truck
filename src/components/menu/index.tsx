@@ -10,6 +10,7 @@ import { updateCountryCode } from '@/store/actions';
 import { useCallback } from 'react';
 import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useState } from 'react';
 import {
 	Container,
 	ButtonIcon,
@@ -30,6 +31,9 @@ export const Menu: React.FC<IProps> = ({
 }: IProps) => {
 	const { locale } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
+	const [toggleLanguage, setToggleLanguage] = useState(
+		locale.country_code === 'pt-BR',
+	);
 	const { height } = useWindowDimensions();
 	const translateY = useRef(new Animated.Value(height)).current;
 	const rotate = useRef(new Animated.Value(0)).current;
@@ -64,15 +68,19 @@ export const Menu: React.FC<IProps> = ({
 		rotate.setValue(0);
 	}, [height, isModalVisible, rotate, translateY]);
 
-	const toggleLanguage = useCallback(async () => {
-		if (locale.country_code === 'en-US') {
-			await AsyncStorage.setItem('@CountryCode', 'pt-BR');
+	useEffect(() => {
+		if (toggleLanguage) {
+			AsyncStorage.setItem('@CountryCode', 'pt-BR');
 			dispatch(updateCountryCode({ country_code: 'pt-BR' }));
 			return;
 		}
-		await AsyncStorage.setItem('@CountryCode', 'en-US');
+		AsyncStorage.setItem('@CountryCode', 'en-US');
 		dispatch(updateCountryCode({ country_code: 'en-US' }));
-	}, [dispatch, locale.country_code]);
+	}, [dispatch, locale.country_code, toggleLanguage]);
+
+	const handleSwitchLanguage = useCallback(async () => {
+		setToggleLanguage(!toggleLanguage);
+	}, [toggleLanguage]);
 
 	return (
 		<Container
@@ -101,10 +109,10 @@ export const Menu: React.FC<IProps> = ({
 				<Image source={Usa} resizeMode="contain" />
 				<Switch
 					trackColor={{ false: '#41479b', true: '#fece3f' }}
-					thumbColor={locale.country_code === 'pt-BR' ? '#4ba543' : '#ff4b55'}
+					thumbColor={toggleLanguage ? '#4ba543' : '#ff4b55'}
 					ios_backgroundColor="#3e3e3e"
-					onValueChange={toggleLanguage}
-					value={locale.country_code === 'pt-BR'}
+					onValueChange={handleSwitchLanguage}
+					value={toggleLanguage}
 				/>
 				<Image source={Brazil} resizeMode="contain" />
 			</LanguageContainer>
