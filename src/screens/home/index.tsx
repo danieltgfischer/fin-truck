@@ -8,9 +8,9 @@ import { routeNames, RootStackParamList } from '@/navigation/types';
 import { IState } from '@/store/types';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateTrucks } from '@/store/actions';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
+import { useTranslation } from 'react-i18next';
 import {
 	ButtonIcon,
 	HomeContainer,
@@ -39,6 +39,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
+	const { t } = useTranslation();
+
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
 			truckRepository?.getAllTrucks().then(response => {
@@ -90,7 +92,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		<Container>
 			<CloseMenuContainer onPress={() => setIsModalVisible(false)}>
 				<HomeContainer>
-					<Title>{I18n.t(TranslationsValues.title_home)}:</Title>
+					<Title>{t(TranslationsValues.title_home)}:</Title>
 					<FlatList
 						data={data}
 						renderItem={renderItem}
@@ -102,7 +104,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 					<Footer>
 						<FooterAddContainer>
 							<FooterLabel>
-								{I18n.t(TranslationsValues.button_label_home)}
+								{t(TranslationsValues.button_label_home)}
 							</FooterLabel>
 							<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
 								<AntDesign name="pluscircle" size={50} color="#b63b34" />

@@ -8,6 +8,7 @@ import { IState } from '@/store/types';
 import { updateCountryCode } from '@/store/actions';
 import { useCallback } from 'react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, LanguageContainer } from './styles';
 
 export const LanguageSwitch: React.FC = () => {
@@ -16,6 +17,7 @@ export const LanguageSwitch: React.FC = () => {
 	const [toggleLanguage, setToggleLanguage] = useState(
 		locale.country_code === 'pt-BR',
 	);
+	const { i18n } = useTranslation();
 
 	useEffect(() => {
 		setToggleLanguage(locale.country_code === 'pt-BR');
@@ -23,13 +25,16 @@ export const LanguageSwitch: React.FC = () => {
 
 	useEffect(() => {
 		if (toggleLanguage) {
+			i18n.changeLanguage('pt-BR');
 			dispatch(updateCountryCode({ country_code: 'pt-BR' }));
 			AsyncStorage.setItem('@CountryCode', 'pt-BR');
 			return;
 		}
 		dispatch(updateCountryCode({ country_code: 'en-US' }));
+		i18n.changeLanguage('en-US');
+
 		AsyncStorage.setItem('@CountryCode', 'en-US');
-	}, [dispatch, locale.country_code, toggleLanguage]);
+	}, [dispatch, i18n, locale.country_code, toggleLanguage]);
 
 	const handleSwitchLanguage = useCallback(async () => {
 		setToggleLanguage(!toggleLanguage);

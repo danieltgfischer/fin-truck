@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useEffect, memo, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import I18n from 'i18n-js';
 import { BillingItem } from '@/components/billingItem';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
 import { updateMonth, updateMonthResume } from '@/store/actions';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import { optionsObj } from './options';
 import {
 	Container,
@@ -37,6 +37,7 @@ const MonthTimeline: React.FC<IProps> = ({
 		(state: IState) => state,
 	);
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 	const [isLoading, setIsLoading] = useState(true);
 	const thisYear = new Date();
 	const [isOpen, setIsOpen] = useState(
@@ -138,6 +139,8 @@ const MonthTimeline: React.FC<IProps> = ({
 		sub_total: null,
 	};
 
+	const { currency } = locale[locale.country_code];
+
 	return (
 		<>
 			<Container onPress={openMonth}>
@@ -146,7 +149,7 @@ const MonthTimeline: React.FC<IProps> = ({
 				<Line />
 			</Container>
 			{!isLoading && isOpen && data.length === 0 && (
-				<EmptyData>{I18n.t(TranslationsValues.empty_month)}</EmptyData>
+				<EmptyData>{t(TranslationsValues.empty_month)}</EmptyData>
 			)}
 			{isLoading && isOpen && (
 				<ActivityIndicator color="#B63B34" size="small" />
@@ -155,38 +158,38 @@ const MonthTimeline: React.FC<IProps> = ({
 				<>
 					<SubHeader>
 						<Label>
-							{I18n.t(TranslationsValues.total_gains, { value: month })}:
+							{t(TranslationsValues.total_gains, { value: month })}:
 						</Label>
 						<Value color="#85bb65">
 							{gains || gains === 0 ? (
-								I18n.toCurrency(
-									gains,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)
+								new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(gains)
 							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
 						<Label>
-							{I18n.t(TranslationsValues.total_costs, { value: month })}:
+							{t(TranslationsValues.total_costs, { value: month })}:
 						</Label>
 						<Value color="#FF616D">
 							{costs || costs === 0 ? (
-								I18n.toCurrency(
-									costs,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)
+								new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(costs)
 							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}
 						</Value>
-						<Label>{I18n.t(TranslationsValues.subtotal)}:</Label>
+						<Label>{t(TranslationsValues.subtotal)}:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
 							{sub_total || sub_total === 0 ? (
-								I18n.toCurrency(
-									sub_total,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)
+								new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(sub_total)
 							) : (
 								<ActivityIndicator color="#B63B34" size="small" />
 							)}

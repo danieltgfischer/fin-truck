@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
-import I18n from 'i18n-js';
 import { RootStackParamList, routeNames } from '@/navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import TimelineIcon from '@/icons/TimelineIcon.png';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYears } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import {
 	Container,
 	Image,
@@ -33,6 +33,8 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const { current_truck, total_years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
+
 	const title = current_truck?.name ?? '';
 
 	useEffect(() => {
@@ -62,7 +64,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 		<Container>
 			<SubHeader>
 				<Image source={TimelineIcon} resizeMode="contain" />
-				<Title>{I18n.t(TranslationsValues.history)}</Title>
+				<Title>{t(TranslationsValues.history)}</Title>
 			</SubHeader>
 			<ScrollView contentContainerStyle={scrollViewStyle.content}>
 				{isLoading ? (
@@ -72,7 +74,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 						{total_years.length > 0 &&
 							total_years.map(year => <YearTimeline year={year} key={year} />)}
 						{total_years.length === 0 && (
-							<Warning>{I18n.t(TranslationsValues.empty_timeline)}</Warning>
+							<Warning>{t(TranslationsValues.empty_timeline)}</Warning>
 						)}
 					</>
 				)}

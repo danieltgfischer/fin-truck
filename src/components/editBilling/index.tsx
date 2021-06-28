@@ -12,8 +12,8 @@ import { optionsObj } from '@/screens/truck/options';
 import { updateTimeline } from '@/store/actions';
 import { Animated, ToastAndroid } from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import {
 	Container,
 	Form,
@@ -50,6 +50,8 @@ export const EditBilling: React.FC<IProps> = ({
 	const dispatch = useDispatch();
 	const { year, monthNumber } = useContext(MonthInfoContext);
 	const { billingRepository } = useDatabaseConnection();
+	const { t } = useTranslation();
+
 	const { source, label, value: optionValue } = optionsObj[option];
 
 	useEffect(() => {
@@ -95,9 +97,7 @@ export const EditBilling: React.FC<IProps> = ({
 		async (data: IData, { reset }) => {
 			try {
 				const schema = Yup.object().shape({
-					value: Yup.string().required(
-						I18n.t(TranslationsValues.value_required),
-					),
+					value: Yup.string().required(t(TranslationsValues.value_required)),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -113,8 +113,8 @@ export const EditBilling: React.FC<IProps> = ({
 				reset();
 				closeModal();
 				ToastAndroid.showWithGravityAndOffset(
-					I18n.t(TranslationsValues.toast_edit_option, {
-						value: I18n.t(optionValue),
+					t(TranslationsValues.toast_edit_option, {
+						value: t(optionValue),
 					}),
 					ToastAndroid.LONG,
 					ToastAndroid.BOTTOM,
@@ -141,15 +141,15 @@ export const EditBilling: React.FC<IProps> = ({
 	return (
 		<Container ontentContainerStyle={scrollView.content}>
 			<Title>
-				{I18n.t(TranslationsValues.edit_option_title, {
-					value: I18n.t(optionValue),
+				{t(TranslationsValues.edit_option_title, {
+					value: t(optionValue),
 				})}
 			</Title>
 			<Image source={source} resizeMode="contain" />
 			<Form ref={formRef} onSubmit={handleSubmit}>
 				<Input
 					name="value"
-					label={I18n.t(TranslationsValues.edit_option_value_label)}
+					label={t(TranslationsValues.edit_option_value_label)}
 					numeric
 					currency
 					returnKeyType="next"
@@ -160,18 +160,18 @@ export const EditBilling: React.FC<IProps> = ({
 				/>
 				<MultiInput
 					name="description"
-					label={I18n.t(TranslationsValues.edit_option_description_label)}
+					label={t(TranslationsValues.edit_option_description_label)}
 					maxLength={60}
 					ref={nextInputRef}
 				/>
 			</Form>
 			<ButtonContainer>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.cancel)}
+					buttonLabel={t(TranslationsValues.cancel)}
 					onPress={closeModal}
 				/>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.save)}
+					buttonLabel={t(TranslationsValues.save)}
 					onPress={submit}
 					next
 				/>

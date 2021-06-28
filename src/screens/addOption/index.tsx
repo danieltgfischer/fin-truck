@@ -18,8 +18,8 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { Button } from '@/components/button';
 import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import * as _ from './styles';
 import { optionsObj } from './options';
 
@@ -57,6 +57,8 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const translateXForm = useRef(new Animated.Value(0)).current;
 	const translateXReview = useRef(new Animated.Value(width)).current;
 	const { billingRepository } = useDatabaseConnection();
+	const { t } = useTranslation();
+
 	const title = current_truck?.name ?? '';
 	const option = route?.params?.option ?? '';
 	const { value } = optionsObj[option];
@@ -112,7 +114,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				year: date.getFullYear(),
 			});
 			ToastAndroid.showWithGravityAndOffset(
-				I18n.t(TranslationsValues.toast_add_option, { value: I18n.t(value) }),
+				t(TranslationsValues.toast_add_option, { value: t(value) }),
 				ToastAndroid.LONG,
 				ToastAndroid.BOTTOM,
 				0,
@@ -130,6 +132,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 		data?.value,
 		navigate,
 		option,
+		t,
 		value,
 	]);
 
@@ -154,9 +157,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 			}
 			try {
 				const schema = Yup.object().shape({
-					value: Yup.string().required(
-						I18n.t(TranslationsValues.value_required),
-					),
+					value: Yup.string().required(t(TranslationsValues.value_required)),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -175,12 +176,15 @@ export const AddOptionScreen: React.FC<Props> = ({
 				}
 			}
 		},
-		[animate, createBillingOption, step],
+		[animate, createBillingOption, step, t],
 	);
 
 	const submit = useCallback(() => {
 		formRef.current.submitForm();
 	}, []);
+
+	const { currency } = locale[locale.country_code];
+
 	return (
 		<>
 			<_.Container contentContainerStyle={_.scrollView.content}>
@@ -191,7 +195,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				</_.ButtonHeaderContainer>
 				<_.Header>
 					<_.Image source={optionsObj[option].source} resizeMode="contain" />
-					<_.Title>{I18n.t(value)}</_.Title>
+					<_.Title>{t(value)}</_.Title>
 				</_.Header>
 				<_.AnimetadeContainer>
 					<Animated.View
@@ -203,7 +207,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 							<Input
 								numeric
 								name="value"
-								label={I18n.t(TranslationsValues.add_option_value_label)}
+								label={t(TranslationsValues.add_option_value_label)}
 								returnKeyType="next"
 								maxLength={16}
 								currency
@@ -213,7 +217,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 							/>
 							<MultiInput
 								name="description"
-								label={I18n.t(TranslationsValues.add_option_description_label)}
+								label={t(TranslationsValues.add_option_description_label)}
 								maxLength={60}
 								ref={nextInputRef}
 							/>
@@ -224,24 +228,24 @@ export const AddOptionScreen: React.FC<Props> = ({
 							transform: [{ translateX: translateXReview }],
 						}}
 					>
-						<_.Title>{I18n.t(TranslationsValues.review_title)}:</_.Title>
+						<_.Title>{t(TranslationsValues.review_title)}:</_.Title>
 						<_.ValueContainer>
-							<_.Label>{I18n.t(TranslationsValues.value)}:</_.Label>
+							<_.Label>{t(TranslationsValues.value)}:</_.Label>
 							<_.Value>
-								{I18n.toCurrency(
-									data?.value,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)}
+								{new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(data?.value)}
 							</_.Value>
 						</_.ValueContainer>
 						<_.DescriptionContainer>
 							<_.LabelDescription>
-								{I18n.t(TranslationsValues.description)}:
+								{t(TranslationsValues.description)}:
 							</_.LabelDescription>
 							<_.Description>
 								{data?.description
 									? data?.description
-									: I18n.t(TranslationsValues.empty_description)}
+									: t(TranslationsValues.empty_description)}
 							</_.Description>
 						</_.DescriptionContainer>
 					</_.ReviewContainer>
@@ -251,16 +255,14 @@ export const AddOptionScreen: React.FC<Props> = ({
 						onPress={goBack}
 						buttonLabel={
 							step > 0
-								? I18n.t(TranslationsValues.edit)
-								: I18n.t(TranslationsValues.cancel)
+								? t(TranslationsValues.edit)
+								: t(TranslationsValues.cancel)
 						}
 					/>
 					<Button
 						onPress={submit}
 						buttonLabel={
-							step > 0
-								? I18n.t(TranslationsValues.save)
-								: I18n.t(TranslationsValues.add)
+							step > 0 ? t(TranslationsValues.save) : t(TranslationsValues.add)
 						}
 						next
 					/>
@@ -268,7 +270,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 			</_.Container>
 			<Modal visible={isModalVisible} animationType="fade">
 				<_.ModalContainer>
-					<_.Title>{I18n.t(value)}</_.Title>
+					<_.Title>{t(value)}</_.Title>
 					<_.ModalImage
 						source={optionsObj[option].source}
 						resizeMode="stretch"
@@ -278,7 +280,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 					</_.ModalDescription>
 					<Button
 						onPress={() => setModalVisible(!isModalVisible)}
-						buttonLabel={I18n.t(TranslationsValues.close)}
+						buttonLabel={t(TranslationsValues.close)}
 					/>
 				</_.ModalContainer>
 			</Modal>

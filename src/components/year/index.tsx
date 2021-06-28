@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import MonthTimeline from '@/components/month';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
-import { addYearKeyAtYears, updateYearResume } from '@/store/actions';
-import I18n from 'i18n-js';
+import { updateYearResume } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -27,6 +27,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		(state: IState) => state,
 	);
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 	const { billingRepository } = useDatabaseConnection();
 	const [isLoading, setIsLoading] = useState(true);
 	const [isOpen, setIsOpen] = useState(
@@ -34,12 +35,17 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	);
 
 	useEffect(() => {
-		const ac = new AbortController();
+		let mounted = true;
 		billingRepository.getYearInfo(year, current_truck.id).then(resume => {
-			setIsLoading(false);
-			dispatch(updateYearResume({ year, resume }));
+			if (mounted) {
+				setIsLoading(false);
+				dispatch(updateYearResume({ year, resume }));
+			}
 		});
-		return () => ac.abort();
+		return () => {
+			mounted = false;
+			return mounted;
+		};
 	}, [billingRepository, current_truck.id, dispatch, monthResume, year]);
 
 	const months = useMemo(
@@ -55,6 +61,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		costs: null,
 		sub_total: null,
 	};
+	const { currency } = locale[locale.country_code];
 
 	return (
 		<Container>
@@ -66,41 +73,37 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 			{isOpen && (
 				<>
 					<SubHeader>
-						<Label>
-							{I18n.t(TranslationsValues.total_gains, { value: year })}:
-						</Label>
+						<Label>{t(TranslationsValues.total_gains, { value: year })}:</Label>
 						<Value color="#85bb65">
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
-								I18n.toCurrency(
-									gains,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)
+								new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(gains)
 							)}
 						</Value>
-						<Label>
-							{I18n.t(TranslationsValues.total_costs, { value: year })}:
-						</Label>
+						<Label>{t(TranslationsValues.total_costs, { value: year })}:</Label>
 						<Value color="#FF616D">
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
-								I18n.toCurrency(
-									costs,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)
+								new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(costs)
 							)}
 						</Value>
-						<Label> {I18n.t(TranslationsValues.subtotal)}:</Label>
+						<Label> {t(TranslationsValues.subtotal)}:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
 							{isLoading ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
-								I18n.toCurrency(
-									sub_total,
-									locale[locale.country_code].CURRENCY_FORMAT,
-								)
+								new Intl.NumberFormat(locale.country_code, {
+									style: 'currency',
+									currency,
+								}).format(sub_total)
 							)}
 						</Value>
 					</SubHeader>

@@ -2,7 +2,7 @@ import React, { useCallback, FC, useEffect, useMemo } from 'react';
 import { Animated, Easing } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { routeNames } from '@/navigation/types';
-import I18n from 'i18n-js';
+import { useTranslation } from 'react-i18next';
 import { Container, Name, Image } from './styles';
 
 interface IProps {
@@ -20,6 +20,7 @@ export const OptionItem: FC<IProps> = ({
 }: IProps) => {
 	const navigation = useNavigation();
 	const scale = useMemo(() => new Animated.Value(0), []);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		Animated.timing(scale, {
@@ -39,7 +40,7 @@ export const OptionItem: FC<IProps> = ({
 		<Animated.View style={{ transform: [{ scale }] }}>
 			<Container onPress={navigate}>
 				<Image source={source} resizeMode="contain" />
-				<Name big_name={big_name}>{I18n.t(value)}</Name>
+				<Name big_name={big_name}>{t(value)}</Name>
 			</Container>
 		</Animated.View>
 	);

@@ -8,7 +8,8 @@ import { ToastAndroid } from 'react-native';
 import { IState } from '@/store/types';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
-import I18n from 'i18n-js';
+
+import { useTranslation } from 'react-i18next';
 import {
 	Container,
 	Label,
@@ -40,6 +41,7 @@ export const DeleteOption: React.FC<IProps> = ({
 	const dispatch = useDispatch();
 	const { value: optionValue, label } = optionsObj[option];
 	const { year, monthNumber } = useContext(MonthInfoContext);
+	const { t } = useTranslation();
 
 	const updateTimelineOnEdit = useCallback(async () => {
 		try {
@@ -69,8 +71,8 @@ export const DeleteOption: React.FC<IProps> = ({
 		closeModal();
 		updateTimelineOnEdit();
 		ToastAndroid.showWithGravityAndOffset(
-			I18n.t(TranslationsValues.toast_delete_option, {
-				value: I18n.t(optionValue),
+			t(TranslationsValues.toast_delete_option, {
+				value: t(optionValue),
 			}),
 			ToastAndroid.LONG,
 			ToastAndroid.BOTTOM,
@@ -82,16 +84,16 @@ export const DeleteOption: React.FC<IProps> = ({
 	return (
 		<Container>
 			<Image source={source} resizeMode="contain" />
-			<Label>{I18n.t(TranslationsValues.delete_option_title)}</Label>
+			<Label>{t(TranslationsValues.delete_option_title)}</Label>
 			<Value>R$ {value}</Value>
 			<Description>{description}</Description>
 			<ContainerButtons>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.cancel)}
+					buttonLabel={t(TranslationsValues.cancel)}
 					onPress={closeModal}
 				/>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.delete)}
+					buttonLabel={t(TranslationsValues.delete)}
 					cancel
 					onPress={handleDeleteOption}
 				/>
