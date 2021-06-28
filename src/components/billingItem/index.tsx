@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { Modal as StyledModal } from '@/components/modal';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import { EditBilling } from '../editBilling';
 import { DeleteOption } from '../deleteOption';
 import {
@@ -53,6 +53,7 @@ export const BillingItem: React.FC<IProps> = ({
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { locale } = useSelector((state: IState) => state);
+	const { t } = useTranslation();
 	const timelineOpacity = useRef(new Animated.Value(0)).current;
 	const translateXInfo = useRef(new Animated.Value(width)).current;
 
@@ -76,9 +77,9 @@ export const BillingItem: React.FC<IProps> = ({
 			: "'Day' d',' EEEE 'at' HH:mm aaaa";
 	const dateLocale = locale.country_code === 'pt-BR' ? ptLocale : usLocale;
 	const descriptionWithValue =
-		description !== ''
-			? description
-			: I18n.t(TranslationsValues.empty_description);
+		description !== '' ? description : t(TranslationsValues.empty_description);
+
+	const { currency } = locale[locale.country_code];
 
 	return (
 		<>
@@ -108,10 +109,10 @@ export const BillingItem: React.FC<IProps> = ({
 						{format(created_at, localeFormat, { locale: dateLocale })}
 					</Date>
 					<Value>
-						{I18n.toCurrency(
-							value,
-							locale[locale.country_code].CURRENCY_FORMAT,
-						)}
+						{new Intl.NumberFormat(locale.country_code, {
+							style: 'currency',
+							currency,
+						}).format(value)}
 					</Value>
 					<Description>{descriptionWithValue}</Description>
 				</InfoContainer>

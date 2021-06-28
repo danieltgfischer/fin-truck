@@ -1,4 +1,5 @@
 import 'intl';
+import './i18n';
 import 'react-native-gesture-handler';
 import 'reflect-metadata';
 import React, { useCallback, useState } from 'react';

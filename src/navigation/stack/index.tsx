@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Fonts from '@expo-google-fonts/source-sans-pro';
 import { ActivityIndicator } from 'react-native';
-import I18n from 'i18n-js';
 import { StatusBar } from 'expo-status-bar';
 import {
 	createStackNavigator,
@@ -13,11 +12,12 @@ import { HomeScreen } from '@/screens/home';
 import { AddTruckScreen } from '@/screens/addTruck';
 import { AddOptionScreen } from '@/screens/addOption';
 import { Timeline } from '@/screens/timeline';
-import { translations } from '@/config/intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { useCallback } from 'react';
 import { updateCountryCode } from '@/store/actions';
+import { useTranslation } from 'react-i18next';
+import { TranslationsValues } from '@/config/intl';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
 import { LoadingContainer } from '../style';
@@ -27,6 +27,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 export const Navigation: React.FC = () => {
 	const { locale } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
+	const { t, i18n } = useTranslation();
 
 	const [fontsLoaded] = Fonts.useFonts({
 		Light: Fonts.SourceSansPro_300Light,
@@ -48,7 +49,8 @@ export const Navigation: React.FC = () => {
 			}
 		}
 		dispatch(updateCountryCode({ country_code }));
-	}, [dispatch, locale.country_code]);
+		i18n.changeLanguage(country_code);
+	}, [dispatch, i18n, locale.country_code]);
 
 	useEffect(() => {
 		updateLanguage();
@@ -76,9 +78,6 @@ export const Navigation: React.FC = () => {
 		},
 	};
 
-	I18n.translations = translations;
-	I18n.locale = locale.country_code;
-
 	return (
 		<>
 			<StatusBar style="light" backgroundColor="#b63b34" />
@@ -101,7 +100,7 @@ export const Navigation: React.FC = () => {
 						name={routeNames.AddTruck}
 						component={AddTruckScreen}
 						options={{
-							title: I18n.t('add_truck_header_title'),
+							title: t(TranslationsValues.add_truck_header_title),
 							...options,
 						}}
 					/>

@@ -8,7 +8,7 @@ import { routeNames } from '@/navigation/types';
 import { IState } from '@/store/types';
 import { ToastAndroid } from 'react-native';
 import { TranslationsValues } from '@/config/intl';
-import I18n from 'i18n-js';
+import { useTranslation } from 'react-i18next';
 import { Container, Label, ContainerButtons, Span } from './styles';
 
 interface IProps {
@@ -20,6 +20,7 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	const { truckRepository, billingRepository } = useDatabaseConnection();
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 	const { name, board } = current_truck;
 	const handleDeleteTruck = useCallback(async () => {
 		const allBillings = await billingRepository.getAllBillingOptions({
@@ -32,7 +33,7 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 		dispatch(updateTrucks(trucks));
 		navigation.navigate(routeNames.Home);
 		ToastAndroid.showWithGravityAndOffset(
-			I18n.t(TranslationsValues.toast_delete_truck, { name, board }),
+			t(TranslationsValues.toast_delete_truck, { name, board }),
 			ToastAndroid.LONG,
 			ToastAndroid.BOTTOM,
 			0,
@@ -54,17 +55,17 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	return (
 		<Container>
 			<Label>
-				{I18n.t(TranslationsValues.delete_truck_warning)}{' '}
+				{t(TranslationsValues.delete_truck_warning)}{' '}
 				<Span>{current_truck.name}</Span>.
 			</Label>
-			<Label> {I18n.t(TranslationsValues.delete_truck_warning2)}</Label>
+			<Label> {t(TranslationsValues.delete_truck_warning2)}</Label>
 			<ContainerButtons>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.cancel)}
+					buttonLabel={t(TranslationsValues.cancel)}
 					onPress={closeModal}
 				/>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.delete)}
+					buttonLabel={t(TranslationsValues.delete)}
 					cancel
 					onPress={handleDeleteTruck}
 				/>

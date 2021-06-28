@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import I18n from 'i18n-js';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
 import Input, { IInputRef } from '@/components/input';
@@ -11,6 +10,7 @@ import { Button } from '@/components/button';
 import { updateCurrentTruck } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { ToastAndroid } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
 	Container,
 	Form,
@@ -36,6 +36,7 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		formRef.current.setData({
@@ -48,10 +49,8 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 		async (data: IData, { reset }) => {
 			try {
 				const schema = Yup.object().shape({
-					name: Yup.string().required(I18n.t(TranslationsValues.name_required)),
-					board: Yup.string().required(
-						I18n.t(TranslationsValues.board_required),
-					),
+					name: Yup.string().required(t(TranslationsValues.name_required)),
+					board: Yup.string().required(t(TranslationsValues.board_required)),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -66,7 +65,7 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 				dispatch(updateCurrentTruck(updatedTruck));
 				formRef.current.setErrors({});
 				ToastAndroid.showWithGravityAndOffset(
-					I18n.t(TranslationsValues.toast_edit_truck, { name, board }),
+					t(TranslationsValues.toast_edit_truck, { name, board }),
 					ToastAndroid.LONG,
 					ToastAndroid.BOTTOM,
 					0,
@@ -94,21 +93,21 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	return (
 		<Container ontentContainerStyle={scrollView.content}>
 			<Title>
-				{I18n.t(TranslationsValues.editing_truck_title)}{' '}
+				{t(TranslationsValues.editing_truck_title)}{' '}
 				<Span>{current_truck.name}</Span>
 			</Title>
 			<Image source={EditTruckIcon} resizeMode="contain" />
 			<Form ref={formRef} onSubmit={handleSubmit}>
 				<Input
 					name="name"
-					label={I18n.t(TranslationsValues.edit_truck_name_label)}
+					label={t(TranslationsValues.edit_truck_name_label)}
 					returnKeyType="next"
 					maxLength={16}
 					onSubmitEditing={() => nextInputRef.current?.focus()}
 				/>
 				<Input
 					name="board"
-					label={I18n.t(TranslationsValues.edit_truck_board_label)}
+					label={t(TranslationsValues.edit_truck_board_label)}
 					maxLength={12}
 					returnKeyType="send"
 					onSubmitEditing={submit}
@@ -117,11 +116,11 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 			</Form>
 			<ButtonContainer>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.cancel)}
+					buttonLabel={t(TranslationsValues.cancel)}
 					onPress={closeModal}
 				/>
 				<Button
-					buttonLabel={I18n.t(TranslationsValues.save)}
+					buttonLabel={t(TranslationsValues.save)}
 					onPress={submit}
 					next
 				/>

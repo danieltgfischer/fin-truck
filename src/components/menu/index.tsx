@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, SetStateAction, Dispatch } from 'react';
 import { Animated, useWindowDimensions } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import { LanguageSwitch } from '../languageSwitch';
 import {
 	Container,
@@ -22,6 +22,8 @@ export const Menu: React.FC<IProps> = ({
 	setIsModalVisible,
 }: IProps) => {
 	const { height } = useWindowDimensions();
+	const { t } = useTranslation();
+
 	const translateY = useRef(new Animated.Value(height)).current;
 	const rotate = useRef(new Animated.Value(0)).current;
 
@@ -77,7 +79,7 @@ export const Menu: React.FC<IProps> = ({
 					<AntDesign name="setting" size={50} color="#ccc" />
 				</Rotate>
 			</ButtonIcon>
-			<Label>{I18n.t(TranslationsValues.language)}:</Label>
+			<Label>{t(TranslationsValues.language)}:</Label>
 			<ContainerLanguageSwitch>
 				<LanguageSwitch />
 			</ContainerLanguageSwitch>

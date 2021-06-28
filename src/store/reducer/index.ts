@@ -19,6 +19,7 @@ const INITIAL_STATE = {
 		country_code,
 		'en-US': {
 			code: 'en',
+			currency: 'USD',
 			CURRENCY_FORMAT: {
 				separator: '.',
 				precision: 2,
@@ -28,6 +29,7 @@ const INITIAL_STATE = {
 		},
 		'pt-BR': {
 			code: 'pt',
+			currency: 'BRL',
 			CURRENCY_FORMAT: {
 				separator: ',',
 				precision: 2,

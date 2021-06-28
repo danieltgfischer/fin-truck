@@ -5,8 +5,8 @@ import TrucksIconLight from '@/icons/TrucksIconLight.png';
 import TimelineLight from '@/icons/TimelineLight.png';
 import { useNavigation } from '@react-navigation/native';
 import { routeNames } from '@/navigation/types';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import { DrawerItem } from './DrawerItem';
 import {
 	Container,
@@ -18,6 +18,7 @@ import { LanguageSwitch } from '../languageSwitch';
 
 export const DrawerComponent: React.FC = () => {
 	const navigation = useNavigation();
+	const { t } = useTranslation();
 
 	const navigate = useCallback(
 		path => {
@@ -33,12 +34,12 @@ export const DrawerComponent: React.FC = () => {
 			</HeaderContainer>
 			<DrawerItem
 				source={TrucksIcon}
-				name={I18n.t(TranslationsValues.trucks)}
+				name={t(TranslationsValues.trucks)}
 				onPress={() => navigate(routeNames.Home)}
 			/>
 			<DrawerItem
 				source={Timeline}
-				name={I18n.t(TranslationsValues.history)}
+				name={t(TranslationsValues.history)}
 				onPress={() => navigate(routeNames.Timeline)}
 			/>
 			<LanguageContainer>

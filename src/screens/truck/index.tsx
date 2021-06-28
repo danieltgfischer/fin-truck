@@ -8,9 +8,7 @@ import Timeline from '@/icons/Timeline.png';
 import { EditTruck } from '@/components/editTruck';
 import { Modal as StyledModal } from '@/components/modal';
 import { DeleteTruck } from '@/components/deleteTruck';
-import I18n from 'i18n-js';
-import { useSelector } from 'react-redux';
-import { IState } from '@/store/types';
+import { useTranslation } from 'react-i18next';
 import {
 	Container,
 	FlatList,
@@ -37,7 +35,7 @@ type Props = {
 export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-	useSelector((state: IState) => state);
+	const { t } = useTranslation();
 
 	const renderItem = ({ item: { source, big_name, value }, index }) => {
 		return (
@@ -76,7 +74,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<ContainerButtons>
 					<HistoryButton onPress={() => navigate(routeNames.Timeline)}>
 						<Image source={Timeline} resizeMode="contain" />
-						<HistoryLabel>{I18n.t('history')}</HistoryLabel>
+						<HistoryLabel>{t('history')}</HistoryLabel>
 					</HistoryButton>
 					<RightView>
 						<ButtonIcon onPress={openEditModal}>
@@ -87,7 +85,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 						</ButtonIcon>
 					</RightView>
 				</ContainerButtons>
-				<Title>{I18n.t('title_truck')}:</Title>
+				<Title>{t('title_truck')}:</Title>
 				<FlatList
 					data={data}
 					renderItem={renderItem}

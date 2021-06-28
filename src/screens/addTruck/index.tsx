@@ -10,8 +10,8 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import AddTruckIcon from '@/icons/CreateTruckIcon.png';
 import { Button } from '@/components/button';
 import { ToastAndroid } from 'react-native';
-import I18n from 'i18n-js';
 import { TranslationsValues } from '@/config/intl';
+import { useTranslation } from 'react-i18next';
 import { Container, Image, Form, scrollView, ButtonContainer } from './styles';
 
 interface IData {
@@ -33,6 +33,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const nextInputRef = useRef<IInputRef>(null);
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
+	const { t } = useTranslation();
 
 	const navigate = useCallback(() => {
 		navigation.navigate(routeNames.Home);
@@ -42,10 +43,8 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		async (data: IData, { reset }) => {
 			try {
 				const schema = Yup.object().shape({
-					name: Yup.string().required(I18n.t(TranslationsValues.name_required)),
-					board: Yup.string().required(
-						I18n.t(TranslationsValues.board_required),
-					),
+					name: Yup.string().required(t(TranslationsValues.name_required)),
+					board: Yup.string().required(t(TranslationsValues.board_required)),
 				});
 				await schema.validate(data, {
 					abortEarly: false,
@@ -56,7 +55,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				formRef.current.setErrors({});
 				reset();
 				ToastAndroid.showWithGravityAndOffset(
-					I18n.t(TranslationsValues.toast_add_truck, { name, board }),
+					t(TranslationsValues.toast_add_truck, { name, board }),
 					ToastAndroid.LONG,
 					ToastAndroid.BOTTOM,
 					0,
@@ -73,7 +72,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				}
 			}
 		},
-		[dispatch, navigate, truckRepository],
+		[dispatch, navigate, t, truckRepository],
 	);
 
 	const submit = useCallback(() => {
@@ -87,7 +86,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<Form ref={formRef} onSubmit={handleSubmit}>
 					<Input
 						name="name"
-						label={I18n.t(TranslationsValues.add_name_truck_label)}
+						label={t(TranslationsValues.add_name_truck_label)}
 						returnKeyType="next"
 						requiredLabel
 						maxLength={16}
@@ -95,7 +94,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					/>
 					<Input
 						name="board"
-						label={I18n.t(TranslationsValues.add_board_truck_label)}
+						label={t(TranslationsValues.add_board_truck_label)}
 						maxLength={12}
 						requiredLabel
 						returnKeyType="send"
@@ -104,8 +103,15 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					/>
 				</Form>
 				<ButtonContainer>
-					<Button onPress={navigate} buttonLabel={I18n.t('cancel')} />
-					<Button onPress={submit} buttonLabel={I18n.t('add')} next />
+					<Button
+						onPress={navigate}
+						buttonLabel={t(TranslationsValues.cancel)}
+					/>
+					<Button
+						onPress={submit}
+						buttonLabel={t(TranslationsValues.add)}
+						next
+					/>
 				</ButtonContainer>
 			</Container>
 		</>
