@@ -105,7 +105,7 @@ export const translations = {
 		delete_truck_warning: 'You are about to delete the truck',
 		delete_truck_warning2:
 			'All records for that truck will be deleted. Are you sure about that?',
-		toast_add_option: 'You have registered a value in %{value}',
+		toast_add_option: 'You have registered a value in {{value}}',
 		add_option_value_label: 'Add a value for this option',
 		add_option_description_label: 'Add a description for this value',
 		empty_description: 'No description added',
