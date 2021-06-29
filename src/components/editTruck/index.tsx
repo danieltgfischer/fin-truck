@@ -11,6 +11,9 @@ import { updateCurrentTruck } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { ToastAndroid } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { StatusBar } from 'expo-status-bar';
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components/native';
 import {
 	Container,
 	Form,
@@ -37,6 +40,7 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
 	const { t } = useTranslation();
+	const theme = useContext(ThemeContext);
 
 	useEffect(() => {
 		formRef.current.setData({
@@ -83,48 +87,58 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 				}
 			}
 		},
-		[closeModal, current_truck.id, dispatch, truckRepository],
+		[closeModal, current_truck.id, dispatch, t, truckRepository],
 	);
 
 	const submit = useCallback(() => {
 		formRef.current?.submitForm();
 	}, []);
 
+	const isDark = theme.name === 'dark';
+
 	return (
-		<Container ontentContainerStyle={scrollView.content}>
-			<Title>
-				{t(TranslationsValues.editing_truck_title)}{' '}
-				<Span>{current_truck.name}</Span>
-			</Title>
-			<Image source={EditTruckIcon} resizeMode="contain" />
-			<Form ref={formRef} onSubmit={handleSubmit}>
-				<Input
-					name="name"
-					label={t(TranslationsValues.edit_truck_name_label)}
-					returnKeyType="next"
-					maxLength={16}
-					onSubmitEditing={() => nextInputRef.current?.focus()}
-				/>
-				<Input
-					name="board"
-					label={t(TranslationsValues.edit_truck_board_label)}
-					maxLength={12}
-					returnKeyType="send"
-					onSubmitEditing={submit}
-					ref={nextInputRef}
-				/>
-			</Form>
-			<ButtonContainer>
-				<Button
-					buttonLabel={t(TranslationsValues.cancel)}
-					onPress={closeModal}
-				/>
-				<Button
-					buttonLabel={t(TranslationsValues.save)}
-					onPress={submit}
-					next
-				/>
-			</ButtonContainer>
-		</Container>
+		<>
+			<StatusBar
+				style="light"
+				backgroundColor={
+					isDark ? theme.colors.background : theme.colors.primary
+				}
+			/>
+			<Container contentContainerStyle={scrollView.content}>
+				<Title>
+					{t(TranslationsValues.editing_truck_title)}{' '}
+					<Span>{current_truck.name}</Span>
+				</Title>
+				<Image source={EditTruckIcon} resizeMode="contain" />
+				<Form ref={formRef} onSubmit={handleSubmit}>
+					<Input
+						name="name"
+						label={t(TranslationsValues.edit_truck_name_label)}
+						returnKeyType="next"
+						maxLength={16}
+						onSubmitEditing={() => nextInputRef.current?.focus()}
+					/>
+					<Input
+						name="board"
+						label={t(TranslationsValues.edit_truck_board_label)}
+						maxLength={12}
+						returnKeyType="send"
+						onSubmitEditing={submit}
+						ref={nextInputRef}
+					/>
+				</Form>
+				<ButtonContainer>
+					<Button
+						buttonLabel={t(TranslationsValues.cancel)}
+						onPress={closeModal}
+					/>
+					<Button
+						buttonLabel={t(TranslationsValues.save)}
+						onPress={submit}
+						next
+					/>
+				</ButtonContainer>
+			</Container>
+		</>
 	);
 };

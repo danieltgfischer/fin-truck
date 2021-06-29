@@ -18,7 +18,7 @@ export const scrollView = StyleSheet.create({
 export const Container = styled.ScrollView`
 	height: 100%;
 	width: 100%;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 	padding: 50px 0;
 `;
 
@@ -28,6 +28,7 @@ export const Title = styled.Text`
 	text-align: center;
 	font-family: Regular;
 	padding: 0 15px;
+	color: ${({ theme }) => theme.colors.text};
 	margin: 0 0 15px;
 `;
 
@@ -46,7 +47,7 @@ export const ButtonContainer = styled.View`
 `;
 
 export const Span = styled.Text`
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	font-size: 24px;
 	font-family: Bold;
 `;
