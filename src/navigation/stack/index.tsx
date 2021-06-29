@@ -21,9 +21,10 @@ import { TranslationsValues } from '@/config/intl';
 import light from '@/styles/themes/light';
 import dark from '@/styles/themes/dark';
 import { darken } from 'polished';
+import { Ionicons } from '@expo/vector-icons';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
-import { LoadingContainer } from '../style';
+import { LoadingContainer, MenuButton } from '../style';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -149,7 +150,19 @@ export const Navigation: React.FC = () => {
 					<Stack.Screen
 						name={routeNames.DrawerRoot}
 						component={DrawerScreen}
-						options={options}
+						options={{
+							headerLeft: () => (
+								<MenuButton onPress={() => null}>
+									<Ionicons
+										name="menu"
+										size={30}
+										color={isDark ? '#fbfbff' : '#fff'}
+									/>
+								</MenuButton>
+							),
+							title: '',
+							...options,
+						}}
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>

@@ -12,8 +12,6 @@ export const Container = styled.View`
 	align-items: center;
 	justify-content: space-between;
 	background-color: ${({ theme }) =>
-		theme.name === 'dark'
-			? lighten(0.05, theme.colors.background)
-			: theme.colors.background};
-	padding: 15px;
+		theme.name === 'dark' ? lighten(0.05, theme.colors.background) : '#fafafa'};
+	padding: 5%;
 `;

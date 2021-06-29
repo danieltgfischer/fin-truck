@@ -22,11 +22,8 @@
       "versionCode": 1
     },
 		"androidNavigationBar": {
-
-		 "visible": true,
-
 		 "barStyle": "light-content",
-		 "backgroundColor": "#000"
+		 "backgroundColor": "#040F16"
 	 }
 	}
 

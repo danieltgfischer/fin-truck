@@ -16,13 +16,10 @@ export const LoadingContainer = styled.View<ILoading>`
 `;
 
 export const ButtonIcon = styled.TouchableOpacity`
-	justify-content: center;
-	align-items: center;
-	margin: 0 20px 0 0;
-	padding: 5px 7px;
-	elevation: 7;
-	border-radius: 7px;
-	background: ${({ theme }) => theme.colors.background};
+	width: 50px;
+	height: 50px;
+	margin: 0 30px 15px;
+	align-self: flex-end;
 `;
 
 export const MenuButton = styled.TouchableOpacity`

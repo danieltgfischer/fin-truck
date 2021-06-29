@@ -26,6 +26,8 @@ export const DrawerScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const theme = useContext(ThemeContext);
 	const title = current_truck?.name ?? '';
 
+	const isDark = theme.name === 'dark';
+
 	useEffect(() => {
 		navigation.addListener('blur', () => {
 			navigation.dispatch(DrawerActions.closeDrawer());
@@ -36,7 +38,11 @@ export const DrawerScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<MenuButton
 					onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
 				>
-					<Ionicons name="menu" size={30} color={theme.colors.text} />
+					<Ionicons
+						name="menu"
+						size={30}
+						color={isDark ? theme.colors.text : '#fff'}
+					/>
 				</MenuButton>
 			),
 		});
@@ -48,12 +54,16 @@ export const DrawerScreen: React.FC<Props> = ({ navigation }: Props) => {
 					<MenuButton
 						onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
 					>
-						<Ionicons name="menu" size={30} color={theme.colors.text} />
+						<Ionicons
+							name="menu"
+							size={30}
+							color={isDark ? theme.colors.text : '#fff'}
+						/>
 					</MenuButton>
 				),
 			});
 		});
-	}, [navigation, title, current_truck, theme.colors.text]);
+	}, [navigation, title, current_truck, theme.colors.text, isDark]);
 
 	return (
 		<Drawer.Navigator

@@ -32,7 +32,6 @@ export const Menu: React.FC<IProps> = ({
 	const { height } = useWindowDimensions();
 	const { t } = useTranslation();
 	const { name, colors } = useContext(ThemeContext);
-
 	const translateY = useRef(new Animated.Value(height)).current;
 	const rotate = useRef(new Animated.Value(0)).current;
 

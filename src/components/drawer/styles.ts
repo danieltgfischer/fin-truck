@@ -1,9 +1,21 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
-	position: relative;
+export const DrawerContainer = styled.TouchableWithoutFeedback`
 	height: 100%;
 	width: 100%;
+	background-color: ${({ theme }) => theme.colors.background};
+`;
+
+export const Container = styled.View`
+	justify-content: space-between;
+	height: 100%;
+	background-color: ${({ theme }) => theme.colors.background};
+	width: 100%;
+`;
+
+export const DrawerContentContainer = styled.View`
+	justify-content: space-between;
+	height: 100%;
 `;
 
 export const ItemContainer = styled.TouchableOpacity`
@@ -14,14 +26,27 @@ export const ItemContainer = styled.TouchableOpacity`
 	border: none;
 	border-bottom-width: 1px;
 	position: relative;
-	border-color: #ccc;
+	border-color: ${({ theme }) =>
+		theme.name === 'dark' ? theme.colors.text : '#ccc'};
 	border-style: solid;
+`;
+
+export const ButtonIcon = styled.TouchableOpacity`
+	margin: 0 30px;
+`;
+
+export const MenuButtonsContainer = styled.View`
+	width: 100%;
+`;
+
+export const MenuConfigContainer = styled.View`
+	width: 100%;
 `;
 
 export const ItemLabel = styled.Text`
 	font-family: Semi_Bold;
 	font-size: 26px;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	padding: 0 0 0 10px;
 `;
 
@@ -32,7 +57,11 @@ export const HeaderLabel = styled.Text`
 	padding: 0 0 0 10px;
 `;
 
-export const Image = styled.Image`
+interface IImage {
+	source: string;
+}
+
+export const Image = styled.Image<IImage>`
 	position: relative;
 	top: -5px;
 `;
@@ -51,12 +80,5 @@ export const HeaderContainer = styled.View`
 `;
 
 export const LanguageContainer = styled.View`
-	align-self: center;
-	background-color: #fafafa;
 	width: 100%;
-	justify-content: center;
-	position: absolute;
-	height: 15%;
-	bottom: 0;
-	/* padding: 0 5%; */
 `;

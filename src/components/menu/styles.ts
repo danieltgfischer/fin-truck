@@ -7,7 +7,7 @@ const { height, width } = Dimensions.get('window');
 export const Container = styled(Animated.View)`
 	position: absolute;
 	height: ${height * 0.5}px;
-	width: ${width}px;
+	width: 100%;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
 	border-top-width: 0.3px;
@@ -18,6 +18,9 @@ export const Container = styled(Animated.View)`
 
 export const ButtonIcon = styled.TouchableOpacity`
 	margin: 0 30px;
+	width: 50px;
+	height: 50px;
+	align-self: flex-end;
 `;
 
 export const Rotate = styled(Animated.View)`
@@ -36,6 +39,6 @@ export const Label = styled.Text`
 
 export const ContainerSwitch = styled.View`
 	width: 100%;
-	padding: 0 10%;
+	padding: 0 5%;
 	margin: 2% 0;
 `;
