@@ -1,15 +1,23 @@
-import React, { useEffect, useRef, SetStateAction, Dispatch } from 'react';
+import React, {
+	useEffect,
+	useRef,
+	SetStateAction,
+	Dispatch,
+	useContext,
+} from 'react';
 import { Animated, useWindowDimensions } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ThemeContext } from 'styled-components/native';
 import { LanguageSwitch } from '../languageSwitch';
+import { ThemeSwitch } from '../themeSwitch';
 import {
 	Container,
 	ButtonIcon,
 	Rotate,
 	Label,
-	ContainerLanguageSwitch,
+	ContainerSwitch,
 } from './styles';
 
 interface IProps {
@@ -23,6 +31,7 @@ export const Menu: React.FC<IProps> = ({
 }: IProps) => {
 	const { height } = useWindowDimensions();
 	const { t } = useTranslation();
+	const { name, colors } = useContext(ThemeContext);
 
 	const translateY = useRef(new Animated.Value(height)).current;
 	const rotate = useRef(new Animated.Value(0)).current;
@@ -57,6 +66,8 @@ export const Menu: React.FC<IProps> = ({
 		rotate.setValue(0);
 	}, [height, isModalVisible, rotate, translateY]);
 
+	const dark = name === 'dark';
+
 	return (
 		<Container
 			style={{
@@ -76,13 +87,21 @@ export const Menu: React.FC<IProps> = ({
 						],
 					}}
 				>
-					<AntDesign name="setting" size={50} color="#ccc" />
+					<AntDesign
+						name="setting"
+						size={50}
+						color={dark ? colors.text : '#ccc'}
+					/>
 				</Rotate>
 			</ButtonIcon>
 			<Label>{t(TranslationsValues.language)}:</Label>
-			<ContainerLanguageSwitch>
+			<ContainerSwitch>
 				<LanguageSwitch />
-			</ContainerLanguageSwitch>
+			</ContainerSwitch>
+			<Label>{t(TranslationsValues.theme)}:</Label>
+			<ContainerSwitch>
+				<ThemeSwitch />
+			</ContainerSwitch>
 		</Container>
 	);
 };

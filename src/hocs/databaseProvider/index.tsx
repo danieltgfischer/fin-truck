@@ -6,6 +6,11 @@ import { TruckRepository } from '@/database/repositories/truckRepository';
 import { Truck, BillingOption } from '@/database/entities';
 import { LoadingContainer } from '@/navigation/style';
 import { BilliginRepository } from '@/database/repositories/billingRepository';
+import light from '@/styles/themes/light';
+import dark from '@/styles/themes/dark';
+import { useSelector } from 'react-redux';
+import { IState } from '@/store/types';
+import { ThemeProvider } from 'styled-components';
 
 interface IProps {
 	children: ReactNode;
@@ -16,6 +21,8 @@ LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 export const DatabaseConnectionProvider: FC<IProps> = ({
 	children,
 }: IProps) => {
+	const { theme } = useSelector((state: IState) => state);
+
 	const [connection, setConnection] = useState<Connection | null>(null);
 
 	const connect = useCallback(async () => {
@@ -41,12 +48,15 @@ export const DatabaseConnectionProvider: FC<IProps> = ({
 	useEffect(() => {
 		connect();
 	}, [connect, connection]);
+	const defaultTheme = theme === 'light' ? light : dark;
 
 	if (!connection) {
 		return (
-			<LoadingContainer>
-				<ActivityIndicator color="#fff" size="large" />
-			</LoadingContainer>
+			<ThemeProvider theme={defaultTheme}>
+				<LoadingContainer>
+					<ActivityIndicator color="#fff" size="large" />
+				</LoadingContainer>
+			</ThemeProvider>
 		);
 	}
 

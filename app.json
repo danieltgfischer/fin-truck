@@ -20,7 +20,14 @@
 			"backgroundColor": "#ffffff",
 			"package": "com.danieltgfischer.fintruck",
       "versionCode": 1
-    }
+    },
+		"androidNavigationBar": {
+
+		 "visible": true,
+
+		 "barStyle": "light-content",
+		 "backgroundColor": "#040F16"
+	 }
 	}
 
 }

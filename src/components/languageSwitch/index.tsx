@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Switch } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Brazil from '@/icons/brazil_flag.png';
@@ -9,10 +9,14 @@ import { updateCountryCode } from '@/store/actions';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { darken } from 'polished';
+import { ThemeContext } from 'styled-components/native';
 import { Image, LanguageContainer } from './styles';
 
 export const LanguageSwitch: React.FC = () => {
 	const { locale } = useSelector((state: IState) => state);
+	const { name } = useContext(ThemeContext);
+
 	const dispatch = useDispatch();
 	const [toggleLanguage, setToggleLanguage] = useState(
 		locale.country_code === 'pt-BR',
@@ -40,12 +44,22 @@ export const LanguageSwitch: React.FC = () => {
 		setToggleLanguage(!toggleLanguage);
 	}, [toggleLanguage]);
 
+	const dark = name === 'dark';
+	const darkValue = dark ? 0.2 : 0;
+
 	return (
 		<LanguageContainer>
 			<Image source={Usa} resizeMode="contain" />
 			<Switch
-				trackColor={{ false: '#41479b', true: '#fece3f' }}
-				thumbColor={toggleLanguage ? '#4ba543' : '#ff4b55'}
+				trackColor={{
+					false: darken(darkValue, '#41479b'),
+					true: darken(darkValue, '#fece3f'),
+				}}
+				thumbColor={
+					toggleLanguage
+						? darken(darkValue, '#4ba543')
+						: darken(darkValue, '#ff4b55')
+				}
 				ios_backgroundColor="#3e3e3e"
 				onValueChange={handleSwitchLanguage}
 				value={toggleLanguage}

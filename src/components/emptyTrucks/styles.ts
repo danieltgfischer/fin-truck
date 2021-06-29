@@ -11,7 +11,7 @@ export const Container = styled.View`
 `;
 
 export const Label = styled.Text`
-	color: #ccc;
+	color: ${({ theme }) => theme.colors.empty_warning};
 	font-size: 20px;
 	padding: 0 10%;
 	text-align: center;

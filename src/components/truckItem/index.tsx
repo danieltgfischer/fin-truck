@@ -7,13 +7,18 @@ import { useDispatch } from 'react-redux';
 import { updateCurrentTruck } from '@/store/actions';
 import { Board, Container, Name, Image } from './styles';
 
-interface IProps {
+export interface ITruckItemProps {
 	name: string;
 	board: string;
 	id: string;
+	empty?: boolean;
 }
 
-export const TruckItem: React.FC<IProps> = ({ board, name, id }: IProps) => {
+export const TruckItem: React.FC<ITruckItemProps> = ({
+	board,
+	name,
+	id,
+}: ITruckItemProps) => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();

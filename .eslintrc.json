@@ -62,7 +62,8 @@
 		"no-duplicate-case": "off",
 		"react/require-default-props": "off",
 		"max-classes-per-file": "off",
-		"import/no-duplicates": "off"
+		"import/no-duplicates": "off",
+		"no-return-assign":"off"
 	},
 	"settings": {
     "import/resolver": {

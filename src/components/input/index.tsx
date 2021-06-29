@@ -133,7 +133,7 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 	const delimiter = locale.country_code === 'pt-BR' ? '.' : ',';
 	const separator = locale.country_code === 'pt-BR' ? ',' : '.';
 	const prefix = locale.country_code === 'pt-BR' ? 'R$' : '$';
-
+	// TODO
 	return (
 		<Container>
 			{label && (

@@ -108,3 +108,10 @@ export function updateCountryCode({
 		payload: { country_code },
 	};
 }
+
+export function updateTheme(theme: string): Types.IAction<Types.ITheme> {
+	return {
+		type: Types.ActionTypes.UPDATE_THEME,
+		payload: { theme },
+	};
+}

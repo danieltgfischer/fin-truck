@@ -58,6 +58,7 @@ export interface ILocace {
 export interface IState {
 	trucks: Truck[];
 	locale: ILocace;
+	theme: string;
 	current_truck: Truck;
 	total_years: number[];
 	years: Year;
@@ -101,6 +102,10 @@ export interface ITrucks {
 	trucks: Truck[];
 }
 
+export interface ITheme {
+	theme: string;
+}
+
 export enum ActionTypes {
 	UPDATE_TRUCKS = 'UPDATE_TRUCKS',
 	ADD_TRUCK = 'ADD_TRUCK',
@@ -112,4 +117,5 @@ export enum ActionTypes {
 	UPDATE_MONTH_RESUME = 'UPDATE_MONTH_RESUME',
 	ADD_YEAR_IN_YEARS = 'ADD_YEAR_IN_YEARS',
 	UPDATE_COUNTRY_CODE = 'UPDATE_COUNTRY_CODE',
+	UPDATE_THEME = 'UPDATE_THEME',
 }

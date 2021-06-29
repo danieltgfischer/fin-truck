@@ -2,9 +2,11 @@ import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-
-export const LoadingContainer = styled.View`
-	background: #b63b34;
+interface ILoading {
+	theme?: any;
+}
+export const LoadingContainer = styled.View<ILoading>`
+	background: ${props => props?.theme?.colors?.background || '#b63b34'};
 	width: ${width}px;
 	height: ${height}px;
 	min-height: 100%;
@@ -20,7 +22,7 @@ export const ButtonIcon = styled.TouchableOpacity`
 	padding: 5px 7px;
 	elevation: 7;
 	border-radius: 7px;
-	background-color: #fff;
+	background: ${({ theme }) => theme.colors.background};
 `;
 
 export const MenuButton = styled.TouchableOpacity`

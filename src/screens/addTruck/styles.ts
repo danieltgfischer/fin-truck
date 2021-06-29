@@ -16,7 +16,7 @@ export const Container = styled.ScrollView`
 	display: flex;
 	height: 100%;
 	width: 100%;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Image = styled.Image``;

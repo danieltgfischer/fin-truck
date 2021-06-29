@@ -14,6 +14,7 @@ const country_code = Object.keys(locales).includes(Localization.locale)
 
 const INITIAL_STATE = {
 	trucks: [],
+	theme: 'light',
 	current_truck: null,
 	locale: {
 		country_code,
@@ -151,6 +152,13 @@ export const truckReducer: Reducer<IState> = (
 						[month]: resume,
 					},
 				};
+				break;
+			}
+			case ActionTypes.UPDATE_THEME: {
+				const {
+					payload: { theme },
+				} = action;
+				draft.theme = theme;
 				break;
 			}
 			default:

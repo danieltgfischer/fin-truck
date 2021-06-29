@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TruckItem } from '@/components/truckItem';
+import shortid from 'shortid';
+import { ITruckItemProps, TruckItem } from '@/components/truckItem';
 import { EmptyTrucks } from '@/components/emptyTrucks';
 import { routeNames, RootStackParamList } from '@/navigation/types';
 import { IState } from '@/store/types';
@@ -11,6 +12,10 @@ import { updateTrucks } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import { useTranslation } from 'react-i18next';
+import { darken, lighten } from 'polished';
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components/native';
+import { ListRenderItemInfo } from 'react-native';
 import {
 	ButtonIcon,
 	HomeContainer,
@@ -34,11 +39,16 @@ type Props = {
 	navigation: HomeScreenNavigationProp;
 };
 
+export type ListRenderItem<ItemT> = (
+	info: ListRenderItemInfo<ItemT>,
+) => React.ReactElement | null;
+
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
+	const { colors } = useContext(ThemeContext);
 	const { t } = useTranslation();
 
 	useEffect(() => {
@@ -58,21 +68,26 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	}, [dispatch, navigation, truckRepository]);
 
 	function createRows(trucks, columns) {
-		const data = Array.from(trucks);
-		const rows = Math.floor(data.length / columns);
-		let lastRowElements = data.length - rows * columns;
-		while (lastRowElements !== columns) {
-			data.push({
-				id: `empty-${lastRowElements}`,
-				name: `empty-${lastRowElements}`,
-				empty: true,
-			});
-			lastRowElements += 1;
+		if (trucks.length > 0) {
+			const data = Array.from(trucks);
+			const rows = Math.floor(data.length / columns);
+			let lastRowElements = data.length - rows * columns;
+			while (lastRowElements !== columns) {
+				data.push({
+					id: shortid(),
+					name: `empty-${lastRowElements}`,
+					empty: true,
+				});
+				lastRowElements += 1;
+			}
+			return data;
 		}
-		return data;
+		return [];
 	}
 
-	const renderItem = ({ item: { name, board, id, ...item } }) => {
+	const renderItem: ListRenderItem<ITruckItemProps> = ({
+		item: { name, board, id, ...item },
+	}) => {
 		if (item?.empty) {
 			return <EmptyCell />;
 		}
@@ -96,7 +111,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 					<FlatList
 						data={data}
 						renderItem={renderItem}
-						keyExtractor={item => String(item.id)}
+						keyExtractor={(item: ITruckItemProps) => item.id}
 						contentContainerStyle={flatListStyle.content}
 						numColumns={3}
 						ListEmptyComponent={EmptyTrucks}
@@ -107,7 +122,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 								{t(TranslationsValues.button_label_home)}
 							</FooterLabel>
 							<ButtonIcon onPress={() => navigate(routeNames.AddTruck)}>
-								<AntDesign name="pluscircle" size={50} color="#b63b34" />
+								<AntDesign name="pluscircle" size={50} color={colors.primary} />
 							</ButtonIcon>
 						</FooterAddContainer>
 						<ButtonIcon onPress={() => setIsModalVisible(true)}>

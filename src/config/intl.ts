@@ -59,6 +59,7 @@ export enum TranslationsValues {
 	edit_option_title = 'edit_option_title',
 	delete_option_title = 'delete_option_title',
 	language = 'language',
+	theme = 'theme',
 }
 
 export const translations = {
@@ -125,6 +126,7 @@ export const translations = {
 		delete_option_title:
 			'You are about to delete this record. Are you sure about that?',
 		language: 'Language',
+		theme: 'Theme',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -190,5 +192,6 @@ export const translations = {
 		delete_option_title:
 			'Você está prestes a excluir este registro. Tem certeza disso?',
 		language: 'Idioma',
+		theme: 'Tema',
 	},
 };

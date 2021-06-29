@@ -16,7 +16,7 @@ export const Button: React.FC<IProps> = ({
 }: IProps) => {
 	if (cancel) {
 		return (
-			<CancelButton next={next} onPress={onPress}>
+			<CancelButton onPress={onPress}>
 				<ButtonLabel next={next} cancel={cancel}>
 					{buttonLabel}
 				</ButtonLabel>

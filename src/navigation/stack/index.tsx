@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Fonts from '@expo-google-fonts/source-sans-pro';
 import { ActivityIndicator } from 'react-native';
+import { ThemeProvider } from 'styled-components';
 import { StatusBar } from 'expo-status-bar';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	createStackNavigator,
 	StackNavigationOptions,
@@ -12,12 +14,13 @@ import { HomeScreen } from '@/screens/home';
 import { AddTruckScreen } from '@/screens/addTruck';
 import { AddOptionScreen } from '@/screens/addOption';
 import { Timeline } from '@/screens/timeline';
-import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
-import { useCallback } from 'react';
-import { updateCountryCode } from '@/store/actions';
+import { updateCountryCode, updateTheme } from '@/store/actions';
 import { useTranslation } from 'react-i18next';
 import { TranslationsValues } from '@/config/intl';
+import light from '@/styles/themes/light';
+import dark from '@/styles/themes/dark';
+import { darken } from 'polished';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
 import { LoadingContainer } from '../style';
@@ -25,7 +28,7 @@ import { LoadingContainer } from '../style';
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const Navigation: React.FC = () => {
-	const { locale } = useSelector((state: IState) => state);
+	const { locale, theme } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { t, i18n } = useTranslation();
 
@@ -52,35 +55,55 @@ export const Navigation: React.FC = () => {
 		i18n.changeLanguage(country_code);
 	}, [dispatch, i18n, locale.country_code]);
 
+	const updateAppTheme = useCallback(async () => {
+		const storagedTheme = await AsyncStorage.getItem('@Theme');
+		if (!storagedTheme) {
+			try {
+				await AsyncStorage.setItem('@Theme', 'light');
+				dispatch(updateTheme('light'));
+			} catch (error) {
+				console.warn(error);
+			}
+		}
+		dispatch(updateTheme(storagedTheme));
+	}, [dispatch]);
+
 	useEffect(() => {
 		updateLanguage();
-	}, [updateLanguage]);
+		updateAppTheme();
+	}, [updateAppTheme, updateLanguage]);
+
+	const defaultTheme = theme === 'light' ? light : dark;
+	const isDark = theme === 'dark';
+	const darkValue = isDark ? 0.2 : 0;
 
 	if (!fontsLoaded) {
 		return (
-			<LoadingContainer>
-				<ActivityIndicator color="#fff" size="large" />
-			</LoadingContainer>
+			<ThemeProvider theme={defaultTheme}>
+				<LoadingContainer>
+					<ActivityIndicator color={isDark ? '#fbfbff' : '#fff'} size="large" />
+				</LoadingContainer>
+			</ThemeProvider>
 		);
 	}
 
 	const options: StackNavigationOptions = {
 		headerTitleAlign: 'center',
 		headerTitleStyle: {
-			color: '#fff',
+			color: isDark ? '#fbfbff' : '#fff',
+
 			fontSize: 28,
 			fontFamily: 'Italic',
 		},
-		headerTintColor: '#fff',
+		headerTintColor: isDark ? '#fbfbff' : '#fff',
 		headerStyle: {
-			backgroundColor: '#b63b34',
+			backgroundColor: darken(darkValue, '#b63b34'),
 			height: 115,
 		},
 	};
 
 	return (
-		<>
-			<StatusBar style="light" backgroundColor="#b63b34" />
+		<ThemeProvider theme={defaultTheme}>
 			<NavigationContainer>
 				<Stack.Navigator initialRouteName={routeNames.Home}>
 					<Stack.Screen
@@ -89,9 +112,12 @@ export const Navigation: React.FC = () => {
 						options={{
 							title: 'HOME',
 							headerTitleAlign: 'center',
-							headerTitleStyle: { color: '#fff', fontSize: 32 },
+							headerTitleStyle: {
+								color: isDark ? '#fbfbff' : '#fff',
+								fontSize: 32,
+							},
 							headerStyle: {
-								backgroundColor: '#b63b34',
+								backgroundColor: darken(darkValue, '#b63b34'),
 								height: 140,
 							},
 						}}
@@ -127,6 +153,7 @@ export const Navigation: React.FC = () => {
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>
-		</>
+			<StatusBar style="light" backgroundColor={darken(darkValue, '#b63b34')} />
+		</ThemeProvider>
 	);
 };

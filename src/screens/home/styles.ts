@@ -20,12 +20,12 @@ export const Container = styled.SafeAreaView`
 export const HomeContainer = styled.View`
 	height: 100%;
 	width: 100%;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 	padding: 20px 0 0;
 `;
 
 export const Title = styled.Text`
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	font-size: 24px;
 	text-align: center;
 	font-family: 'Italic';
@@ -50,6 +50,7 @@ export const FooterLabel = styled.Text`
 	font-size: 18px;
 	text-align: center;
 	width: ${width * 0.55}px;
+	color: ${({ theme }) => theme.colors.text};
 	left: 50px;
 	top: -35px;
 `;
