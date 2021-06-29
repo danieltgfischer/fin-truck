@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import TruckIcon from '@/icons/TruckItemIcon.png';
 import DarkTruckIcon from '@/icons/DarkTruckIcon.png';
@@ -6,7 +6,6 @@ import { routeNames } from '@/navigation/types';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { useDispatch } from 'react-redux';
 import { updateCurrentTruck } from '@/store/actions';
-import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { Board, Container, Name, Image } from './styles';
 

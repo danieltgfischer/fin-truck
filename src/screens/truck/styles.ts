@@ -20,11 +20,11 @@ export const Container = styled.SafeAreaView`
 	display: flex;
 	height: 100%;
 	width: 100%;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Title = styled.Text`
-	color: #000;
+	color: ${({ theme }) => theme.colors.text};
 	font-size: 24px;
 	text-align: center;
 	font-family: Italic;
@@ -39,7 +39,7 @@ export const ButtonIcon = styled.TouchableOpacity`
 	padding: 10px;
 	elevation: 7;
 	border-radius: 7px;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.secondary};
 `;
 
 export const ContainerButtons = styled.View`
@@ -65,7 +65,7 @@ export const HistoryButton = styled.TouchableOpacity`
 	align-items: center;
 	padding: 5px;
 	position: relative;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.secondary};
 	border-radius: 7px;
 	margin: 0 0 0 20px;
 `;
@@ -73,5 +73,5 @@ export const HistoryButton = styled.TouchableOpacity`
 export const HistoryLabel = styled.Text`
 	font-family: Regular;
 	font-size: 20px;
-	color: #b63b34;
+	color: ${({ theme }) => theme.colors.text};
 `;

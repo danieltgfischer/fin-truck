@@ -1,14 +1,17 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Modal } from 'react-native';
+import React, { useCallback, useMemo, useState, useContext } from 'react';
+import { ListRenderItem, Modal } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { OptionItem } from '@/components/optionItem';
+import shortid from 'shortid';
+import { IOptionItem, OptionItem } from '@/components/optionItem';
 import { routeNames, DrawerParamList } from '@/navigation/types';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
 import Timeline from '@/icons/Timeline.png';
+import TimelineLight from '@/icons/TimelineLight.png';
 import { EditTruck } from '@/components/editTruck';
 import { Modal as StyledModal } from '@/components/modal';
 import { DeleteTruck } from '@/components/deleteTruck';
 import { useTranslation } from 'react-i18next';
+import { ThemeContext } from 'styled-components/native';
 import {
 	Container,
 	FlatList,
@@ -21,7 +24,7 @@ import {
 	Image,
 	RightView,
 } from './styles';
-import { optionsObj } from './options';
+import { IOptionsObj, optionsObj } from './options';
 
 type TruckScreenNavigationProp = StackNavigationProp<
 	DrawerParamList,
@@ -36,11 +39,16 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { t } = useTranslation();
+	const theme = useContext(ThemeContext);
 
-	const renderItem = ({ item: { source, big_name, value }, index }) => {
+	const renderItem: ListRenderItem<IOptionItem> = ({
+		item: { source, big_name, value, source_light },
+		index,
+	}) => {
 		return (
 			<OptionItem
 				source={source}
+				source_light={source_light}
 				big_name={big_name}
 				value={value}
 				delay={index * 150}
@@ -55,7 +63,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		[navigation],
 	);
 
-	const data = useMemo(
+	const data: IOptionsObj[] = useMemo(
 		() =>
 			Object.keys(optionsObj).reduce((acc, curr) => {
 				acc.push(optionsObj[curr]);
@@ -68,20 +76,33 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		setEditModalVisible(true);
 	}, []);
 
+	const isDark = theme.name === 'dark';
+
 	return (
 		<>
 			<Container>
 				<ContainerButtons>
 					<HistoryButton onPress={() => navigate(routeNames.Timeline)}>
-						<Image source={Timeline} resizeMode="contain" />
+						<Image
+							source={isDark ? TimelineLight : Timeline}
+							resizeMode="contain"
+						/>
 						<HistoryLabel>{t('history')}</HistoryLabel>
 					</HistoryButton>
 					<RightView>
 						<ButtonIcon onPress={openEditModal}>
-							<SimpleLineIcons name="pencil" size={20} color="#333" />
+							<SimpleLineIcons
+								name="pencil"
+								size={20}
+								color={theme.colors.text}
+							/>
 						</ButtonIcon>
 						<ButtonIcon onPress={() => setDeleteModalVisible(true)}>
-							<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
+							<FontAwesome5
+								name="trash-alt"
+								size={20}
+								color={theme.colors.text}
+							/>
 						</ButtonIcon>
 					</RightView>
 				</ContainerButtons>
@@ -89,7 +110,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<FlatList
 					data={data}
 					renderItem={renderItem}
-					keyExtractor={item => String(item.label)}
+					keyExtractor={() => shortid()}
 					contentContainerStyle={flatListStyle.content}
 					numColumns={3}
 				/>
