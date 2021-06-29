@@ -6,14 +6,14 @@ const { width, height } = Dimensions.get('window');
 export const Container = styled.View`
 	width: ${width * 0.95}px;
 	height: ${height * 0.4}px;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 	padding: 10% 0 0;
 	justify-content: flex-start;
 	border-radius: 7px;
 `;
 
 export const Label = styled.Text`
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	font-family: Regular;
 	font-size: 20px;
 	padding: 0 25px;
@@ -21,7 +21,7 @@ export const Label = styled.Text`
 `;
 
 export const Span = styled.Text`
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	font-family: Bold;
 	font-size: 20px;
 `;

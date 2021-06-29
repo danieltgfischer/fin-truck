@@ -49,6 +49,7 @@ export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 		dispatch,
 		name,
 		navigation,
+		t,
 		truckRepository,
 	]);
 
