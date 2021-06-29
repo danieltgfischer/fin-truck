@@ -6,7 +6,7 @@ const { height, width } = Dimensions.get('window');
 
 export const Container = styled(Animated.View)`
 	position: absolute;
-	height: ${height * 0.4}px;
+	height: ${height * 0.5}px;
 	width: ${width}px;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
@@ -37,4 +37,5 @@ export const Label = styled.Text`
 export const ContainerSwitch = styled.View`
 	width: 100%;
 	padding: 0 10%;
+	margin: 2% 0;
 `;

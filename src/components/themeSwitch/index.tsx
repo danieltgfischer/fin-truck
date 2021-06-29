@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ThemeContext } from 'styled-components';
 import { darken, lighten } from 'polished';
 import DarkTheme from '@/icons/DarkTheme.png';
+import DarkIconLightTheme from '@/icons/DarkIconLightTheme.png';
 import LightTheme from '@/icons/LightTheme.png';
 import { IState } from '@/store/types';
 import { updateTheme } from '@/store/actions';
@@ -44,7 +45,10 @@ export const ThemeSwitch: React.FC = () => {
 				onValueChange={handleSwitchTheme}
 				value={toggleTheme}
 			/>
-			<Image source={LightTheme} resizeMode="contain" />
+			<Image
+				source={theme === 'dark' ? DarkIconLightTheme : LightTheme}
+				resizeMode="contain"
+			/>
 		</Container>
 	);
 };

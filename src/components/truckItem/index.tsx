@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import TruckIcon from '@/icons/TruckItemIcon.png';
+import DarkTruckIcon from '@/icons/DarkTruckIcon.png';
 import { routeNames } from '@/navigation/types';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { useDispatch } from 'react-redux';
 import { updateCurrentTruck } from '@/store/actions';
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components/native';
 import { Board, Container, Name, Image } from './styles';
 
 export interface ITruckItemProps {
@@ -22,7 +25,7 @@ export const TruckItem: React.FC<ITruckItemProps> = ({
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { truckRepository } = useDatabaseConnection();
-
+	const theme = useContext(ThemeContext);
 	const navigate = useCallback(() => {
 		navigation.navigate(routeNames.DrawerRoot);
 	}, [navigation]);
@@ -40,7 +43,7 @@ export const TruckItem: React.FC<ITruckItemProps> = ({
 	return (
 		<Container onPress={updteCurrentTruck}>
 			<Name>{name}</Name>
-			<Image source={TruckIcon} />
+			<Image source={theme.name === 'dark' ? DarkTruckIcon : TruckIcon} />
 			<Board>{board}</Board>
 		</Container>
 	);

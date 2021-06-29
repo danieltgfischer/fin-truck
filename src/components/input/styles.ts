@@ -1,10 +1,14 @@
 import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
-import RNCurrencyInput from 'react-native-currency-input';
-import { darken } from 'polished';
-import theme from '@/styles/themes/light';
+import { Dimensions, TextInput as TextInputNative } from 'react-native';
+import RNCurrencyInput, {
+	CurrencyInputProps,
+} from 'react-native-currency-input';
 
 const { width } = Dimensions.get('window');
+
+interface InputReference extends TextInputNative {
+	value: string;
+}
 
 interface IFocus {
 	isFocused: boolean;
@@ -27,14 +31,14 @@ export const Label = styled.Text<IFocus>`
 		isFocused ? theme.colors.primary : theme.colors.text};
 `;
 
-export const TextInput = styled.TextInput`
+export const TextInput = styled.TextInput<InputReference>`
 	height: 100%;
 	font-size: 24px;
 	color: ${({ theme }) => theme.colors.text};
 	padding: 0 0 0 5px;
 `;
 
-export const CurrencyInput = styled(RNCurrencyInput)`
+export const CurrencyInput = styled(RNCurrencyInput)<CurrencyInputProps>`
 	height: 100%;
 	font-size: 24px;
 	color: ${({ theme }) => theme.colors.text};

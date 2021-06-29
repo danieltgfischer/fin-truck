@@ -12,6 +12,8 @@ import { formatNumber } from 'react-native-currency-input';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { useMemo } from 'react';
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components/native';
 import {
 	Container,
 	Error,
@@ -49,6 +51,7 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 	}: InputProps,
 	ref,
 ) => {
+	const theme = useContext(ThemeContext);
 	const { locale } = useSelector((state: IState) => state);
 	const inputRef = useRef<InputReference>(null);
 	const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -133,7 +136,7 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 	const delimiter = locale.country_code === 'pt-BR' ? '.' : ',';
 	const separator = locale.country_code === 'pt-BR' ? ',' : '.';
 	const prefix = locale.country_code === 'pt-BR' ? 'R$' : '$';
-	// TODO
+	// TODO fix input type
 	return (
 		<Container>
 			{label && (
@@ -148,13 +151,14 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 						value={currencyValue}
 						delimiter={delimiter}
 						separator={separator}
+						keyboardAppearance={theme.name}
 						prefix={prefix}
 						precision={2}
 						onChangeValue={setValue}
 						onFocus={() => setIsFocused(true)}
 						onBlur={() => setIsFocused(false)}
+						selectionColor={theme.colors.text}
 						ref={inputRef}
-						selectionColor="#333"
 						onChangeText={handleChangeText}
 						{...rest}
 					/>
@@ -163,7 +167,8 @@ const Input: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 						onFocus={() => setIsFocused(true)}
 						onBlur={() => setIsFocused(false)}
 						ref={inputRef}
-						selectionColor="#333"
+						keyboardAppearance={theme.name}
+						selectionColor={theme.colors.text}
 						onChangeText={handleChangeText}
 						{...rest}
 					/>

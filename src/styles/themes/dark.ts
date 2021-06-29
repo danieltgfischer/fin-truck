@@ -1,11 +1,11 @@
 import { DefaultTheme } from 'styled-components';
-import { darken } from 'polished';
-
+import { darken, lighten } from 'polished';
+// b80c09
 const theme: DefaultTheme = {
 	name: 'dark',
 	colors: {
 		primary: darken(0.2, '#b63b34'),
-		secondary: '#ffe251',
+		secondary: lighten(0.1, '#040F16'),
 		background: '#040F16',
 		text: '#E1E1E3',
 		empty_warning: '#aaa',
