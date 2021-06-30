@@ -1,3 +1,4 @@
+import { lighten } from 'polished';
 import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
@@ -12,7 +13,7 @@ export const scrollViewStyle = StyleSheet.create({
 export const Container = styled.SafeAreaView`
 	align-items: center;
 	justify-content: center;
-	background-color: #fafafa;
+	background-color: ${({ theme }) => theme.colors.background};
 	flex: 1;
 `;
 
@@ -24,7 +25,8 @@ export const SubHeader = styled.View`
 	margin: 0 0 20px;
 	padding: 20px 0;
 	position: relative;
-	background-color: #fff;
+	background-color: ${({ theme }) =>
+		theme.name === 'dark' ? lighten(0.2, theme.colors.background) : '#fff'};
 	elevation: 1;
 `;
 
@@ -36,7 +38,7 @@ export const Image = styled.Image`
 `;
 
 export const Title = styled.Text`
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	position: relative;
 	left: -15px;
 	font-size: 36px;
@@ -44,7 +46,7 @@ export const Title = styled.Text`
 `;
 
 export const Warning = styled.Text`
-	color: #ccc;
+	color: ${({ theme }) => theme.colors.empty_warning};
 	font-size: 20px;
 	font-family: Italic;
 	text-align: center;

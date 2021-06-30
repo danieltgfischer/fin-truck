@@ -18,7 +18,7 @@ export const Container = styled.ScrollView`
 	display: flex;
 	height: 100%;
 	width: 100%;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Image = styled.Image`
@@ -40,7 +40,7 @@ export const Form = styled(UnForm)`
 
 export const IconButton = styled.TouchableOpacity`
 	padding: 5px 10px;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.secondary};
 	elevation: 7;
 	border-radius: 7px;
 	margin: 0 15px 0 0;
@@ -60,12 +60,12 @@ export const Header = styled.View`
 export const Title = styled.Text`
 	font-family: Semi_Bold;
 	font-size: 24px;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	margin: 0 0 0 15px;
 `;
 
 export const ModalContainer = styled.View`
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 	height: 100%;
 	align-items: center;
 	padding: 50px 0;
@@ -79,6 +79,7 @@ export const ModalDescription = styled.Text`
 	text-align: center;
 	font-family: Regular;
 	font-size: 20px;
+	color: ${({ theme }) => theme.colors.text};
 	padding: 0 5%;
 	margin: 0 0 10%;
 `;
@@ -104,14 +105,14 @@ export const ValueContainer = styled.View`
 export const Label = styled.Text`
 	font-size: 18px;
 	font-family: Bold;
-	color: #000;
+	color: ${({ theme }) => theme.colors.text};
 `;
 
 export const LabelDescription = styled.Text`
 	align-self: flex-start;
 	font-size: 18px;
 	font-family: Bold;
-	color: #000;
+	color: ${({ theme }) => theme.colors.text};
 `;
 
 export const DescriptionContainer = styled.View`
@@ -134,7 +135,7 @@ export const Description = styled.Text`
 	font-size: 18px;
 	height: 90px;
 	width: 90%;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	border: 1px solid #ccc;
 	align-self: center;
 	padding: 5px 0 0 5px;

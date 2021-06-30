@@ -3,6 +3,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useState,
+	useContext,
 	useMemo,
 } from 'react';
 import { Modal, Animated, Dimensions, ToastAndroid } from 'react-native';
@@ -20,6 +21,7 @@ import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ThemeContext } from 'styled-components/native';
 import * as _ from './styles';
 import { optionsObj } from './options';
 
@@ -58,10 +60,12 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const translateXReview = useRef(new Animated.Value(width)).current;
 	const { billingRepository } = useDatabaseConnection();
 	const { t } = useTranslation();
+	const theme = useContext(ThemeContext);
 
 	const title = current_truck?.name ?? '';
 	const option = route?.params?.option ?? '';
 	const { value } = optionsObj[option];
+
 	useEffect(() => {
 		navigation.addListener('focus', () => {
 			navigation.setOptions({
@@ -184,17 +188,29 @@ export const AddOptionScreen: React.FC<Props> = ({
 	}, []);
 
 	const { currency } = locale[locale.country_code];
+	const isDark = theme.name === 'dark';
 
 	return (
 		<>
 			<_.Container contentContainerStyle={_.scrollView.content}>
 				<_.ButtonHeaderContainer>
 					<_.IconButton onPress={() => setModalVisible(!isModalVisible)}>
-						<Feather name="help-circle" size={24} color="#b63b34" />
+						<Feather
+							name="help-circle"
+							size={24}
+							color={isDark ? theme.colors.text : '#b63b34'}
+						/>
 					</_.IconButton>
 				</_.ButtonHeaderContainer>
 				<_.Header>
-					<_.Image source={optionsObj[option].source} resizeMode="contain" />
+					<_.Image
+						source={
+							isDark
+								? optionsObj[option].source_light
+								: optionsObj[option].source
+						}
+						resizeMode="contain"
+					/>
 					<_.Title>{t(value)}</_.Title>
 				</_.Header>
 				<_.AnimetadeContainer>
@@ -268,12 +284,16 @@ export const AddOptionScreen: React.FC<Props> = ({
 					/>
 				</_.ButtonContainer>
 			</_.Container>
-			<Modal visible={isModalVisible} animationType="fade">
+			<Modal visible={isModalVisible} animationType="fade" statusBarTranslucent>
 				<_.ModalContainer>
 					<_.Title>{t(value)}</_.Title>
 					<_.ModalImage
-						source={optionsObj[option].source}
 						resizeMode="stretch"
+						source={
+							isDark
+								? optionsObj[option].source_light
+								: optionsObj[option].source
+						}
 					/>
 					<_.ModalDescription>
 						{optionsObj[option].description}
