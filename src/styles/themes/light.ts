@@ -4,7 +4,7 @@ const theme: DefaultTheme = {
 	name: 'light',
 	colors: {
 		primary: '#b63b34',
-		secondary: '#fff',
+		secondary: '#fafafa',
 		background: '#fff',
 		text: '#333',
 		empty_warning: '#ccc',

@@ -18,7 +18,7 @@ export const scrollView = StyleSheet.create({
 export const Container = styled.ScrollView`
 	height: 100%;
 	width: 100%;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 	padding: 50px 0;
 `;
 
@@ -31,7 +31,10 @@ export const Title = styled.Text`
 	margin: 0 0 15px;
 `;
 
-export const Image = styled.Image`
+interface IImage {
+	source: string;
+}
+export const Image = styled.Image<IImage>`
 	height: 80px;
 	width: 80px;
 	margin: 0 0 15px;

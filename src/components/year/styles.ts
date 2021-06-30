@@ -12,11 +12,11 @@ export const Button = styled.TouchableOpacity`
 `;
 
 export const Year = styled.Text`
-	background-color: ${({ theme }) => theme.colors.secondary};
+	background-color: ${({ theme }) => theme.colors.background};
 	padding: 5px 12.5%;
 	margin: 15px 0%;
 	color: ${({ theme }) => theme.colors.text};
-	border: 0.8px solid #333;
+	border: 0.8px solid ${({ theme }) => theme.colors.text};
 	border-radius: 7px;
 	font-family: Regular;
 	font-size: 18px;
@@ -44,14 +44,10 @@ export const Value = styled.Text`
 	font-size: 24px;
 `;
 
-interface ILabel {
-	color: string;
-}
-
-export const Label = styled.Text<ILabel>`
+export const Label = styled.Text`
 	font-family: Bold;
 	font-size: 18px;
-	color: ${({ color, theme }) => color || theme.colors.text};
+	color: ${({ theme }) => theme.colors.text};
 `;
 
 export const FlatList = styled.FlatList``;

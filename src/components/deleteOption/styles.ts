@@ -8,13 +8,16 @@ export const Container = styled.View`
 	justify-content: flex-start;
 	width: ${width * 0.95}px;
 	height: ${height * 0.5}px;
-	background-color: #fff;
+	background-color: ${({ theme }) => theme.colors.background};
 	padding: 5% 0 0;
 	justify-content: flex-start;
 	border-radius: 7px;
 `;
 
-export const Image = styled.Image`
+interface IImage {
+	source: string;
+}
+export const Image = styled.Image<IImage>`
 	height: 80px;
 	width: 80px;
 	margin: 0 0 15px;
@@ -25,12 +28,12 @@ export const Value = styled.Text`
 	position: relative;
 	align-self: center;
 	font-size: 24px;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	margin: 15px 0 0;
 `;
 
 export const Label = styled.Text`
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	font-family: Semi_Bold;
 	padding: 0 15px;
 	font-size: 20px;
@@ -48,7 +51,7 @@ export const ContainerButtons = styled.View`
 export const Description = styled.Text`
 	position: relative;
 	text-align: center;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	width: 100%;
 	font-size: 18px;
 	font-family: Regular;

@@ -39,7 +39,7 @@ export const DeleteOption: React.FC<IProps> = ({
 	const { billingRepository } = useDatabaseConnection();
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const { value: optionValue, label } = optionsObj[option];
+	const { value: optionValue } = optionsObj[option];
 	const { year, monthNumber } = useContext(MonthInfoContext);
 	const { t } = useTranslation();
 
@@ -79,7 +79,7 @@ export const DeleteOption: React.FC<IProps> = ({
 			0,
 			150,
 		);
-	}, [billingRepository, closeModal, id, optionValue, updateTimelineOnEdit]);
+	}, [billingRepository, closeModal, id, optionValue, t, updateTimelineOnEdit]);
 
 	return (
 		<Container>

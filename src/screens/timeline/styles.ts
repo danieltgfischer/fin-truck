@@ -25,8 +25,7 @@ export const SubHeader = styled.View`
 	margin: 0 0 20px;
 	padding: 20px 0;
 	position: relative;
-	background-color: ${({ theme }) =>
-		theme.name === 'dark' ? lighten(0.2, theme.colors.background) : '#fff'};
+	background-color: ${({ theme }) => theme.colors.background};
 	elevation: 1;
 `;
 

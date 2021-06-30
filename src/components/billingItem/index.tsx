@@ -1,6 +1,6 @@
 import 'intl/locale-data/jsonp/pt-BR';
 import 'intl/locale-data/jsonp/en-US';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { Modal, Animated, useWindowDimensions } from 'react-native';
 import { format } from 'date-fns';
 import usLocale from 'date-fns/locale/en-US';
@@ -11,6 +11,7 @@ import { Modal as StyledModal } from '@/components/modal';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ThemeContext } from 'styled-components/native';
 import { EditBilling } from '../editBilling';
 import { DeleteOption } from '../deleteOption';
 import {
@@ -49,13 +50,13 @@ export const BillingItem: React.FC<IProps> = ({
 	option,
 }: IProps) => {
 	const { width } = useWindowDimensions();
-	const containerRef = useRef(0);
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { locale } = useSelector((state: IState) => state);
 	const { t } = useTranslation();
 	const timelineOpacity = useRef(new Animated.Value(0)).current;
 	const translateXInfo = useRef(new Animated.Value(width)).current;
+	const theme = useContext(ThemeContext);
 
 	useEffect(() => {
 		Animated.timing(timelineOpacity, {
@@ -83,7 +84,7 @@ export const BillingItem: React.FC<IProps> = ({
 
 	return (
 		<>
-			<Container ref={containerRef} even={index % 2 === 0}>
+			<Container even={index % 2 === 0}>
 				<TimelineContainer
 					style={{
 						opacity: timelineOpacity,
@@ -97,12 +98,24 @@ export const BillingItem: React.FC<IProps> = ({
 				<InfoContainer style={{ transform: [{ translateX: translateXInfo }] }}>
 					<ContainerButtons>
 						<ButtonIcon
+							even={index % 2 === 0}
 							onPress={() => setEditModalVisible(!isEditModalVisible)}
 						>
-							<SimpleLineIcons name="pencil" size={20} color="#333" />
+							<SimpleLineIcons
+								name="pencil"
+								size={20}
+								color={theme.colors.text}
+							/>
 						</ButtonIcon>
-						<ButtonIcon onPress={() => setDeleteModalVisible(true)}>
-							<FontAwesome5 name="trash-alt" size={20} color="#afafaf" />
+						<ButtonIcon
+							onPress={() => setDeleteModalVisible(true)}
+							even={index % 2 === 0}
+						>
+							<FontAwesome5
+								name="trash-alt"
+								size={20}
+								color={theme.colors.text}
+							/>
 						</ButtonIcon>
 					</ContainerButtons>
 					<Date>

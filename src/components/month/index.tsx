@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, {
+	useState,
+	useCallback,
+	useEffect,
+	useMemo,
+	useContext,
+} from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
@@ -9,6 +15,7 @@ import { updateMonth, updateMonthResume } from '@/store/actions';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ThemeContext } from 'styled-components';
 import { optionsObj } from './options';
 import {
 	Container,
@@ -44,7 +51,8 @@ const MonthTimeline: React.FC<IProps> = ({
 	const [isOpen, setIsOpen] = useState(
 		thisYear.getMonth() === monthNumber && thisYear.getFullYear() === year,
 	);
-	const [clld, setClld] = useState(false);
+	const [called, setCalled] = useState(false);
+	const theme = useContext(ThemeContext);
 
 	const openMonth = useCallback(async () => {
 		setIsLoading(true);
@@ -90,14 +98,18 @@ const MonthTimeline: React.FC<IProps> = ({
 	}, [billingRepository, current_truck.id, dispatch, monthNumber, year]);
 
 	useEffect(() => {
-		if (!clld) {
+		if (!called) {
 			callCurrentMonth();
-			setClld(true);
+			setCalled(true);
 		}
-	}, [callCurrentMonth, clld]);
+	}, [callCurrentMonth, called]);
 
 	const renderItem = useCallback(
 		({ item: { id, value, description, created_at, option }, index }) => {
+			const source =
+				theme.name === 'dark'
+					? optionsObj[option].source_light
+					: optionsObj[option].source;
 			return (
 				<MonthInfoContext.Provider value={{ monthNumber, year }}>
 					<BillingItem
@@ -106,7 +118,7 @@ const MonthTimeline: React.FC<IProps> = ({
 							value,
 							description,
 							created_at,
-							source: optionsObj[option].source,
+							source,
 							option,
 							delay: index * 200,
 							index,
@@ -115,7 +127,7 @@ const MonthTimeline: React.FC<IProps> = ({
 				</MonthInfoContext.Provider>
 			);
 		},
-		[monthNumber, year],
+		[monthNumber, theme.name, year],
 	);
 
 	const data = useMemo(

@@ -12,13 +12,14 @@ export const Container = styled.View`
 interface IFocus {
 	isFocused: boolean;
 }
+
 export const Label = styled.Text<IFocus>`
 	align-self: flex-start;
 	font-size: 20px;
 	font-family: Semi_Bold;
 	margin: 0 0 0 3%;
 	color: ${({ isFocused, theme }) =>
-		isFocused ? theme.colors.secondary : theme.colors.text};
+		isFocused ? theme.colors.primary : theme.colors.text};
 `;
 
 export const TextInput = styled.TextInput`
@@ -34,7 +35,7 @@ export const TextInputContainer = styled.View<IFocus>`
 	height: 120px;
 	border: 2px solid
 		${({ isFocused, theme }) =>
-			isFocused ? theme.colors.secondary : theme.colors.text};
+			isFocused ? theme.colors.primary : theme.colors.text};
 	margin: 3px 0 15px;
 	border-radius: 7px;
 `;

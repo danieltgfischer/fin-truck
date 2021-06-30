@@ -14,6 +14,7 @@ import { Animated, ToastAndroid } from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ThemeContext } from 'styled-components/native';
 import {
 	Container,
 	Form,
@@ -49,10 +50,14 @@ export const EditBilling: React.FC<IProps> = ({
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { year, monthNumber } = useContext(MonthInfoContext);
+	const theme = useContext(ThemeContext);
 	const { billingRepository } = useDatabaseConnection();
 	const { t } = useTranslation();
-
-	const { source, label, value: optionValue } = optionsObj[option];
+	const isDark = theme.name === 'dark';
+	const { value: optionValue } = optionsObj[option];
+	const source = isDark
+		? optionsObj[option].source_light
+		: optionsObj[option].source;
 
 	useEffect(() => {
 		Animated.timing(warningOpacity, {
@@ -131,7 +136,7 @@ export const EditBilling: React.FC<IProps> = ({
 				}
 			}
 		},
-		[billingRepository, closeModal, id, optionValue, updateTimelineOnEdit],
+		[billingRepository, closeModal, id, optionValue, t, updateTimelineOnEdit],
 	);
 
 	const submit = useCallback(() => {
@@ -139,7 +144,7 @@ export const EditBilling: React.FC<IProps> = ({
 	}, []);
 
 	return (
-		<Container ontentContainerStyle={scrollView.content}>
+		<Container contentContainerStyle={scrollView.content}>
 			<Title>
 				{t(TranslationsValues.edit_option_title, {
 					value: t(optionValue),
