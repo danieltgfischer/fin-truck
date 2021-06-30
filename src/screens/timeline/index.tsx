@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { YearTimeline } from '@/components/year';
 import TimelineIcon from '@/icons/TimelineIcon.png';
+import TimelineIconLight from '@/icons/TimelineLight.png';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYears } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { ThemeContext } from 'styled-components/native';
 import {
 	Container,
 	Image,
@@ -34,6 +37,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	const { current_truck, total_years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const theme = useContext(ThemeContext);
 
 	const title = current_truck?.name ?? '';
 
@@ -44,31 +48,41 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	}, [navigation, title]);
 
 	useEffect(() => {
-		const unsubscribe = navigation.addListener('focus', () => {
-			billingRepository.getYears(current_truck.id).then(({ total_years }) => {
-				dispatch(updateYears(total_years));
-				setIsLoading(false);
+		if (isLoading) {
+			const unsubscribe = navigation.addListener('focus', () => {
+				billingRepository.getYears(current_truck.id).then(({ total_years }) => {
+					dispatch(updateYears(total_years));
+					setIsLoading(false);
+				});
 			});
-		});
-
-		return unsubscribe;
+			return () => unsubscribe;
+		}
 	}, [
 		billingRepository,
 		current_truck.id,
 		dispatch,
+		isLoading,
 		navigation,
 		truckRepository,
 	]);
 
+	const isDark = theme.name === 'dark';
+
 	return (
 		<Container>
 			<SubHeader>
-				<Image source={TimelineIcon} resizeMode="contain" />
+				<Image
+					source={isDark ? TimelineIconLight : TimelineIcon}
+					resizeMode="contain"
+				/>
 				<Title>{t(TranslationsValues.history)}</Title>
 			</SubHeader>
 			<ScrollView contentContainerStyle={scrollViewStyle.content}>
 				{isLoading ? (
-					<ActivityIndicator color="#B63B34" size="small" />
+					<ActivityIndicator
+						color={isDark ? theme.colors.text : '#B63B34'}
+						size="small"
+					/>
 				) : (
 					<>
 						{total_years.length > 0 &&

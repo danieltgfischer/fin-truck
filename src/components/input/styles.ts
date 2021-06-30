@@ -28,7 +28,7 @@ export const Label = styled.Text<IFocus>`
 	font-family: Semi_Bold;
 	margin: 0 0 0 3%;
 	color: ${({ isFocused, theme }) =>
-		isFocused ? theme.colors.primary : theme.colors.text};
+		isFocused ? theme.colors.secondary : theme.colors.text};
 `;
 
 export const TextInput = styled.TextInput<InputReference>`
@@ -51,7 +51,7 @@ export const TextInputContainer = styled.View<IFocus>`
 	height: 50px;
 	border: 2px solid
 		${({ isFocused, theme }) =>
-			isFocused ? theme.colors.primary : theme.colors.text};
+			isFocused ? theme.colors.secondary : theme.colors.text};
 	margin: 3px 0 20px;
 	border-radius: 7px;
 `;

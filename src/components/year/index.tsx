@@ -29,24 +29,31 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const { billingRepository } = useDatabaseConnection();
-	const [isLoading, setIsLoading] = useState(true);
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
 	);
 
 	useEffect(() => {
 		let mounted = true;
-		billingRepository.getYearInfo(year, current_truck.id).then(resume => {
-			if (mounted) {
-				setIsLoading(false);
-				dispatch(updateYearResume({ year, resume }));
+		if (mounted) {
+			if (Object.keys(yearResume).length === 0) {
+				billingRepository.getYearInfo(year, current_truck.id).then(resume => {
+					dispatch(updateYearResume({ year, resume }));
+				});
 			}
-		});
+		}
 		return () => {
 			mounted = false;
 			return mounted;
 		};
-	}, [billingRepository, current_truck.id, dispatch, monthResume, year]);
+	}, [
+		billingRepository,
+		current_truck.id,
+		dispatch,
+		monthResume,
+		year,
+		yearResume,
+	]);
 
 	const months = useMemo(
 		() => Object.keys(monthsNames).map(m => monthsNames[m]),
@@ -61,6 +68,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		costs: null,
 		sub_total: null,
 	};
+
 	const { currency } = locale[locale.country_code];
 
 	return (
@@ -75,7 +83,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 					<SubHeader>
 						<Label>{t(TranslationsValues.total_gains, { value: year })}:</Label>
 						<Value color="#85bb65">
-							{isLoading ? (
+							{typeof gains !== 'number' ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
 								new Intl.NumberFormat(locale.country_code, {
@@ -86,7 +94,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 						</Value>
 						<Label>{t(TranslationsValues.total_costs, { value: year })}:</Label>
 						<Value color="#FF616D">
-							{isLoading ? (
+							{typeof costs !== 'number' ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
 								new Intl.NumberFormat(locale.country_code, {
@@ -97,7 +105,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 						</Value>
 						<Label> {t(TranslationsValues.subtotal)}:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
-							{isLoading ? (
+							{typeof sub_total !== 'number' ? (
 								<ActivityIndicator color="#B63B34" size="small" />
 							) : (
 								new Intl.NumberFormat(locale.country_code, {

@@ -9,26 +9,32 @@ export const Container = styled.View`
 	align-items: center;
 `;
 
-export const Label = styled.Text`
+interface IFocus {
+	isFocused: boolean;
+}
+export const Label = styled.Text<IFocus>`
 	align-self: flex-start;
 	font-size: 20px;
 	font-family: Semi_Bold;
 	margin: 0 0 0 3%;
-	color: ${({ isFocused }) => (isFocused ? '#9b3b34' : '#333')};
+	color: ${({ isFocused, theme }) =>
+		isFocused ? theme.colors.secondary : theme.colors.text};
 `;
 
 export const TextInput = styled.TextInput`
 	height: 100%;
 	font-size: 24px;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 	padding: 0 0 0 5px;
 `;
 
-export const TextInputContainer = styled.View`
+export const TextInputContainer = styled.View<IFocus>`
 	display: flex;
 	width: 95%;
 	height: 120px;
-	border: 2px solid ${({ isFocused }) => (isFocused ? '#9b3b34' : '#333')};
+	border: 2px solid
+		${({ isFocused, theme }) =>
+			isFocused ? theme.colors.secondary : theme.colors.text};
 	margin: 3px 0 15px;
 	border-radius: 7px;
 `;

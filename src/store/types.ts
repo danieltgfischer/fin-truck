@@ -9,9 +9,9 @@ type Year = {
 };
 
 export type IValuesResume = {
-	gains: number;
-	costs: number;
-	sub_total: number;
+	gains: number | null;
+	costs: number | null;
+	sub_total: number | null;
 };
 
 export interface ICountryCode {
@@ -83,7 +83,7 @@ export interface IYears {
 export interface IMonth {
 	month: number;
 	year: number;
-	billings: BillingOption[];
+	billings: BillingOption[] | [];
 }
 
 export interface ITimeline {

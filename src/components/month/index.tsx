@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import shortid from 'shortid';
 import { BillingItem } from '@/components/billingItem';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
@@ -43,22 +44,24 @@ const MonthTimeline: React.FC<IProps> = ({
 	const [isOpen, setIsOpen] = useState(
 		thisYear.getMonth() === monthNumber && thisYear.getFullYear() === year,
 	);
+	const [clld, setClld] = useState(false);
+
 	const openMonth = useCallback(async () => {
-		setIsOpen(!isOpen);
 		setIsLoading(true);
+		setIsOpen(!isOpen);
 		const billings = await billingRepository.getBillingOptionsByMonth({
 			truckId: current_truck.id,
 			month: monthNumber,
 			year,
 		});
-		dispatch(updateMonth({ year, month: monthNumber, billings }));
-		setIsLoading(false);
 		const resume = await billingRepository.getMonthInfo(
 			year,
 			current_truck.id,
 			monthNumber,
 		);
 		dispatch(updateMonthResume({ resume, year, month: monthNumber }));
+		dispatch(updateMonth({ year, month: monthNumber, billings }));
+		setIsLoading(false);
 	}, [
 		billingRepository,
 		current_truck.id,
@@ -68,34 +71,30 @@ const MonthTimeline: React.FC<IProps> = ({
 		year,
 	]);
 
-	useEffect(() => {
+	const callCurrentMonth = useCallback(async () => {
 		if (new Date().getMonth() === monthNumber) {
-			billingRepository
-				.getBillingOptionsByMonth({
-					truckId: current_truck.id,
-					month: monthNumber,
-					year,
-				})
-				.then(billings => {
-					dispatch(updateMonth({ year, month: monthNumber, billings }));
-					setIsLoading(false);
-				});
-			billingRepository
-				.getMonthInfo(year, current_truck.id, monthNumber)
-				.then(resume => {
-					dispatch(updateMonthResume({ resume, year, month: monthNumber }));
-				});
+			const billings = await billingRepository.getBillingOptionsByMonth({
+				truckId: current_truck.id,
+				month: monthNumber,
+				year,
+			});
+			const resume = await billingRepository.getMonthInfo(
+				year,
+				current_truck.id,
+				monthNumber,
+			);
+			dispatch(updateMonth({ year, month: monthNumber, billings }));
+			dispatch(updateMonthResume({ resume, year, month: monthNumber }));
+			setIsLoading(false);
 		}
-		return () => setIsLoading(false);
-	}, [
-		billingRepository,
-		current_truck.id,
-		dispatch,
-		isOpen,
-		monthNumber,
-		openMonth,
-		year,
-	]);
+	}, [billingRepository, current_truck.id, dispatch, monthNumber, year]);
+
+	useEffect(() => {
+		if (!clld) {
+			callCurrentMonth();
+			setClld(true);
+		}
+	}, [callCurrentMonth, clld]);
 
 	const renderItem = useCallback(
 		({ item: { id, value, description, created_at, option }, index }) => {
@@ -129,7 +128,6 @@ const MonthTimeline: React.FC<IProps> = ({
 			monthResume[year] ?? {
 				[month]: {},
 			},
-
 		[month, monthResume, year],
 	);
 
@@ -161,7 +159,7 @@ const MonthTimeline: React.FC<IProps> = ({
 							{t(TranslationsValues.total_gains, { value: month })}:
 						</Label>
 						<Value color="#85bb65">
-							{gains || gains === 0 ? (
+							{typeof gains === 'number' ? (
 								new Intl.NumberFormat(locale.country_code, {
 									style: 'currency',
 									currency,
@@ -174,7 +172,7 @@ const MonthTimeline: React.FC<IProps> = ({
 							{t(TranslationsValues.total_costs, { value: month })}:
 						</Label>
 						<Value color="#FF616D">
-							{costs || costs === 0 ? (
+							{typeof costs === 'number' ? (
 								new Intl.NumberFormat(locale.country_code, {
 									style: 'currency',
 									currency,
@@ -185,7 +183,7 @@ const MonthTimeline: React.FC<IProps> = ({
 						</Value>
 						<Label>{t(TranslationsValues.subtotal)}:</Label>
 						<Value color={sub_total > 0 ? '#369200' : '#cE1212'}>
-							{sub_total || sub_total === 0 ? (
+							{typeof sub_total === 'number' ? (
 								new Intl.NumberFormat(locale.country_code, {
 									style: 'currency',
 									currency,
@@ -198,7 +196,7 @@ const MonthTimeline: React.FC<IProps> = ({
 					<FlatList
 						contentContainerStyle={flatListStyle.content}
 						data={data}
-						keyExtractor={item => String(item?.id)}
+						keyExtractor={() => shortid()}
 						renderItem={renderItem}
 						nestedScrollEnabled
 					/>

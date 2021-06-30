@@ -5,9 +5,11 @@ import React, {
 	useState,
 	useImperativeHandle,
 	forwardRef,
+	useContext,
 } from 'react';
 import { TextInputProps, TextInput as TextInputNative } from 'react-native';
 import { useField } from '@unform/core';
+import { ThemeContext } from 'styled-components';
 import { Container, Label, TextInput, TextInputContainer } from './styles';
 
 export interface InputProps extends TextInputProps {
@@ -28,7 +30,7 @@ const MultiInput: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 	ref,
 ) => {
 	const [isFocused, setIsFocused] = useState<boolean>(false);
-
+	const theme = useContext(ThemeContext);
 	const inputRef = useRef<InputReference>(null);
 
 	const { fieldName, registerField, defaultValue = '', error } = useField(name);
@@ -85,7 +87,7 @@ const MultiInput: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 				<TextInput
 					style={{ textAlignVertical: 'top' }}
 					multiline
-					selectionColor="#333"
+					selectionColor={theme.colors.text}
 					onFocus={() => setIsFocused(true)}
 					onBlur={() => setIsFocused(false)}
 					ref={inputRef}

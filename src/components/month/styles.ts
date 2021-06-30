@@ -1,3 +1,4 @@
+import { darken } from 'polished';
 import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
@@ -17,7 +18,8 @@ export const Container = styled.TouchableOpacity`
 
 export const Month = styled.Text`
 	color: #fff;
-	background-color: #b63b34;
+	background-color: ${({ theme }) =>
+		theme.name === 'dark' ? darken(0.2, '#b63b34') : '#b63b34'};
 	padding: 2.5px 0;
 	width: 50%;
 	text-align: center;
@@ -30,7 +32,8 @@ export const Line = styled.View`
 	width: 15%;
 	height: 1px;
 	padding: 0 10%;
-	background-color: #b63b34;
+	background-color: ${({ theme }) =>
+		theme.name === 'dark' ? darken(0.2, '#b63b34') : '#b63b34'};
 	margin: 0 2%;
 `;
 
@@ -39,7 +42,7 @@ export const FlatList = styled.FlatList`
 `;
 
 export const EmptyData = styled.Text`
-	color: #ccc;
+	color: ${({ theme }) => theme.colors.empty_warning};
 	font-size: 20px;
 	font-family: Italic;
 	text-align: center;
@@ -53,7 +56,7 @@ export const SubHeader = styled.View`
 export const Label = styled.Text`
 	font-family: Semi_Bold;
 	font-size: 18px;
-	color: #333;
+	color: ${({ theme }) => theme.colors.text};
 `;
 
 interface IValue {

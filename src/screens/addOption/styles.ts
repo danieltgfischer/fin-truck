@@ -35,6 +35,8 @@ export const ButtonContainer = styled.View`
 `;
 
 export const Form = styled(UnForm)`
+	position: relative;
+	top: 15px;
 	align-items: center;
 `;
 
@@ -90,6 +92,7 @@ export const ReviewContainer = styled(Animated.View)`
 	align-items: center;
 	width: ${width}px;
 	margin: 16px 0 0;
+	top: -10px;
 `;
 
 export const ValueContainer = styled.View`
@@ -126,6 +129,7 @@ export const DescriptionContainer = styled.View`
 
 export const Value = styled.Text`
 	font-family: Regular;
+	color: ${({ theme }) => theme.colors.text};
 	font-size: 24px;
 	margin: 0 0 0 5px;
 `;
@@ -139,6 +143,7 @@ export const Description = styled.Text`
 	border: 1px solid #ccc;
 	align-self: center;
 	padding: 5px 0 0 5px;
+	margin: 10px 0 0;
 `;
 
 export const AnimetadeContainer = styled(Animated.View)`
