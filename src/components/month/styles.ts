@@ -68,3 +68,7 @@ export const Value = styled.Text`
 	font-family: Semi_Bold_Italic;
 	font-size: 24px;
 `;
+
+export const ShareButton = styled.TouchableOpacity`
+	align-self: flex-end;
+`;

@@ -9,6 +9,7 @@ import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { BillingItem } from '@/components/billingItem';
+import { FontAwesome } from '@expo/vector-icons';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
 import { updateMonth, updateMonthResume } from '@/store/actions';
@@ -16,6 +17,7 @@ import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components';
+import { shareDatabase } from '@/utils/export';
 import { optionsObj } from './options';
 import {
 	Container,
@@ -27,6 +29,7 @@ import {
 	SubHeader,
 	Value,
 	Label,
+	ShareButton,
 } from './styles';
 
 interface IProps {
@@ -167,6 +170,13 @@ const MonthTimeline: React.FC<IProps> = ({
 			{isOpen && !isLoading && data.length > 0 && (
 				<>
 					<SubHeader>
+						<ShareButton onPress={() => shareDatabase()}>
+							<FontAwesome
+								name="share-square-o"
+								size={24}
+								color={theme.colors.text}
+							/>
+						</ShareButton>
 						<Label>
 							{t(TranslationsValues.total_gains, { value: month })}:
 						</Label>

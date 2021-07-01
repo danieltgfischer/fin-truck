@@ -12,8 +12,10 @@
     "date-fns": "^2.22.1",
     "expo": "~41.0.0",
     "expo-app-loading": "^1.0.3",
+    "expo-file-system": "^11.0.2",
     "expo-font": "^9.1.0",
     "expo-localization": "^10.1.0",
+    "expo-sharing": "~9.1.2",
     "expo-splash-screen": "^0.10.2",
     "expo-sqlite": "^9.1.0",
     "expo-status-bar": "^1.0.4",
@@ -38,6 +40,7 @@
     "shortid": "^2.2.16",
     "styled-components": "^5.3.0",
     "typeorm": "^0.2.34",
+    "xlsx": "^0.17.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {

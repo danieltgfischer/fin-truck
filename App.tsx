@@ -13,10 +13,9 @@ import { Navigation } from '@/navigation/stack';
 import store from '@/store';
 import { LoadingContainer } from '@/navigation/style';
 
-// TODO dark theme #18191A #F5F6F7
-// TODO type styled-components
 // TODO export db to xls
 // TODO push notification
+// TODO type styled-components
 
 const App: React.FC = () => {
 	const [isReady, setIsReady] = useState(false);
@@ -29,6 +28,7 @@ const App: React.FC = () => {
 		const fontAssets = cacheFonts([
 			Icons.SimpleLineIcons.font,
 			Icons.FontAwesome5.font,
+			Icons.FontAwesome.font,
 			Icons.Ionicons.font,
 			Icons.AntDesign.font,
 			Icons.Feather.font,
