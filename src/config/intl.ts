@@ -60,6 +60,10 @@ export enum TranslationsValues {
 	delete_option_title = 'delete_option_title',
 	language = 'language',
 	theme = 'theme',
+	download = 'download',
+	share = 'share',
+	toast_download = 'toast_download',
+	toast_download_year = 'toast_download_year',
 }
 
 export const translations = {
@@ -127,6 +131,12 @@ export const translations = {
 			'You are about to delete this record. Are you sure about that?',
 		language: 'Language',
 		theme: 'Theme',
+		download: 'Download',
+		share: 'Share',
+		toast_download:
+			'The records for the month of {{month}} was downloaded from Documents > FinTruck',
+		toast_download_year:
+			'The year {{year}} records were downloaded from Documents > FinTruck',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -193,5 +203,11 @@ export const translations = {
 			'Você está prestes a excluir este registro. Tem certeza disso?',
 		language: 'Idioma',
 		theme: 'Tema',
+		download: 'Baixar',
+		share: 'Compartilhar',
+		toast_download:
+			'Os registros do mês de {{month}} foi baixado em Documentos > FinTruck',
+		toast_download_year:
+			'Os registros do ano {{year}} foi baixado em Documentos > FinTruck',
 	},
 };

@@ -15,6 +15,10 @@ export interface IGetByMonth {
 	month: number;
 	year: number;
 }
+export interface IGetByYear {
+	truckId: string;
+	year: number;
+}
 
 export interface IGetAll {
 	truckId: string;

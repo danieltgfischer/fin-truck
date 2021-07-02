@@ -5,11 +5,11 @@ import React, {
 	useMemo,
 	useContext,
 } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, ToastAndroid } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { BillingItem } from '@/components/billingItem';
-import { FontAwesome } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
 import { updateMonth, updateMonthResume } from '@/store/actions';
@@ -17,7 +17,10 @@ import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components';
-import { shareDatabase } from '@/utils/export';
+import {
+	asyncShareDatabase,
+	asyncDownloadDatabase,
+} from '@/utils/export-database';
 import { optionsObj } from './options';
 import {
 	Container,
@@ -29,7 +32,9 @@ import {
 	SubHeader,
 	Value,
 	Label,
-	ShareButton,
+	DatabseExportButton,
+	ExportDatabaseContainer,
+	ButtonDBContainer,
 } from './styles';
 
 interface IProps {
@@ -138,6 +143,28 @@ const MonthTimeline: React.FC<IProps> = ({
 		[monthNumber, year, years],
 	);
 
+	const downloadDatabase = useCallback(async () => {
+		await asyncDownloadDatabase({
+			data,
+			xlsx_name: `${month}_${year}`,
+			path: `${current_truck.name}_${current_truck.board}_${month}_${year}`,
+			locale: locale.country_code,
+		});
+		ToastAndroid.showWithGravity(
+			t(TranslationsValues.toast_download, { month }),
+			ToastAndroid.LONG,
+			ToastAndroid.CENTER,
+		);
+	}, [
+		current_truck.board,
+		current_truck.name,
+		data,
+		locale.country_code,
+		month,
+		t,
+		year,
+	]);
+
 	const monthYear = useMemo(
 		() =>
 			monthResume[year] ?? {
@@ -170,13 +197,29 @@ const MonthTimeline: React.FC<IProps> = ({
 			{isOpen && !isLoading && data.length > 0 && (
 				<>
 					<SubHeader>
-						<ShareButton onPress={() => shareDatabase()}>
-							<FontAwesome
-								name="share-square-o"
-								size={24}
-								color={theme.colors.text}
-							/>
-						</ShareButton>
+						<ExportDatabaseContainer>
+							<ButtonDBContainer>
+								<Label>{t(TranslationsValues.download)}</Label>
+								<DatabseExportButton onPress={downloadDatabase}>
+									<Entypo name="download" size={24} color={theme.colors.text} />
+								</DatabseExportButton>
+							</ButtonDBContainer>
+							<ButtonDBContainer>
+								<Label>{t(TranslationsValues.share)}</Label>
+								<DatabseExportButton
+									onPress={() =>
+										asyncShareDatabase({
+											data,
+											xlsx_name: `${month}_${year}`,
+											path: `${current_truck.name}_${current_truck.board}_${month}_${year}`,
+											locale: locale.country_code,
+										})
+									}
+								>
+									<Entypo name="share" size={24} color={theme.colors.text} />
+								</DatabseExportButton>
+							</ButtonDBContainer>
+						</ExportDatabaseContainer>
 						<Label>
 							{t(TranslationsValues.total_gains, { value: month })}:
 						</Label>

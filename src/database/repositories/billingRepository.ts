@@ -1,4 +1,4 @@
-import { Connection, Repository, Not } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { BillingOption } from '@/database/entities';
 import { optionsObj } from '@/screens/addOption/options';
 import * as Types from './types';
@@ -34,6 +34,27 @@ export class BilliginRepository {
 				where: {
 					truck: { id: truckId },
 					month,
+					year,
+				},
+				order: {
+					created_at: 'DESC',
+				},
+				cache: true,
+			});
+			return billingOptions;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async getBillingOptionsByYear({
+		truckId,
+		year,
+	}: Types.IGetByYear): Promise<BillingOption[]> {
+		try {
+			const billingOptions = await this.billingepository.find({
+				where: {
+					truck: { id: truckId },
 					year,
 				},
 				order: {

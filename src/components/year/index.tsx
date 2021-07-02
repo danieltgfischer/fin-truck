@@ -1,5 +1,11 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
+import React, {
+	useState,
+	useCallback,
+	useMemo,
+	useEffect,
+	useContext,
+} from 'react';
+import { ActivityIndicator, ToastAndroid } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import MonthTimeline from '@/components/month';
@@ -7,6 +13,12 @@ import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { updateYearResume } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import {
+	asyncDownloadDatabase,
+	asyncShareDatabase,
+} from '@/utils/export-database';
+import { Entypo } from '@expo/vector-icons';
+import { ThemeContext } from 'styled-components';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -16,6 +28,9 @@ import {
 	SubHeader,
 	Label,
 	Value,
+	DatabseExportButton,
+	ExportDatabaseContainer,
+	ButtonDBContainer,
 } from './styles';
 
 interface IProps {
@@ -28,6 +43,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	);
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const theme = useContext(ThemeContext);
 	const { billingRepository } = useDatabaseConnection();
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
@@ -69,8 +85,45 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		sub_total: null,
 	};
 
-	const { currency } = locale[locale.country_code];
+	const exportYearData = useCallback(
+		async type => {
+			const data = await billingRepository.getBillingOptionsByYear({
+				truckId: current_truck.id,
+				year,
+			});
+			if (type === 'download') {
+				await asyncDownloadDatabase({
+					data,
+					xlsx_name: `${year}`,
+					path: `${current_truck.name}_${current_truck.board}_${year}`,
+					locale: locale.country_code,
+				});
+				ToastAndroid.showWithGravity(
+					t(TranslationsValues.toast_download_year, { year }),
+					ToastAndroid.LONG,
+					ToastAndroid.CENTER,
+				);
+				return;
+			}
+			await asyncShareDatabase({
+				data,
+				xlsx_name: `${year}`,
+				path: `${current_truck.name}_${current_truck.board}_${year}`,
+				locale: locale.country_code,
+			});
+		},
+		[
+			billingRepository,
+			current_truck.board,
+			current_truck.id,
+			current_truck.name,
+			locale.country_code,
+			t,
+			year,
+		],
+	);
 
+	const { currency } = locale[locale.country_code];
 	return (
 		<Container>
 			<Button onPress={toogleOpen}>
@@ -81,6 +134,20 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 			{isOpen && (
 				<>
 					<SubHeader>
+						<ExportDatabaseContainer>
+							<ButtonDBContainer>
+								<Label>{t(TranslationsValues.download)}</Label>
+								<DatabseExportButton onPress={() => exportYearData('download')}>
+									<Entypo name="download" size={24} color={theme.colors.text} />
+								</DatabseExportButton>
+							</ButtonDBContainer>
+							<ButtonDBContainer>
+								<Label>{t(TranslationsValues.share)}</Label>
+								<DatabseExportButton onPress={() => exportYearData('share')}>
+									<Entypo name="share" size={24} color={theme.colors.text} />
+								</DatabseExportButton>
+							</ButtonDBContainer>
+						</ExportDatabaseContainer>
 						<Label>{t(TranslationsValues.total_gains, { value: year })}:</Label>
 						<Value color="#85bb65">
 							{typeof gains !== 'number' ? (

@@ -69,6 +69,16 @@ export const Value = styled.Text`
 	font-size: 24px;
 `;
 
-export const ShareButton = styled.TouchableOpacity`
-	align-self: flex-end;
+export const ButtonDBContainer = styled.View`
+	align-items: center;
+`;
+
+export const DatabseExportButton = styled.TouchableOpacity`
+	padding: 10px;
+`;
+
+export const ExportDatabaseContainer = styled.View`
+	padding: 15px 0;
+	flex-direction: row;
+	justify-content: space-around;
 `;
