@@ -12,7 +12,6 @@ import { updateTrucks } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import { useTranslation } from 'react-i18next';
-import { darken, lighten } from 'polished';
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { ListRenderItemInfo } from 'react-native';

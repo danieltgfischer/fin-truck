@@ -7,7 +7,8 @@
 		"slug": "fin-truck",
 		"version": "1.0.0",
 		"assetBundlePatterns": [
-			"**/*"
+			"**/*",
+			"src/icons/*"
 		],
 		"icon": "./assets/icon.png",
 		"splash": {

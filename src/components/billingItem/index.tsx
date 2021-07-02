@@ -1,7 +1,7 @@
 import 'intl/locale-data/jsonp/pt-BR';
 import 'intl/locale-data/jsonp/en-US';
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import { Modal, Animated, useWindowDimensions } from 'react-native';
+import { Modal, Animated, Easing } from 'react-native';
 import { format } from 'date-fns';
 import usLocale from 'date-fns/locale/en-US';
 import ptLocale from 'date-fns/locale/pt-BR';
@@ -49,29 +49,12 @@ export const BillingItem: React.FC<IProps> = ({
 	index,
 	option,
 }: IProps) => {
-	const { width } = useWindowDimensions();
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { locale } = useSelector((state: IState) => state);
 	const { t } = useTranslation();
-	const timelineOpacity = useRef(new Animated.Value(0)).current;
-	const translateXInfo = useRef(new Animated.Value(width)).current;
 	const theme = useContext(ThemeContext);
 
-	useEffect(() => {
-		Animated.timing(timelineOpacity, {
-			toValue: 1,
-			duration: 2500,
-			useNativeDriver: true,
-			delay,
-		}).start();
-		Animated.timing(translateXInfo, {
-			toValue: 0,
-			duration: 2000,
-			useNativeDriver: true,
-			delay,
-		}).start();
-	}, [translateXInfo, timelineOpacity, delay]);
 	const localeFormat =
 		locale.country_code === 'pt-BR'
 			? "'Dia' d',' EEEE 'às' HH:mm "
@@ -79,23 +62,18 @@ export const BillingItem: React.FC<IProps> = ({
 	const dateLocale = locale.country_code === 'pt-BR' ? ptLocale : usLocale;
 	const descriptionWithValue =
 		description !== '' ? description : t(TranslationsValues.empty_description);
-
 	const { currency } = locale[locale.country_code];
 
 	return (
 		<>
 			<Container even={index % 2 === 0}>
-				<TimelineContainer
-					style={{
-						opacity: timelineOpacity,
-					}}
-				>
+				<TimelineContainer>
 					<Line />
 					<ImageContainer>
 						<Image source={source} resizeMode="contain" />
 					</ImageContainer>
 				</TimelineContainer>
-				<InfoContainer style={{ transform: [{ translateX: translateXInfo }] }}>
+				<InfoContainer>
 					<ContainerButtons>
 						<ButtonIcon
 							even={index % 2 === 0}

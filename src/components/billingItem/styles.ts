@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions, Animated } from 'react-native';
+import { Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -18,14 +18,14 @@ export const Container = styled.View<IContainer>`
 	padding: 20px 0;
 `;
 
-export const TimelineContainer = styled(Animated.View)`
+export const TimelineContainer = styled.View`
 	position: relative;
 	align-items: center;
 	width: ${width * 0.25}px;
 	background: transparent;
 `;
 
-export const InfoContainer = styled(Animated.View)`
+export const InfoContainer = styled.View`
 	position: relative;
 	align-items: flex-start;
 	top: 15px;
