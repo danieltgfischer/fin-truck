@@ -11,6 +11,11 @@
 			"src/icons/*"
 		],
 		"icon": "./assets/icon.png",
+		"notification": {
+			"icon": "./assets/icon-push.png",
+			"color": "#b63b34",
+      "androidMode": "default"
+		},
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",

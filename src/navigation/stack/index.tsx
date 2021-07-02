@@ -1,8 +1,9 @@
-import React, { useEffect, useCallback, useContext } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Fonts from '@expo-google-fonts/source-sans-pro';
-import { ActivityIndicator } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { ThemeProvider } from 'styled-components';
 import { StatusBar } from 'expo-status-bar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,6 +31,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export const Navigation: React.FC = () => {
 	const { locale, theme } = useSelector((state: IState) => state);
+	const [isNotificationCalled, setIsNotificationCalled] = useState(false);
 	const dispatch = useDispatch();
 	const { t, i18n } = useTranslation();
 
@@ -77,6 +79,36 @@ export const Navigation: React.FC = () => {
 	const defaultTheme = theme === 'light' ? light : dark;
 	const isDark = theme === 'dark';
 	const darkValue = isDark ? 0.2 : 0;
+
+	const schedulePushNotification = useCallback(async () => {
+		Notifications.setNotificationHandler({
+			handleNotification: async () => ({
+				shouldShowAlert: true,
+				shouldPlaySound: true,
+				shouldSetBadge: true,
+			}),
+		});
+
+		await Notifications.scheduleNotificationAsync({
+			content: {
+				title: 'FinTruck',
+				body: t(TranslationsValues.push_content),
+				priority: Notifications.AndroidNotificationPriority.MAX,
+			},
+			trigger: {
+				hour: 12,
+				minute: 0,
+				repeats: true,
+			},
+		});
+	}, [t]);
+
+	useEffect(() => {
+		if (!isNotificationCalled) {
+			schedulePushNotification();
+			setIsNotificationCalled(true);
+		}
+	}, [schedulePushNotification, isNotificationCalled]);
 
 	if (!fontsLoaded) {
 		return (

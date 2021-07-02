@@ -13,10 +13,10 @@ import { DatabaseConnectionProvider } from '@/hocs/databaseProvider';
 import { Navigation } from '@/navigation/stack';
 import store from '@/store';
 import { LoadingContainer } from '@/navigation/style';
-import { preloadImages } from '@/utils/preload_images';
+import { preloadImages } from '@/utils/preload-images';
 
-// TODO export db to xls
-// TODO push notification
+// TODO rquest timeline
+// TODO imageColumn
 // TODO type styled-components
 
 const App: React.FC = () => {

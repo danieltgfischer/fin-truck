@@ -64,6 +64,7 @@ export enum TranslationsValues {
 	share = 'share',
 	toast_download = 'toast_download',
 	toast_download_year = 'toast_download_year',
+	push_content = 'push_content',
 }
 
 export const translations = {
@@ -137,6 +138,8 @@ export const translations = {
 			'The records for the month of {{month}} was downloaded from Documents > FinTruck',
 		toast_download_year:
 			'The year {{year}} records were downloaded from Documents > FinTruck',
+		push_content:
+			"Don't be in the red, remember to save your earnings and expenses to be able to better manage your truck :)",
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -209,5 +212,7 @@ export const translations = {
 			'Os registros do mês de {{month}} foi baixado em Documentos > FinTruck',
 		toast_download_year:
 			'Os registros do ano {{year}} foi baixado em Documentos > FinTruck',
+		push_content:
+			'Não fique no vermelho, lembre-se de salvar seus ganhos e gastos para poder gerenciar melhor seu caminhão :)',
 	},
 };
