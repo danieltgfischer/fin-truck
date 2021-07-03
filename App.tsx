@@ -15,7 +15,6 @@ import store from '@/store';
 import { LoadingContainer } from '@/navigation/style';
 import { preloadImages } from '@/utils/preload-images';
 
-// TODO type styled-components
 // TODO teste with many yars months
 
 const App: React.FC = () => {

@@ -34,7 +34,7 @@ interface IProps {
 }
 
 export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
-	const { locale, current_truck, yearResume, monthResume } = useSelector(
+	const { locale, current_truck, yearResume } = useSelector(
 		(state: IState) => state,
 	);
 	const dispatch = useDispatch();
@@ -44,29 +44,19 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
 	);
+	const [called, setCalled] = useState(false);
+
+	const getCurrentYearInfo = useCallback(async () => {
+		const resume = await billingRepository.getYearInfo(year, current_truck.id);
+		dispatch(updateYearResume({ year, resume }));
+		setCalled(true);
+	}, [billingRepository, current_truck.id, dispatch, year]);
 
 	useEffect(() => {
-		let mounted = true;
-		if (mounted) {
-			if (Object.keys(yearResume).length === 0) {
-				billingRepository.getYearInfo(year, current_truck.id).then(resume => {
-					dispatch(updateYearResume({ year, resume }));
-				});
-			}
+		if (isOpen && !called) {
+			getCurrentYearInfo();
 		}
-		return () => {
-			mounted = false;
-			return mounted;
-		};
-	}, [
-		billingRepository,
-		current_truck.id,
-		dispatch,
-		monthResume,
-		year,
-		yearResume,
-	]);
-
+	}, [called, getCurrentYearInfo, isOpen]);
 	const months = useMemo(
 		() => Object.keys(monthsNames).map(m => monthsNames[m]),
 		[],
