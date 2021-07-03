@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
+import { ModalProps } from 'react-native';
 
-export const Modal = styled.Modal`
+export const Modal = styled.Modal<ModalProps>`
 	background-color: transparent;
 `;
 

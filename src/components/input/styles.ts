@@ -1,8 +1,5 @@
 import styled from 'styled-components/native';
 import { Dimensions, TextInput as TextInputNative } from 'react-native';
-import RNCurrencyInput, {
-	CurrencyInputProps,
-} from 'react-native-currency-input';
 
 const { width } = Dimensions.get('window');
 
@@ -29,20 +26,6 @@ export const Label = styled.Text<IFocus>`
 	margin: 0 0 0 3%;
 	color: ${({ isFocused, theme }) =>
 		isFocused ? theme.colors.primary : theme.colors.text};
-`;
-
-export const TextInput = styled.TextInput<InputReference>`
-	height: 100%;
-	font-size: 24px;
-	color: ${({ theme }) => theme.colors.text};
-	padding: 0 0 0 5px;
-`;
-
-export const CurrencyInput = styled(RNCurrencyInput)<CurrencyInputProps>`
-	height: 100%;
-	font-size: 24px;
-	color: ${({ theme }) => theme.colors.text};
-	padding: 0 0 0 5px;
 `;
 
 export const TextInputContainer = styled.View<IFocus>`

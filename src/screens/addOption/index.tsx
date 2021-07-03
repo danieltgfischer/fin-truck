@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
 import * as _ from './styles';
 import { optionsObj } from './options';
+import { monthsNames } from './months';
 
 interface IData {
 	value: number;
@@ -108,13 +109,16 @@ export const AddOptionScreen: React.FC<Props> = ({
 		try {
 			// const date = new Date(2019, 11, 31, 20, 30);
 			const date = new Date();
+			const monthNumber = date.getMonth();
+			const monthName = monthsNames[monthNumber][locale.country_code];
 			await billingRepository.createBillingOption({
 				value: data?.value,
 				description: data?.description ?? '',
 				created_at: date,
 				truck: current_truck,
 				option,
-				month: date.getMonth(),
+				month: monthNumber,
+				monthName,
 				year: date.getFullYear(),
 			});
 			ToastAndroid.showWithGravityAndOffset(

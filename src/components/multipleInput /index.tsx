@@ -7,17 +7,17 @@ import React, {
 	forwardRef,
 	useContext,
 } from 'react';
-import { TextInputProps, TextInput as TextInputNative } from 'react-native';
+import { TextInputProps, TextInput } from 'react-native';
 import { useField } from '@unform/core';
 import { ThemeContext } from 'styled-components';
-import { Container, Label, TextInput, TextInputContainer } from './styles';
+import { Container, Label, TextInputContainer } from './styles';
 
 export interface InputProps extends TextInputProps {
 	name: string;
 	label: string;
 }
 
-interface InputReference extends TextInputNative {
+interface InputReference extends TextInput {
 	value: string;
 }
 
@@ -85,10 +85,17 @@ const MultiInput: React.ForwardRefRenderFunction<IInputRef, InputProps> = (
 			{label && <Label isFocused={isFocused}>{label}</Label>}
 			<TextInputContainer isFocused={isFocused}>
 				<TextInput
-					style={{ textAlignVertical: 'top' }}
+					style={{
+						textAlignVertical: 'top',
+						height: ' 100%',
+						fontSize: 24,
+						color: theme.colors.text,
+						paddingLeft: 5,
+					}}
 					multiline
 					selectionColor={theme.colors.text}
 					onFocus={() => setIsFocused(true)}
+					keyboardAppearance="dark"
 					onBlur={() => setIsFocused(false)}
 					ref={inputRef}
 					onChangeText={handleChangeText}

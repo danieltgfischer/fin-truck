@@ -7,6 +7,7 @@ export interface ICreateBilling {
 	truck: Truck;
 	option: string;
 	month: number;
+	monthName: string;
 	year: number;
 }
 

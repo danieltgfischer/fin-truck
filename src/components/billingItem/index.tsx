@@ -1,7 +1,7 @@
 import 'intl/locale-data/jsonp/pt-BR';
 import 'intl/locale-data/jsonp/en-US';
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import { Modal, Animated, Easing } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Modal } from 'react-native';
 import { format } from 'date-fns';
 import usLocale from 'date-fns/locale/en-US';
 import ptLocale from 'date-fns/locale/pt-BR';
@@ -35,7 +35,6 @@ interface IProps {
 	source: string;
 	id: string;
 	option: string;
-	delay: number;
 	index: number;
 }
 
@@ -45,7 +44,6 @@ export const BillingItem: React.FC<IProps> = ({
 	created_at,
 	id,
 	source,
-	delay,
 	index,
 	option,
 }: IProps) => {
@@ -108,7 +106,11 @@ export const BillingItem: React.FC<IProps> = ({
 					<Description>{descriptionWithValue}</Description>
 				</InfoContainer>
 			</Container>
-			<Modal visible={isEditModalVisible} animationType="slide">
+			<Modal
+				visible={isEditModalVisible}
+				animationType="slide"
+				statusBarTranslucent
+			>
 				<EditBilling
 					closeModal={() => setEditModalVisible(false)}
 					id={id}

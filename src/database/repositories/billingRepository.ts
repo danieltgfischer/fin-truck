@@ -74,6 +74,7 @@ export class BilliginRepository {
 		created_at,
 		truck,
 		month,
+		monthName,
 		year,
 		option,
 	}: Types.ICreateBilling): Promise<BillingOption> {
@@ -85,6 +86,7 @@ export class BilliginRepository {
 				truck,
 				option,
 				month,
+				monthName,
 				year,
 			});
 			await this.billingepository?.save(billingOption);

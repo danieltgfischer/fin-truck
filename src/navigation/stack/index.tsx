@@ -64,6 +64,7 @@ export const Navigation: React.FC = () => {
 			try {
 				await AsyncStorage.setItem('@Theme', 'light');
 				dispatch(updateTheme('light'));
+				return;
 			} catch (error) {
 				console.warn(error);
 			}
@@ -97,6 +98,18 @@ export const Navigation: React.FC = () => {
 			},
 			trigger: {
 				hour: 12,
+				minute: 0,
+				repeats: true,
+			},
+		});
+		await Notifications.scheduleNotificationAsync({
+			content: {
+				title: 'FinTruck',
+				body: t(TranslationsValues.push_content),
+				priority: Notifications.AndroidNotificationPriority.MAX,
+			},
+			trigger: {
+				hour: 22,
 				minute: 0,
 				repeats: true,
 			},

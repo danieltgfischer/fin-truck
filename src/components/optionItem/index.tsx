@@ -1,4 +1,11 @@
-import React, { useCallback, FC, useEffect, useMemo, useContext } from 'react';
+import React, {
+	useCallback,
+	FC,
+	useEffect,
+	useMemo,
+	useContext,
+	memo,
+} from 'react';
 import { Animated, Easing } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { routeNames } from '@/navigation/types';
@@ -14,7 +21,7 @@ export interface IOptionItem {
 	source_light?: string;
 }
 
-export const OptionItem: FC<IOptionItem> = ({
+const OptionItem: FC<IOptionItem> = ({
 	big_name,
 	source,
 	value,
@@ -51,3 +58,5 @@ export const OptionItem: FC<IOptionItem> = ({
 		</Animated.View>
 	);
 };
+
+export default memo(OptionItem);

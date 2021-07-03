@@ -29,6 +29,15 @@ export class BillingOption extends BaseEntity {
 	month: number;
 
 	@Column()
+	monthName: string;
+
+	@Column({ nullable: true })
+	imagePath: string;
+
+	@Column({ nullable: true })
+	imageName: string;
+
+	@Column()
 	year: number;
 
 	// eslint-disable-next-line @typescript-eslint/no-use-before-define

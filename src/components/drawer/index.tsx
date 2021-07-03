@@ -1,8 +1,6 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react';
 import TrucksIcon from '@/icons/TrucksIcon.png';
 import Timeline from '@/icons/Timeline.png';
-import TrucksIconLight from '@/icons/TrucksIconLight.png';
-import TimelineLight from '@/icons/TimelineLight.png';
 import { useNavigation } from '@react-navigation/native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { routeNames } from '@/navigation/types';

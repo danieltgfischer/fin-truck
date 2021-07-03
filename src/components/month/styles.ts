@@ -71,14 +71,10 @@ export const Value = styled.Text`
 
 export const ButtonDBContainer = styled.View`
 	align-items: center;
+	align-self: flex-end;
+	padding: 5px;
 `;
 
 export const DatabseExportButton = styled.TouchableOpacity`
 	padding: 10px;
-`;
-
-export const ExportDatabaseContainer = styled.View`
-	padding: 15px 0;
-	flex-direction: row;
-	justify-content: space-around;
 `;

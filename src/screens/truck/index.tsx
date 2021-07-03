@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState, useContext } from 'react';
 import { ListRenderItem, Modal } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import shortid from 'shortid';
-import { IOptionItem, OptionItem } from '@/components/optionItem';
+import OptionItem, { IOptionItem } from '@/components/optionItem';
 import { routeNames, DrawerParamList } from '@/navigation/types';
 import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
 import Timeline from '@/icons/Timeline.png';

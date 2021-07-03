@@ -54,14 +54,9 @@ export const FlatList = styled.FlatList``;
 
 export const ButtonDBContainer = styled.View`
 	align-items: center;
+	align-self: flex-end;
 `;
 
 export const DatabseExportButton = styled.TouchableOpacity`
 	padding: 10px;
-`;
-
-export const ExportDatabaseContainer = styled.View`
-	padding: 15px 0;
-	flex-direction: row;
-	justify-content: space-around;
 `;
