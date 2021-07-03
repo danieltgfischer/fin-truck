@@ -5,7 +5,7 @@ type Month = {
 };
 
 type Year = {
-	[key: number]: Month;
+	[key: number]: Month | any;
 };
 
 export type IValuesResume = {
@@ -20,6 +20,7 @@ export interface ICountryCode {
 
 export interface IAddYear {
 	year: number;
+	monthNumber: number;
 }
 export interface IResumeInfo {
 	[key: number]: IValuesResume;

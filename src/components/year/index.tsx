@@ -65,6 +65,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	const toogleOpen = useCallback(() => {
 		setIsOpen(!isOpen);
 	}, [isOpen]);
+
 	const { gains, costs, sub_total } = yearResume[year] ?? {
 		gains: null,
 		costs: null,

@@ -44,10 +44,11 @@ export function updateMonth({
 
 export function addYearKeyAtYears({
 	year,
+	monthNumber,
 }: Types.IAddYear): Types.IAction<Types.IAddYear> {
 	return {
 		type: Types.ActionTypes.ADD_YEAR_IN_YEARS,
-		payload: { year },
+		payload: { year, monthNumber },
 	};
 }
 

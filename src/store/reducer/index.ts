@@ -99,11 +99,11 @@ export const truckReducer: Reducer<IState> = (
 			}
 			case ActionTypes.ADD_YEAR_IN_YEARS: {
 				const {
-					payload: { year },
+					payload: { year, monthNumber },
 				} = action;
 				draft.years = {
 					...draft.years,
-					[year]: { ...draft.years[year] },
+					[year]: { ...draft.years[year], [monthNumber]: {} },
 				};
 				break;
 			}

@@ -12,7 +12,11 @@ import { BillingItem } from '@/components/billingItem';
 import { Entypo } from '@expo/vector-icons';
 import { useDatabaseConnection } from '@/hooks/useDatabse';
 import { IState } from '@/store/types';
-import { updateMonth, updateMonthResume } from '@/store/actions';
+import {
+	addYearKeyAtYears,
+	updateMonth,
+	updateMonthResume,
+} from '@/store/actions';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
@@ -71,6 +75,7 @@ const MonthTimeline: React.FC<IProps> = ({
 			current_truck.id,
 			monthNumber,
 		);
+		dispatch(addYearKeyAtYears({ year, monthNumber }));
 		dispatch(updateMonthResume({ resume, year, month: monthNumber }));
 		dispatch(updateMonth({ year, month: monthNumber, billings }));
 		setIsLoading(false);
@@ -95,6 +100,7 @@ const MonthTimeline: React.FC<IProps> = ({
 				current_truck.id,
 				monthNumber,
 			);
+			dispatch(addYearKeyAtYears({ year, monthNumber }));
 			dispatch(updateMonth({ year, month: monthNumber, billings }));
 			dispatch(updateMonthResume({ resume, year, month: monthNumber }));
 			setIsLoading(false);
@@ -134,10 +140,14 @@ const MonthTimeline: React.FC<IProps> = ({
 		[monthNumber, theme.name, year],
 	);
 
-	const data = useMemo(
-		() => years[year][monthNumber] ?? [],
-		[monthNumber, year, years],
-	);
+	const data = useMemo(() => {
+		if (year in years) {
+			if (monthNumber in years[year]) {
+				return years[year][monthNumber];
+			}
+		}
+		return [];
+	}, [monthNumber, year, years]);
 
 	const monthYear = useMemo(
 		() =>
