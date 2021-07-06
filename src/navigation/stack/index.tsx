@@ -31,7 +31,6 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export const Navigation: React.FC = () => {
 	const { locale, theme } = useSelector((state: IState) => state);
-	const [isNotificationCalled, setIsNotificationCalled] = useState(false);
 	const dispatch = useDispatch();
 	const { t, i18n } = useTranslation();
 
@@ -89,7 +88,6 @@ export const Navigation: React.FC = () => {
 				shouldSetBadge: true,
 			}),
 		});
-
 		await Notifications.scheduleNotificationAsync({
 			content: {
 				title: 'FinTruck',
@@ -117,11 +115,8 @@ export const Navigation: React.FC = () => {
 	}, [t]);
 
 	useEffect(() => {
-		if (!isNotificationCalled) {
-			schedulePushNotification();
-			setIsNotificationCalled(true);
-		}
-	}, [schedulePushNotification, isNotificationCalled]);
+		schedulePushNotification();
+	}, [schedulePushNotification]);
 
 	if (!fontsLoaded) {
 		return (

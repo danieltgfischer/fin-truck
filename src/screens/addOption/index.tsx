@@ -107,8 +107,8 @@ export const AddOptionScreen: React.FC<Props> = ({
 
 	const createBillingOption = useCallback(async () => {
 		try {
-			const date = new Date(2022, 0, 1);
-			// const date = new Date();
+			// const date = new Date(2022, 0, 1);
+			const date = new Date();
 			const monthNumber = date.getMonth();
 			const monthName = monthsNames[monthNumber][locale.country_code];
 			await billingRepository.createBillingOption({

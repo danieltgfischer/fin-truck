@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<resources>
+  <color name="splashscreen_background">#b63b34</color>
+  <color name="iconBackground">#FFFFFF</color>
+  <color name="colorPrimary">#023c69</color>
+  <color name="colorPrimaryDark">#b63b34</color>
+  <color name="navigationBarColor">#040F16</color>
+  <color name="activityBackground">#ffffff</color>
+  <color name="notification_icon_color">#b63b34</color>
+</resources>

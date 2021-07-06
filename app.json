@@ -1,36 +1,38 @@
 {
-	"name": "fin-truck",
-	"displayName": "fin-truck",
-	"privacy": "unlisted",
-	"expo": {
-		"name": "Fin Truck",
-		"slug": "fin-truck",
-		"version": "1.0.0",
-		"assetBundlePatterns": [
-			"**/*",
-			"src/icons/*"
-		],
-		"icon": "./assets/icon.png",
-		"notification": {
-			"icon": "./assets/icon-push.png",
-			"color": "#b63b34",
+  "name": "fin-truck",
+  "displayName": "fin-truck",
+  "privacy": "unlisted",
+  "expo": {
+    "name": "Fin Truck",
+    "slug": "fin-truck",
+    "version": "1.0.1",
+    "assetBundlePatterns": [
+      "**/*",
+      "src/icons/*"
+    ],
+    "icon": "./assets/icon.png",
+    "notification": {
+      "icon": "./assets/icon-push.png",
+      "color": "#b63b34",
       "androidMode": "default"
-		},
-		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#b63b34"
-		},
-		"android": {
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#b63b34"
+    },
+    "android": {
       "icon": "./assets/icon.png",
-			"backgroundColor": "#ffffff",
-			"package": "com.danieltgfischer.fintruck",
+      "backgroundColor": "#ffffff",
+      "package": "com.danieltgfischer.fintruck",
       "versionCode": 1
     },
-		"androidNavigationBar": {
-		 "barStyle": "light-content",
-		 "backgroundColor": "#040F16"
-	 }
-	}
-
+    "androidNavigationBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#040F16"
+    },
+    "ios": {
+      "bundleIdentifier": "com.danieltgfischer.fintruck"
+    }
+  }
 }
