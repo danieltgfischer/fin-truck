@@ -89,8 +89,8 @@ export const Navigation: React.FC = () => {
 			}),
 		});
 		await Notifications.scheduleNotificationAsync({
+			identifier: 'day',
 			content: {
-				title: 'FinTruck',
 				body: t(TranslationsValues.push_content),
 				priority: Notifications.AndroidNotificationPriority.MAX,
 			},
@@ -101,8 +101,8 @@ export const Navigation: React.FC = () => {
 			},
 		});
 		await Notifications.scheduleNotificationAsync({
+			identifier: 'night',
 			content: {
-				title: 'FinTruck',
 				body: t(TranslationsValues.push_content),
 				priority: Notifications.AndroidNotificationPriority.MAX,
 			},
