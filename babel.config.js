@@ -5,16 +5,17 @@ module.exports = function (api) {
 		plugins: [
 			'react-native-reanimated/plugin',
 			'@babel/transform-react-jsx-source',
+			'inline-dotenv',
 			'babel-plugin-transform-typescript-metadata',
 			[
-			'module-resolver',
-			{
-				"root": ['.'],
-				alias: {
-					'@': './src',
+				'module-resolver',
+				{
+					"root": ['.'],
+					alias: {
+						'@': './src',
+					},
 				},
-			},
-      ],
+			],
 		]
 	};
 };
