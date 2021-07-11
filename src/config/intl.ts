@@ -18,20 +18,35 @@ export enum TranslationsValues {
 	trucks = 'trucks',
 	title_truck = 'title_truck',
 	shipping = 'shipping',
+	shipping_description = 'shipping_description',
 	diesel = 'diesel',
+	diesel_description = 'diesel_description',
 	maintenance = 'maintenance',
+	maintenance_description = 'maintenance_description',
 	tire = 'tire',
+	tire_description = 'tire_description',
 	tracking = 'tracking',
+	tracking_description = 'tracking_description',
 	salary = 'salary',
+	salary_description = 'salary_description',
 	admExpenses = 'admExpenses',
+	admExpenses_description = 'admExpenses_description',
 	parcels = 'parcels',
+	parcels_description = 'parcels_description',
 	taxes = 'taxes',
+	taxes_description = 'taxes_description',
 	insurance = 'insurance',
+	insurance_description = 'insurance_description',
 	accountant = 'accountant',
+	accountant_description = 'accountant_description',
 	advance = 'advance',
+	advance_description = 'advance_description',
 	toll = 'toll',
+	toll_description = 'toll_description',
 	restaurant = 'restaurant',
+	restaurant_description = 'restaurant_description',
 	others = 'others',
+	others_description = 'others_description',
 	toast_add_truck = 'toast_add_truck',
 	toast_edit_truck = 'toast_edit_truck',
 	toast_delete_truck = 'toast_delete_truck',
@@ -95,20 +110,50 @@ export const translations = {
 		trucks: 'Trucks',
 		title_truck: 'Choose which option you want to add to accounting',
 		shipping: 'Shipping',
+		shipping_description:
+			'Add here all earnings related to freight received in the current month. \n This is the only option that will count a positive value.\n You can add as many times as you like, adding will record the day and time you registered this value.',
 		diesel: 'Diesel',
+		diesel_description:
+			'Add here the vehicle fueling costs for the current month.\n You can add as many times as you like, when adding will be registered day and time that you registered this value.',
 		maintenance: 'Maintenance',
+		maintenance_description:
+			'Add here the maintenance costs that you received from the vehicle in the current month.\n You can add as many times as you want, when adding will be registered day and time that you registered this value.',
 		tire: 'Tire',
+		tire_description:
+			'Add here the costs with the purchase or retreading of tires in the current month.\n You can add as many times as you like, adding will be recorded the day and time you registered this amount.',
 		tracking: 'Tracking',
+		tracking_description:
+			'Add here the costs with equipment and vehicle tracking programs in the current month.\n You can add as many times as you like, adding will record the date and time you registered this amount.',
 		salary: 'Salary',
+		salary_description:
+			"Add here the driver's salary, own pro-labor or how much is withdrawn for own salary in the current month. \n You can add as many times as you like, adding will record the day and time you registered this value.",
 		admExpenses: 'Administrative Costs',
+		admExpenses_description:
+			'Add here the costs of maintenance of the company, eg telephone, internet, agency and other necessary in the current month. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		parcels: 'Parcels',
+		parcels_description:
+			'Add the monthly payment installments for the vehicle, if any, or any other bills you have here. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		taxes: 'Taxes',
+		taxes_description:
+			'Add here the taxes/tributps payable in the current month. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		insurance: 'Insurance',
+		insurance_description:
+			'Add here all forms of vehicle or personal insurance, eg property insurance, life insurance and transport insurance. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		accountant: 'Accounting Advice',
+		accountant_description:
+			'Add the monthly accountant expenses here. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		advance: 'Advance',
+		advance_description:
+			'Add here all advances payable in the current month. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		toll: 'Toll',
+		toll_description:
+			'Add here the toll costs for the current month.\n You can add as many times as you like, when adding the date and time you registered this amount will be registered',
 		restaurant: 'Restaurant',
+		restaurant_description:
+			'Add the food costs for the current month here. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		others: 'Others',
+		others_description:
+			'Add here all costs calculated in the current month and that are not included in the other expense fields. \n You can add as many times as you like, adding will record the day and time you registered this value. \n You can add as many times as you like, adding will record the day and time you registered this value.',
 		toast_add_truck: '{{name}}/{{board}} truck has been added',
 		toast_edit_truck: 'Truck {{name}}/{{board}} has been edited',
 		toast_delete_truck: 'Truck {{name}}/{{board}} has been deleted',
@@ -176,20 +221,50 @@ export const translations = {
 		trucks: 'Caminhões',
 		title_truck: 'Escolha qual opção deseja adicionar à contabilidade',
 		shipping: 'Frete',
+		shipping_description:
+			'Adicione aqui todos os ganhos relativos à fretes recebidos no mês vigente.\n Esta é a única opção que contabilizará um valor positivo.\n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		diesel: 'Diesel',
+		diesel_description:
+			'Adicione aqui, os custos com abastecimento do veículo no mês vigente.\n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		maintenance: 'Manutenção',
+		maintenance_description:
+			'Adicione aqui, os custos com manutenções que você obeteve do veículo no mês vigente.\n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		tire: 'Pneu',
+		tire_description:
+			'Adicione aqui, os custos com compra ou reforma de pneus no mês vigente.\n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		tracking: 'Rastreamento',
+		tracking_description:
+			'Adicione aqui, os custos com equipamentos e programas de rastreamento do veículo no mês vigente.\n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		salary: 'Salário',
+		salary_description:
+			'Adicione aqui, o salário do motorista, pró-labore próprio ou quanto é retirado para salário próprio no mês vigente. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		admExpenses: 'Despesas Administrativas',
+		admExpenses_description:
+			'Adicione aqui os custos com manutenção da empresa, ex: telefone, internet, agenciamento e outros necessários no mês vigente. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		parcels: 'Parcelas',
+		parcels_description:
+			'Adicione aqui as parcelas mensais de pagamento do veículo, se houver, ou de quaisquer outras contas que você pussuir. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor.',
 		taxes: 'Tributos',
+		taxes_description:
+			'Adicione aqui, os impostos/tributos a pagar no mês vigente. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor',
 		insurance: 'Seguro',
+		insurance_description:
+			'Adicione aqui, todas as formas de seguro do veículo ou pessoal, ex: seguros patrimoniais, seguros de vida e seguros de transporte. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor',
 		accountant: 'Assessoria Contábil',
+		accountant_description:
+			'Adicione aqui as despesas mensais com contador. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor',
 		advance: 'Adiantamento',
+		advance_description:
+			'Adicione aqui todos os adiantamentos a pagar no mês vigente. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor ',
 		toll: 'Pedágio',
+		toll_description:
+			'Adicione aqui, os custos com pedágio no mês vigente.\n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor ',
 		restaurant: 'Restaurante',
+		restaurant_description:
+			'Adicione aqui, os custos com alimentação durante o mês vigente. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor',
 		others: 'Outros',
+		others_description:
+			'Adicione aqui, todos custos apurados no mês vigente e que não estão incluídos nos outros campos de despesas. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor. \n Você pode adicionar quantas vezes quiser, ao adicionar será registrado dia e hora que você registrou esse valor',
 		toast_add_truck: 'O caminhão {{name}}/{{board}} foi adicionado',
 		toast_edit_truck: 'O caminhão {{name}}/{{board}} foi editado',
 		toast_delete_truck: 'O caminhão {{name}}/{{board}} foi excluido',

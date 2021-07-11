@@ -300,9 +300,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 								: optionsObj[option].source
 						}
 					/>
-					<_.ModalDescription>
-						{optionsObj[option].description}
-					</_.ModalDescription>
+					<_.ModalDescription>{t(`${value}_description`)}</_.ModalDescription>
 					<Button
 						onPress={() => setModalVisible(!isModalVisible)}
 						buttonLabel={t(TranslationsValues.close)}
