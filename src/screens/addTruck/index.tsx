@@ -38,7 +38,6 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const navigate = useCallback(() => {
 		navigation.navigate(routeNames.Home);
 	}, [navigation]);
-
 	const handleSubmit: SubmitHandler<IData> = useCallback(
 		async (data: IData, { reset }) => {
 			try {

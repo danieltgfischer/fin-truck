@@ -1,5 +1,5 @@
 import { Connection, Repository } from 'typeorm';
-import { Truck } from '@/database/entities';
+import { Truck } from '@/services/database/entities';
 
 interface ICreateTruck {
 	name: string;

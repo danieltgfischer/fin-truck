@@ -1,7 +1,7 @@
 import XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { BillingOption } from '@/database/entities';
+import { BillingOption } from '@/services/database/entities';
 
 interface IDatabase {
 	data: BillingOption[];

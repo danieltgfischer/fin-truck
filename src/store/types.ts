@@ -1,4 +1,4 @@
-import { Truck, BillingOption } from '@/database/entities';
+import { Truck, BillingOption } from '@/services/database/entities';
 
 type Month = {
 	[key: number]: BillingOption[];

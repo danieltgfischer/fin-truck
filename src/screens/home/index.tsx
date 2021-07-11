@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
+import { ListRenderItemInfo, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import shortid from 'shortid';
+import * as InAppPurchases from 'expo-in-app-purchases';
 import { ITruckItemProps, TruckItem } from '@/components/truckItem';
 import { EmptyTrucks } from '@/components/emptyTrucks';
 import { routeNames, RootStackParamList } from '@/navigation/types';
@@ -12,9 +14,8 @@ import { updateTrucks } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import { useTranslation } from 'react-i18next';
-import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
-import { ListRenderItemInfo } from 'react-native';
+
 import {
 	ButtonIcon,
 	HomeContainer,
@@ -65,6 +66,36 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		});
 		return unsubscribe;
 	}, [dispatch, navigation, truckRepository]);
+
+	const items = Platform.select({
+		android: [
+			// '1_export_month_fin_truck',
+			// '1_premium_fin_truck',
+			// '1_add_truck_fin_truck',
+			// '1_export_year_fin_truck',
+			// '1_donate_fin_truck',
+			'android.test.purchased',
+		],
+	});
+
+	useEffect(() => {
+		InAppPurchases.connectAsync();
+		return () => {
+			InAppPurchases.disconnectAsync();
+		};
+	}, []);
+
+	const getItmes = async () => {
+		console.log(items);
+		const { responseCode, results } = await InAppPurchases.getProductsAsync(
+			items,
+		);
+		console.log(results);
+
+		if (responseCode === InAppPurchases.IAPResponseCode.OK) {
+			console.log(results);
+		}
+	};
 
 	function createRows(trucks, columns) {
 		if (trucks.length > 0) {

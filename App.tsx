@@ -15,11 +15,10 @@ import store from '@/store';
 import { LoadingContainer } from '@/navigation/style';
 import { preloadImages } from '@/utils/preload-images';
 
-// TODO teste with many yars months
+// TODO load use terms and load firts time
 
 const App: React.FC = () => {
 	const [isReady, setIsReady] = useState(false);
-
 	const cacheFonts = useCallback(fonts => {
 		return fonts.map(font => Font.loadAsync(font));
 	}, []);

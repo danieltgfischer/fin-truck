@@ -1,4 +1,4 @@
-import { Truck } from '@/database/entities';
+import { Truck } from '@/services/database/entities';
 import * as Types from '../types';
 
 export function addTruck(truck: Truck): Types.IAction<Types.ITruck> {

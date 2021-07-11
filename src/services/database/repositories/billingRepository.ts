@@ -1,5 +1,5 @@
 import { Connection, Repository } from 'typeorm';
-import { BillingOption } from '@/database/entities';
+import { BillingOption } from '@/services/database/entities';
 import { optionsObj } from '@/screens/addOption/options';
 import * as Types from './types';
 
