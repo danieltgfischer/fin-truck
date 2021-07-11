@@ -114,6 +114,7 @@ export const Welcome: React.FC<Props> = ({ navigation }: Props) => {
 						</TermParagraph>
 					</UseTermsContainer>
 					<Button
+						style={{ marginTop: 15 }}
 						onPress={() => setModalVisible(!isModalVisible)}
 						buttonLabel={t(TranslationsValues.close)}
 					/>

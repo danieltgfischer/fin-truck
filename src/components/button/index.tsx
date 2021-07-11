@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableOpacityProps } from 'react-native';
 import { Button as StyledButton, ButtonLabel, CancelButton } from './styles';
 
 interface IProps {
@@ -7,6 +8,7 @@ interface IProps {
 	onPress: () => void;
 	cancel?: boolean;
 	disabled?: boolean;
+	style?: any;
 }
 
 export const Button: React.FC<IProps> = ({
@@ -15,10 +17,11 @@ export const Button: React.FC<IProps> = ({
 	cancel = false,
 	onPress,
 	disabled = false,
+	...rest
 }: IProps) => {
 	if (cancel) {
 		return (
-			<CancelButton onPress={onPress} disabled={disabled}>
+			<CancelButton onPress={onPress} disabled={disabled} {...rest}>
 				<ButtonLabel disabled next={next} cancel={cancel}>
 					{buttonLabel}
 				</ButtonLabel>
@@ -26,7 +29,7 @@ export const Button: React.FC<IProps> = ({
 		);
 	}
 	return (
-		<StyledButton next={next} onPress={onPress} disabled={disabled}>
+		<StyledButton next={next} onPress={onPress} disabled={disabled} {...rest}>
 			<ButtonLabel disabled next={next}>
 				{buttonLabel}
 			</ButtonLabel>

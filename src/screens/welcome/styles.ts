@@ -26,7 +26,6 @@ export const Title = styled.Text`
 	color: #333;
 	font-size: 32px;
 	font-family: Semi_Bold;
-
 	margin-top: 20px;
 `;
 
