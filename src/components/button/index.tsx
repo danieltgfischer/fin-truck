@@ -6,6 +6,7 @@ interface IProps {
 	next?: boolean;
 	onPress: () => void;
 	cancel?: boolean;
+	disabled?: boolean;
 }
 
 export const Button: React.FC<IProps> = ({
@@ -13,19 +14,22 @@ export const Button: React.FC<IProps> = ({
 	next = false,
 	cancel = false,
 	onPress,
+	disabled = false,
 }: IProps) => {
 	if (cancel) {
 		return (
-			<CancelButton onPress={onPress}>
-				<ButtonLabel next={next} cancel={cancel}>
+			<CancelButton onPress={onPress} disabled={disabled}>
+				<ButtonLabel disabled next={next} cancel={cancel}>
 					{buttonLabel}
 				</ButtonLabel>
 			</CancelButton>
 		);
 	}
 	return (
-		<StyledButton next={next} onPress={onPress}>
-			<ButtonLabel next={next}>{buttonLabel}</ButtonLabel>
+		<StyledButton next={next} onPress={onPress} disabled={disabled}>
+			<ButtonLabel disabled next={next}>
+				{buttonLabel}
+			</ButtonLabel>
 		</StyledButton>
 	);
 };

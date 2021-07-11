@@ -1,7 +1,9 @@
+import { lighten } from 'polished';
 import styled from 'styled-components/native';
 
 interface INext {
 	next: boolean;
+	disabled: boolean;
 }
 
 interface IButtonLabel extends INext {
@@ -9,8 +11,12 @@ interface IButtonLabel extends INext {
 }
 
 export const Button = styled.TouchableOpacity<INext>`
-	background-color: ${({ next, theme }) =>
-		next ? theme.colors.buttons.next : theme.colors.buttons.normal};
+	background-color: ${({ next, theme, disabled }) => {
+		if (disabled) {
+			return lighten(0.1, theme.colors.buttons.next);
+		}
+		return next ? theme.colors.buttons.next : theme.colors.buttons.normal;
+	}};
 	padding: 8px 25px;
 	border-radius: 7px;
 	margin: 0 10px;

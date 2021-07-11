@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import shortid from 'shortid';
-import * as InAppPurchases from 'expo-in-app-purchases';
 import { ITruckItemProps, TruckItem } from '@/components/truckItem';
 import { EmptyTrucks } from '@/components/emptyTrucks';
 import { routeNames, RootStackParamList } from '@/navigation/types';
@@ -77,25 +76,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 			'android.test.purchased',
 		],
 	});
-
-	useEffect(() => {
-		InAppPurchases.connectAsync();
-		return () => {
-			InAppPurchases.disconnectAsync();
-		};
-	}, []);
-
-	const getItmes = async () => {
-		console.log(items);
-		const { responseCode, results } = await InAppPurchases.getProductsAsync(
-			items,
-		);
-		console.log(results);
-
-		if (responseCode === InAppPurchases.IAPResponseCode.OK) {
-			console.log(results);
-		}
-	};
 
 	function createRows(trucks, columns) {
 		if (trucks.length > 0) {

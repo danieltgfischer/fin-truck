@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,18 +11,19 @@ import {
 	createStackNavigator,
 	StackNavigationOptions,
 } from '@react-navigation/stack';
-import { HomeScreen } from '@/screens/home';
-import { AddTruckScreen } from '@/screens/addTruck';
-import { AddOptionScreen } from '@/screens/addOption';
-import { Timeline } from '@/screens/timeline';
+import { Ionicons } from '@expo/vector-icons';
+import { darken } from 'polished';
 import { IState } from '@/store/types';
 import { updateCountryCode, updateTheme } from '@/store/actions';
 import { useTranslation } from 'react-i18next';
 import { TranslationsValues } from '@/config/intl';
 import light from '@/styles/themes/light';
 import dark from '@/styles/themes/dark';
-import { darken } from 'polished';
-import { Ionicons } from '@expo/vector-icons';
+import { HomeScreen } from '@/screens/home';
+import { AddTruckScreen } from '@/screens/addTruck';
+import { AddOptionScreen } from '@/screens/addOption';
+import { Timeline } from '@/screens/timeline';
+import { Welcome } from '@/screens/welcome';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
 import { LoadingContainer, MenuButton } from '../style';
@@ -30,6 +31,7 @@ import { LoadingContainer, MenuButton } from '../style';
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const Navigation: React.FC = () => {
+	const [useTerms, setUseTerms] = useState(false);
 	const { locale, theme } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { t, i18n } = useTranslation();
@@ -71,10 +73,26 @@ export const Navigation: React.FC = () => {
 		dispatch(updateTheme(storagedTheme));
 	}, [dispatch]);
 
+	const updateUseTerms = useCallback(async () => {
+		const useTermsStoraged = await AsyncStorage.getItem('@UseTerms');
+		if (useTermsStoraged) {
+			setUseTerms(JSON.parse(useTermsStoraged));
+			return;
+		}
+		if (!useTermsStoraged) {
+			try {
+				await AsyncStorage.setItem('@UseTerms', JSON.stringify(false));
+			} catch (error) {
+				console.warn(error);
+			}
+		}
+	}, []);
+
 	useEffect(() => {
 		updateLanguage();
 		updateAppTheme();
-	}, [updateAppTheme, updateLanguage]);
+		updateUseTerms();
+	}, [updateAppTheme, updateLanguage, updateUseTerms]);
 
 	const defaultTheme = theme === 'light' ? light : dark;
 	const isDark = theme === 'dark';
@@ -132,7 +150,6 @@ export const Navigation: React.FC = () => {
 		headerTitleAlign: 'center',
 		headerTitleStyle: {
 			color: isDark ? '#fbfbff' : '#fff',
-
 			fontSize: 28,
 			fontFamily: 'Italic',
 		},
@@ -146,7 +163,26 @@ export const Navigation: React.FC = () => {
 	return (
 		<ThemeProvider theme={defaultTheme}>
 			<NavigationContainer>
-				<Stack.Navigator initialRouteName={routeNames.Home}>
+				<Stack.Navigator
+					initialRouteName={useTerms ? routeNames.Home : routeNames.Welcome}
+				>
+					<Stack.Screen
+						name={routeNames.Welcome}
+						component={Welcome}
+						options={{
+							title: 'Fin Truck',
+							headerTitleAlign: 'center',
+							headerTitleStyle: {
+								color: isDark ? '#fbfbff' : '#fff',
+								fontSize: 40,
+								fontFamily: 'Regular',
+							},
+							headerStyle: {
+								backgroundColor: darken(darkValue, '#b63b34'),
+								height: 140,
+							},
+						}}
+					/>
 					<Stack.Screen
 						name={routeNames.Home}
 						component={HomeScreen}
@@ -156,7 +192,9 @@ export const Navigation: React.FC = () => {
 							headerTitleStyle: {
 								color: isDark ? '#fbfbff' : '#fff',
 								fontSize: 32,
+								fontFamily: 'Semi_Bold',
 							},
+							headerLeft: null,
 							headerStyle: {
 								backgroundColor: darken(darkValue, '#b63b34'),
 								height: 140,

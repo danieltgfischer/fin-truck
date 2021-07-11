@@ -12,6 +12,7 @@ export enum TranslationsValues {
 	delete = 'delete',
 	edit = 'edit',
 	close = 'close',
+	continue = 'continue',
 	add_truck_header_title = 'add_truck_header_title',
 	history = 'history',
 	trucks = 'trucks',
@@ -65,6 +66,12 @@ export enum TranslationsValues {
 	toast_download = 'toast_download',
 	toast_download_year = 'toast_download_year',
 	push_content = 'push_content',
+	welcome = 'welcome',
+	use_term = 'use_term',
+	welcome_paragraph = 'welcome_paragraph',
+	enjoy = 'enjoy',
+	term_checkbox_label = 'term_checkbox_label',
+	modal_terms_title = 'modal_terms_title',
 }
 
 export const translations = {
@@ -82,6 +89,7 @@ export const translations = {
 		save: 'Save',
 		delete: 'Delete',
 		close: 'Close',
+		continue: 'Next',
 		add_truck_header_title: 'Add Truck',
 		history: 'History',
 		trucks: 'Trucks',
@@ -140,6 +148,13 @@ export const translations = {
 			'The year {{year}} records were downloaded from Documents > FinTruck',
 		push_content:
 			"Don't be in the red, remember to save your earnings and expenses to be able to better manage your truck :)",
+		welcome: 'Welcome',
+		use_term: 'Terms of Use',
+		welcome_paragraph:
+			'Thank you for using our app, we hope you enjoy it and that it will be very useful for you.\n Please read the ',
+		enjoy: 'Enjoy!',
+		term_checkbox_label: 'I read and accept the terms',
+		modal_terms_title: 'Fin Truck Terms of Use',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -155,6 +170,7 @@ export const translations = {
 		edit: 'Editar',
 		delete: 'Excluir',
 		close: 'Fechar',
+		continue: 'Continuar',
 		add_truck_header_title: 'Adiconar Caminhão',
 		history: 'Histórico',
 		trucks: 'Caminhões',
@@ -214,5 +230,12 @@ export const translations = {
 			'Os registros do ano {{year}} foi baixado em Documentos > FinTruck',
 		push_content:
 			'Não fique no vermelho, lembre-se de salvar seus ganhos e gastos para poder gerenciar melhor seu caminhão :)',
+		welcome: 'Seja Bem Vindo',
+		use_term: 'Termo de Uso',
+		welcome_paragraph:
+			'Obrigado por usar nosso aplicativo, esparamos que goste e que seja muito util para você.\n Por favor, antes de continuar leia nosso',
+		enjoy: 'Aproveite!',
+		term_checkbox_label: 'Li e aceito os termos de uso',
+		modal_terms_title: 'Termo de Uso Fin Truck',
 	},
 };
