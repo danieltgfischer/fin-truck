@@ -1,5 +1,7 @@
+import { TranslationsValues } from '@/config/intl';
 import NetInfo from '@react-native-community/netinfo';
 import { ToastAndroid } from 'react-native';
+import i18n from 'i18next';
 import {
 	connectAsync,
 	disconnectAsync,
@@ -9,19 +11,11 @@ import {
 } from 'expo-in-app-purchases';
 import { IPurchases } from '../domain';
 
-interface INetworkMessages {
-	networkError: string;
-	networkOffiline: string;
-}
-
 export class IAP implements IPurchases {
 	hasNetworkConnection = false;
 
-	networkMessages: INetworkMessages;
-
-	constructor(networkMessages: INetworkMessages) {
+	constructor() {
 		this.verifyNetworkConnection();
-		this.networkMessages = networkMessages;
 	}
 
 	async verifyNetworkConnection(): Promise<void> {
@@ -29,7 +23,7 @@ export class IAP implements IPurchases {
 			const state = await NetInfo.fetch();
 			if (!state.isConnected) {
 				ToastAndroid.showWithGravity(
-					this.networkMessages.networkOffiline,
+					i18n.t(TranslationsValues.network_offline),
 					ToastAndroid.LONG,
 					ToastAndroid.CENTER,
 				);
@@ -38,7 +32,7 @@ export class IAP implements IPurchases {
 			this.hasNetworkConnection = state.isConnected;
 		} catch (error) {
 			ToastAndroid.showWithGravity(
-				this.networkMessages.networkError,
+				i18n.t(TranslationsValues.network_error),
 				ToastAndroid.LONG,
 				ToastAndroid.CENTER,
 			);

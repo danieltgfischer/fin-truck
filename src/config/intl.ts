@@ -87,6 +87,8 @@ export enum TranslationsValues {
 	enjoy = 'enjoy',
 	term_checkbox_label = 'term_checkbox_label',
 	modal_terms_title = 'modal_terms_title',
+	network_offline = 'network_offline',
+	network_error = 'network_error',
 }
 
 export const translations = {
@@ -200,6 +202,9 @@ export const translations = {
 		enjoy: 'Enjoy!',
 		term_checkbox_label: 'I read and accept the terms',
 		modal_terms_title: 'Fin Truck Terms of Use',
+		network_offline:
+			'You are offline, you must be logged in to make a purchase',
+		network_error: 'Error checking connection',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -312,5 +317,8 @@ export const translations = {
 		enjoy: 'Aproveite!',
 		term_checkbox_label: 'Li e aceito os termos de uso',
 		modal_terms_title: 'Termo de Uso Fin Truck',
+		network_offline:
+			'Você está offline, é necessário estar conectado para realizar uma compra',
+		network_error: 'Error ao verificar conexão',
 	},
 };
