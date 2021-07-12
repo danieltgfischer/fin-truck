@@ -1,11 +1,13 @@
 import { BilliginRepository } from '@/services/database/repositories/billingRepository';
 import { TruckRepository } from '@/services/database/repositories/truckRepository';
+import { IPurchases } from '@/services/purchases/domain';
 import { createContext } from 'react';
 
-export interface IDatabaseConnectionContext {
+export interface ISerivcesConnectionContext {
 	truckRepository: TruckRepository;
 	billingRepository: BilliginRepository;
+	inAppPurchases: IPurchases;
 }
 
-export const DatabaseConnectionContext =
-	createContext<IDatabaseConnectionContext>({} as IDatabaseConnectionContext);
+export const ServicesConnectionContext =
+	createContext<ISerivcesConnectionContext>({} as ISerivcesConnectionContext);

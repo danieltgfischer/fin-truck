@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, LogBox } from 'react-native';
 import { Connection, createConnection, getConnectionManager } from 'typeorm';
-import { DatabaseConnectionContext } from '@/contexts/databaseConnection';
+import { ServicesConnectionContext } from '@/contexts/servicesConnection';
 import { TruckRepository } from '@/services/database/repositories/truckRepository';
 import { Truck, BillingOption } from '@/services/database/entities';
 import { LoadingContainer } from '@/navigation/style';
@@ -11,6 +11,7 @@ import dark from '@/styles/themes/dark';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
+import { IAP } from '@/services/purchases/data';
 
 interface IProps {
 	children: ReactNode;
@@ -18,7 +19,7 @@ interface IProps {
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
-export const DatabaseConnectionProvider: FC<IProps> = ({
+export const ServicesConnectionProvider: FC<IProps> = ({
 	children,
 }: IProps) => {
 	const { theme } = useSelector((state: IState) => state);
@@ -61,13 +62,14 @@ export const DatabaseConnectionProvider: FC<IProps> = ({
 	}
 
 	return (
-		<DatabaseConnectionContext.Provider
+		<ServicesConnectionContext.Provider
 			value={{
 				truckRepository: new TruckRepository(connection),
 				billingRepository: new BilliginRepository(connection),
+				inAppPurchases: new IAP(),
 			}}
 		>
 			{children}
-		</DatabaseConnectionContext.Provider>
+		</ServicesConnectionContext.Provider>
 	);
 };

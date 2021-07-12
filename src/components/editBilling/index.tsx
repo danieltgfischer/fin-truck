@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect, useContext } from 'react';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { IState } from '@/store/types';
 import Input from '@/components/input';
 import MultiInput, { IInputRef } from '@/components/multipleInput ';
@@ -51,7 +51,7 @@ export const EditBilling: React.FC<IProps> = ({
 	const dispatch = useDispatch();
 	const { year, monthNumber } = useContext(MonthInfoContext);
 	const theme = useContext(ThemeContext);
-	const { billingRepository } = useDatabaseConnection();
+	const { billingRepository } = useSerivces();
 	const { t } = useTranslation();
 	const isDark = theme.name === 'dark';
 	const { value: optionValue } = optionsObj[option];

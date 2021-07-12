@@ -5,9 +5,11 @@ import i18n from 'i18next';
 import {
 	connectAsync,
 	disconnectAsync,
+	getBillingResponseCodeAsync,
 	getProductsAsync,
 	IAPItemDetails,
 	IAPQueryResponse,
+	IAPResponseCode,
 } from 'expo-in-app-purchases';
 import { IPurchases } from '../domain';
 
@@ -15,8 +17,19 @@ export class IAP implements IPurchases {
 	hasNetworkConnection = false;
 
 	constructor() {
+		this.init();
 		this.verifyNetworkConnection();
 	}
+
+	init = async (): Promise<void> => {
+		try {
+			const responseCode = await getBillingResponseCodeAsync();
+			if (responseCode === IAPResponseCode.OK) return;
+			await connectAsync();
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	async verifyNetworkConnection(): Promise<void> {
 		try {
@@ -44,10 +57,10 @@ export class IAP implements IPurchases {
 	): Promise<IAPQueryResponse<IAPItemDetails>> {
 		try {
 			if (this.hasNetworkConnection) {
-				await connectAsync();
 				const products = await getProductsAsync(temList);
-				await disconnectAsync();
-				return products;
+				if (products.responseCode === IAPResponseCode.OK) {
+					return products;
+				}
 			}
 		} catch (error) {
 			console.error(error);

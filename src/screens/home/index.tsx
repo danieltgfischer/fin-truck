@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { ListRenderItemInfo, Platform } from 'react-native';
+import { ListRenderItemInfo } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -8,13 +8,14 @@ import { ITruckItemProps, TruckItem } from '@/components/truckItem';
 import { EmptyTrucks } from '@/components/emptyTrucks';
 import { routeNames, RootStackParamList } from '@/navigation/types';
 import { IState } from '@/store/types';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { updateTrucks } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
 
+import { Purchase } from '@/components/purchase';
 import {
 	ButtonIcon,
 	HomeContainer,
@@ -44,9 +45,10 @@ export type ListRenderItem<ItemT> = (
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [isPurchaselVisible, setIsPurchaselVisible] = useState(true);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const { truckRepository } = useDatabaseConnection();
+	const { truckRepository } = useSerivces();
 	const { colors } = useContext(ThemeContext);
 	const { t } = useTranslation();
 
@@ -65,17 +67,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		});
 		return unsubscribe;
 	}, [dispatch, navigation, truckRepository]);
-
-	const items = Platform.select({
-		android: [
-			// '1_export_month_fin_truck',
-			// '1_premium_fin_truck',
-			// '1_add_truck_fin_truck',
-			// '1_export_year_fin_truck',
-			// '1_donate_fin_truck',
-			'android.test.purchased',
-		],
-	});
 
 	function createRows(trucks, columns) {
 		if (trucks.length > 0) {
@@ -144,6 +135,13 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 			<Menu
 				isModalVisible={isModalVisible}
 				setIsModalVisible={setIsModalVisible}
+			/>
+			<Purchase
+				productId="android.test.purchased"
+				upgradeId="android.test.canceled"
+				donateId="android.test.refuned"
+				isPurchaselVisible={isPurchaselVisible}
+				setIsPurchaselVisible={setIsPurchaselVisible}
 			/>
 		</Container>
 	);

@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 import { Feather } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { routeNames, RootStackParamList } from '@/navigation/types';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { Button } from '@/components/button';
 import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
@@ -59,7 +59,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const nextInputRef = useRef<IInputRef>(null);
 	const translateXForm = useRef(new Animated.Value(0)).current;
 	const translateXReview = useRef(new Animated.Value(width)).current;
-	const { billingRepository } = useDatabaseConnection();
+	const { billingRepository } = useSerivces();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
 

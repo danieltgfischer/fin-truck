@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import TruckIcon from '@/icons/TruckItemIcon.png';
 import DarkTruckIcon from '@/icons/DarkTruckIcon.png';
 import { routeNames } from '@/navigation/types';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { useDispatch } from 'react-redux';
 import { updateCurrentTruck } from '@/store/actions';
 import { ThemeContext } from 'styled-components/native';
@@ -23,7 +23,7 @@ export const TruckItem: React.FC<ITruckItemProps> = ({
 }: ITruckItemProps) => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { truckRepository } = useDatabaseConnection();
+	const { truckRepository } = useSerivces();
 	const theme = useContext(ThemeContext);
 	const navigate = useCallback(() => {
 		navigation.navigate(routeNames.DrawerRoot);

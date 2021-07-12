@@ -9,7 +9,7 @@ import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import { Provider } from 'react-redux';
-import { DatabaseConnectionProvider } from '@/hocs/databaseProvider';
+import { ServicesConnectionProvider } from '@/hocs/servicesProvider';
 import { Navigation } from '@/navigation/stack';
 import store from '@/store';
 import { LoadingContainer } from '@/navigation/style';
@@ -60,9 +60,9 @@ const App: React.FC = () => {
 
 	return (
 		<Provider store={store}>
-			<DatabaseConnectionProvider>
+			<ServicesConnectionProvider>
 				<Navigation />
-			</DatabaseConnectionProvider>
+			</ServicesConnectionProvider>
 		</Provider>
 	);
 };

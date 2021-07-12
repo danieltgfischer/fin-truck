@@ -8,6 +8,7 @@ import {
 export interface IPurchases {
 	verifyNetworkConnection(): Promise<void>;
 	getProducts(temList: string[]): Promise<IAPQueryResponse<IAPItemDetails>>;
+	init(): Promise<void>;
 	// connect(): Promise<void>;
 	// disconnect(): Promise<void>;
 	// finishTransaction(

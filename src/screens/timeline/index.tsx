@@ -7,7 +7,7 @@ import { IState } from '@/store/types';
 import { YearTimeline } from '@/components/year';
 import TimelineIcon from '@/icons/TimelineIcon.png';
 import TimelineIconLight from '@/icons/TimelineLight.png';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { updateYears } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ type Props = {
 };
 
 export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
-	const { billingRepository, truckRepository } = useDatabaseConnection();
+	const { billingRepository, truckRepository } = useSerivces();
 	const [isLoading, setIsLoading] = useState(true);
 	const { current_truck, total_years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();

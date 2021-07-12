@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { Button } from '@/components/button';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTimeline } from '@/store/actions';
 import { optionsObj } from '@/screens/truck/options';
@@ -36,7 +36,7 @@ export const DeleteOption: React.FC<IProps> = ({
 	value,
 	option,
 }: IProps) => {
-	const { billingRepository } = useDatabaseConnection();
+	const { billingRepository } = useSerivces();
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { value: optionValue } = optionsObj[option];

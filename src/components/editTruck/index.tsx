@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { IState } from '@/store/types';
 import Input, { IInputRef } from '@/components/input';
 import EditTruckIcon from '@/icons/EditeIcon.png';
@@ -38,7 +38,7 @@ export const EditTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	const nextInputRef = useRef<IInputRef>(null);
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const { truckRepository } = useDatabaseConnection();
+	const { truckRepository } = useSerivces();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
 

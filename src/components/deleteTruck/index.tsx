@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Button } from '@/components/button';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentTruck, updateTrucks, updateYears } from '@/store/actions';
 import { useNavigation } from '@react-navigation/native';
@@ -17,7 +17,7 @@ interface IProps {
 
 export const DeleteTruck: React.FC<IProps> = ({ closeModal }: IProps) => {
 	const navigation = useNavigation();
-	const { truckRepository, billingRepository } = useDatabaseConnection();
+	const { truckRepository, billingRepository } = useSerivces();
 	const { current_truck } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { t } = useTranslation();

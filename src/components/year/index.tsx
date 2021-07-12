@@ -9,7 +9,7 @@ import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import MonthTimeline from '@/components/month';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { updateYearResume } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +40,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
-	const { billingRepository } = useDatabaseConnection();
+	const { billingRepository } = useSerivces();
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
 	);

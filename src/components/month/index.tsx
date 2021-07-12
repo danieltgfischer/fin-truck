@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { BillingItem } from '@/components/billingItem';
 import { Entypo } from '@expo/vector-icons';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import { IState } from '@/store/types';
 import {
 	addYearKeyAtYears,
@@ -48,7 +48,7 @@ const MonthTimeline: React.FC<IProps> = ({
 	monthNumber,
 	year,
 }: IProps) => {
-	const { billingRepository } = useDatabaseConnection();
+	const { billingRepository } = useSerivces();
 	const { current_truck, years, monthResume, locale } = useSelector(
 		(state: IState) => state,
 	);

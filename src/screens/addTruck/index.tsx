@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addTruck } from '@/store/actions';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { routeNames, RootStackParamList } from '@/navigation/types';
-import { useDatabaseConnection } from '@/hooks/useDatabse';
+import { useSerivces } from '@/hooks/useServices';
 import AddTruckIcon from '@/icons/CreateTruckIcon.png';
 import { Button } from '@/components/button';
 import { ToastAndroid } from 'react-native';
@@ -32,7 +32,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
 	const dispatch = useDispatch();
-	const { truckRepository } = useDatabaseConnection();
+	const { truckRepository } = useSerivces();
 	const { t } = useTranslation();
 
 	const navigate = useCallback(() => {
