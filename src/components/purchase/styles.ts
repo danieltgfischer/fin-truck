@@ -1,9 +1,12 @@
 import styled from 'styled-components/native';
-import { Animated, Dimensions } from 'react-native';
+import { Animated, Dimensions, StyleSheet } from 'react-native';
 import { darken } from 'polished';
 
 const { height, width } = Dimensions.get('window');
 
+export const scrollViewStyle = StyleSheet.create({
+	content: { minHeight: height },
+});
 export const Container = styled(Animated.View)`
 	position: absolute;
 	height: ${height}px;

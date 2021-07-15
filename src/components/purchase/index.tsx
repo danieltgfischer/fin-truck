@@ -18,6 +18,7 @@ import {
 	Purchase as PurchaseProp,
 	requestPurchase,
 	useIAP,
+	consumeAllItemsAndroid,
 } from 'react-native-iap';
 import shortid from 'shortid';
 import LottieView from 'lottie-react-native';
@@ -38,6 +39,7 @@ import {
 	CloseButton,
 	LikeContainer,
 	LikeLabel,
+	scrollViewStyle,
 } from './styles';
 import { Modal } from '../modal';
 
@@ -73,7 +75,15 @@ export const Purchase: React.FC<IProps> = ({
 	const [isDonateThanksOpen, setDonateThanksOpen] = useState(false);
 	const { height, width } = useWindowDimensions();
 	const { t } = useTranslation();
-	const { connected, products, getProducts, currentPurchase } = useIAP();
+	const {
+		connected,
+		products,
+		getProducts,
+		currentPurchase,
+		getAvailablePurchases,
+		availablePurchases,
+		purchaseHistories,
+	} = useIAP();
 	const translateY = useRef(new Animated.Value(height)).current;
 	const netInfo = useNetInfo();
 	const theme = useContext(ThemeContext);
@@ -111,9 +121,10 @@ export const Purchase: React.FC<IProps> = ({
 	useEffect(() => {
 		if (connected && products.length === 0) {
 			getProducts(items);
+			// consumeAllItemsAndroid();
 		}
 	}, [connected, getProducts, items, products.length]);
-
+	console.log(availablePurchases.length);
 	useEffect(() => {
 		if (products.length > 0) {
 			const selectedPurchases: IAcc = {};
@@ -133,6 +144,10 @@ export const Purchase: React.FC<IProps> = ({
 	}, [donateId, productId, products, upgradeId]);
 
 	useEffect(() => {
+		console.log(purchaseHistories);
+	}, []);
+
+	useEffect(() => {
 		const checkCurrentPurchase = async (
 			purchase?: PurchaseProp,
 		): Promise<void> => {
@@ -140,14 +155,17 @@ export const Purchase: React.FC<IProps> = ({
 				const receipt = purchase.transactionReceipt;
 				if (receipt)
 					try {
-						console.log(purchase.productId === donateId);
 						if (purchase.productId === donateId) {
 							setDonateThanksOpen(true);
+						}
+						if (purchase.productId === upgradeId) {
+							await finishTransaction(purchase, false);
+							return;
 						}
 						const ackResult = await finishTransaction(purchase, true);
 						console.log('ackResult', ackResult);
 					} catch (ackErr) {
-						console.warn('ackErr', ackErr);
+						console.error('ackErr', ackErr);
 					}
 			}
 		};
@@ -174,7 +192,7 @@ export const Purchase: React.FC<IProps> = ({
 						<AntDesign name="close" size={24} color={theme.colors.text} />
 					</CloseButton>
 					<Title>{t(TranslationsValues.help)}</Title>
-					<ScrollView>
+					<ScrollView contentContainerStyle={scrollViewStyle.content}>
 						<PurchaseContainer key={shortid()}>
 							<PurchaseTitle>
 								{componentPurchases[donateId]?.title ?? ''}{' '}
@@ -237,7 +255,7 @@ export const Purchase: React.FC<IProps> = ({
 						<AntDesign name="close" size={24} color={theme.colors.text} />
 					</CloseButton>
 					<Title>{t(TranslationsValues.help)}</Title>
-					<ScrollView>
+					<ScrollView contentContainerStyle={scrollViewStyle.content}>
 						<PurchaseContainer key={shortid()}>
 							<PurchaseTitle>
 								{componentPurchases[donateId]?.title ?? ''}{' '}
@@ -287,7 +305,7 @@ export const Purchase: React.FC<IProps> = ({
 					<AntDesign name="close" size={24} color={theme.colors.text} />
 				</CloseButton>
 				<Title>{t(TranslationsValues.help)}</Title>
-				<ScrollView>
+				<ScrollView contentContainerStyle={scrollViewStyle.content}>
 					<PurchaseContainer key={shortid()}>
 						<PurchaseTitle>
 							{componentPurchases[productId]?.title ?? ''}{' '}
@@ -321,7 +339,7 @@ export const Purchase: React.FC<IProps> = ({
 						<PurchaseDescription>
 							{componentPurchases[upgradeId]?.description ?? ''}
 						</PurchaseDescription>
-						<PurchaseButton>
+						<PurchaseButton onPress={() => purchase(upgradeId)}>
 							<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
 						</PurchaseButton>
 					</PurchaseContainer>

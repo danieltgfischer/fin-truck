@@ -2,11 +2,11 @@ import styled from 'styled-components/native';
 import { Dimensions, Animated } from 'react-native';
 import { darken } from 'polished';
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 export const Container = styled(Animated.View)`
 	position: absolute;
-	height: ${height * 0.5}px;
+	height: ${height * 0.7}px;
 	width: 100%;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;

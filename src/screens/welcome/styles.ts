@@ -7,7 +7,6 @@ export const scrollViewStyle = StyleSheet.create({
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 		width,
-		minHeight: height,
 		paddingHorizontal: 25,
 		paddingTop: 5,
 		paddingBottom: 30,

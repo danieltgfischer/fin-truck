@@ -1,11 +1,11 @@
-import { Button } from '@/components/button';
 import React, { useState, useEffect, useCallback } from 'react';
+import { Modal, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
-import { Modal } from 'react-native';
-import { TranslationsValues } from '@/config/intl';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { Button } from '@/components/button';
 import Icon from '@/icons/CreateTruckIcon.png';
+import { TranslationsValues } from '@/config/intl';
 import { RootStackParamList, routeNames } from '@/navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
@@ -48,36 +48,38 @@ export const Welcome: React.FC<Props> = ({ navigation }: Props) => {
 
 	return (
 		<>
-			<Container>
-				<Image source={Icon} />
-				<Title>{t(TranslationsValues.welcome)}</Title>
-				<Paragraph>
-					{t(TranslationsValues.welcome_paragraph)}
-					<TouchableOpacity onPress={() => setModalVisible(true)}>
-						<Span> {t(TranslationsValues.use_term)}</Span>
-					</TouchableOpacity>
-					.{'\n'}
-					{t(TranslationsValues.enjoy)}
-				</Paragraph>
-				<BouncyCheckbox
-					style={{ marginBottom: 15 }}
-					size={25}
-					fillColor="#b63b34"
-					unfillColor="#fff"
-					text={t(TranslationsValues.term_checkbox_label)}
-					iconStyle={{ borderColor: '#b63b34', borderRadius: 5 }}
-					textStyle={{ fontFamily: 'Regular', fontSize: 24 }}
-					onPress={(isChecked: boolean) => {
-						setUseTerms(isChecked);
-					}}
-				/>
-				<Button
-					next
-					disabled={!isUseTermsChecked}
-					buttonLabel={t(TranslationsValues.continue)}
-					onPress={next}
-				/>
-			</Container>
+			<ScrollView>
+				<Container>
+					<Image source={Icon} />
+					<Title>{t(TranslationsValues.welcome)}</Title>
+					<Paragraph>
+						{t(TranslationsValues.welcome_paragraph)}
+						<TouchableOpacity onPress={() => setModalVisible(true)}>
+							<Span> {t(TranslationsValues.use_term)}</Span>
+						</TouchableOpacity>
+						.{'\n'}
+						{t(TranslationsValues.enjoy)}
+					</Paragraph>
+					<BouncyCheckbox
+						style={{ marginBottom: 15 }}
+						size={25}
+						fillColor="#b63b34"
+						unfillColor="#fff"
+						text={t(TranslationsValues.term_checkbox_label)}
+						iconStyle={{ borderColor: '#b63b34', borderRadius: 5 }}
+						textStyle={{ fontFamily: 'Regular', fontSize: 24 }}
+						onPress={(isChecked: boolean) => {
+							setUseTerms(isChecked);
+						}}
+					/>
+					<Button
+						next
+						disabled={!isUseTermsChecked}
+						buttonLabel={t(TranslationsValues.continue)}
+						onPress={next}
+					/>
+				</Container>
+			</ScrollView>
 			<Modal
 				visible={isModalVisible}
 				animationType="slide"

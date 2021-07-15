@@ -5,7 +5,12 @@ import { Form as UnForm } from '@unform/mobile';
 const { width } = Dimensions.get('window');
 
 export const flatListStyle = StyleSheet.create({
-	content: { alignItems: 'center', width: '100%', paddingBottom: 50 },
+	content: {
+		alignItems: 'center',
+		width: '100%',
+		paddingBottom: 50,
+		paddingTop: 25,
+	},
 });
 
 export const FlatList = styled.FlatList`
