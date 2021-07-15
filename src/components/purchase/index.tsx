@@ -4,21 +4,47 @@ import React, {
 	SetStateAction,
 	Dispatch,
 	useState,
+	useContext,
+	useCallback,
 } from 'react';
-import { Animated, Platform, useWindowDimensions } from 'react-native';
-import { TranslationsValues } from '@/config/intl';
+import {
+	Animated,
+	Platform,
+	useWindowDimensions,
+	ScrollView,
+} from 'react-native';
+import {
+	finishTransaction,
+	Purchase as PurchaseProp,
+	requestPurchase,
+	useIAP,
+} from 'react-native-iap';
 import shortid from 'shortid';
+import LottieView from 'lottie-react-native';
 import { useTranslation } from 'react-i18next';
-import { IAP } from '@/services/purchases/data';
-import { useMemo } from 'react';
-import { IAPItemDetails } from 'expo-in-app-purchases';
+import { TranslationsValues } from '@/config/intl';
+import { AntDesign } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useSerivces } from '@/hooks/useServices';
-import { Container, Title, PurchaseContainer } from './styles';
+import { ThemeContext } from 'styled-components/native';
+import Like from '@/animations/like.json';
+import {
+	Container,
+	Title,
+	PurchaseContainer,
+	PurchaseDescription,
+	PurchaseTitle,
+	PurchaseButton,
+	ButtonLabel,
+	CloseButton,
+	LikeContainer,
+	LikeLabel,
+} from './styles';
+import { Modal } from '../modal';
 
 interface IProps {
 	isPurchaselVisible: boolean;
 	setIsPurchaselVisible: Dispatch<SetStateAction<boolean>>;
+	setEnablePurchase: Dispatch<SetStateAction<boolean>>;
 	productId: string;
 	upgradeId: string;
 	donateId: string;
@@ -27,13 +53,15 @@ interface IProps {
 }
 
 interface IAcc {
-	upgradeItem?: IAPItemDetails;
-	purchaseItem?: IAPItemDetails;
+	upgradeItem?: PurchaseProp;
+	purchaseItem?: PurchaseProp;
+	donateId?: PurchaseProp;
 }
 
 export const Purchase: React.FC<IProps> = ({
 	isPurchaselVisible,
 	setIsPurchaselVisible,
+	setEnablePurchase,
 	productId,
 	upgradeId,
 	donateId,
@@ -41,87 +69,284 @@ export const Purchase: React.FC<IProps> = ({
 	donate = false,
 }: IProps) => {
 	const [componentPurchases, setComponentPurchases] = useState<IAcc>({});
-	const { height } = useWindowDimensions();
+	const [isDonate, setIsDonate] = useState(false);
+	const [isDonateThanksOpen, setDonateThanksOpen] = useState(false);
+	const { height, width } = useWindowDimensions();
 	const { t } = useTranslation();
+	const { connected, products, getProducts, currentPurchase } = useIAP();
 	const translateY = useRef(new Animated.Value(height)).current;
-	const { inAppPurchases } = useSerivces();
 	const netInfo = useNetInfo();
-
+	const theme = useContext(ThemeContext);
 	const items = Platform.select({
 		android: [
-			// '1_export_month_fin_truck',
-			// '1_premium_fin_truck',
-			// '1_add_truck_fin_truck',
-			// '1_export_year_fin_truck',
-			// '1_donate_fin_truck',
-			'android.test.purchased',
-			'android.test.refunded',
-			'android.test.canceled',
-			'android.test.item_unavailable',
+			'1_export_month_fin_truck',
+			'1_premium_fin_truck',
+			'1_add_truck_fin_truck',
+			'1_export_year_fin_truck',
+			'1_donate_fin_truck',
+
+			// 'android.test.purchased',
+			// 'android.test.refunded',
+			// 'android.test.canceled',
+			// 'android.test.item_unavailable',
 		],
 	});
 
 	useEffect(() => {
-		if (netInfo.isConnected && isPurchaselVisible) {
-			inAppPurchases.getProducts(items).then(response => {
-				if (Object.keys(componentPurchases)?.length === 0) {
-					if (response?.results.length > 0) {
-						const componentPurchases: IAcc = {
-							[productId]: null,
-							[upgradeId]: null,
-							[donateId]: null,
-						};
-						response?.results?.forEach(p => {
-							if (p.productId === productId) {
-								componentPurchases[productId] = p;
-							} else if (p.productId === upgradeId) {
-								componentPurchases[upgradeId] = p;
-							}
-						});
-						setComponentPurchases(componentPurchases);
-					}
-				}
-			});
+		if (isPurchaselVisible) {
+			Animated.timing(translateY, {
+				toValue: 0,
+				duration: 500,
+				useNativeDriver: true,
+			}).start();
+			return;
 		}
-	}, [
-		inAppPurchases,
-		items,
-		productId,
-		componentPurchases,
-		upgradeId,
-		netInfo.isConnected,
-		isPurchaselVisible,
-		donateId,
-	]);
-
-	useEffect(() => {
-		// if (isPurchaselVisible) {
-		Animated.timing(translateY, {
-			toValue: 0,
-			duration: 500,
-			useNativeDriver: true,
-		}).start();
-		return;
-		// }
 		Animated.timing(translateY, {
 			toValue: height,
 			duration: 500,
 			useNativeDriver: true,
 		}).start();
 	}, [height, isPurchaselVisible, translateY]);
-	console.log(componentPurchases);
+
+	useEffect(() => {
+		if (connected && products.length === 0) {
+			getProducts(items);
+		}
+	}, [connected, getProducts, items, products.length]);
+
+	useEffect(() => {
+		if (products.length > 0) {
+			const selectedPurchases: IAcc = {};
+			products.forEach(p => {
+				if (p.productId === productId) {
+					selectedPurchases[productId] = p;
+				}
+				if (p.productId === upgradeId) {
+					selectedPurchases[upgradeId] = p;
+				}
+				if (p.productId === donateId) {
+					selectedPurchases[donateId] = p;
+				}
+			});
+			setComponentPurchases(selectedPurchases);
+		}
+	}, [donateId, productId, products, upgradeId]);
+
+	useEffect(() => {
+		const checkCurrentPurchase = async (
+			purchase?: PurchaseProp,
+		): Promise<void> => {
+			if (purchase) {
+				const receipt = purchase.transactionReceipt;
+				if (receipt)
+					try {
+						console.log(purchase.productId === donateId);
+						if (purchase.productId === donateId) {
+							setDonateThanksOpen(true);
+						}
+						const ackResult = await finishTransaction(purchase, true);
+						console.log('ackResult', ackResult);
+					} catch (ackErr) {
+						console.warn('ackErr', ackErr);
+					}
+			}
+		};
+		checkCurrentPurchase(currentPurchase);
+	}, [currentPurchase, donateId]);
+
+	const purchase = useCallback(
+		(id: string): void => {
+			const item = products.find(p => p.productId === id);
+			if (item.type === 'inapp') requestPurchase(item.productId);
+		},
+		[products],
+	);
+
+	if (upgrade) {
+		return (
+			<>
+				<Container
+					style={{
+						transform: [{ translateY }],
+					}}
+				>
+					<CloseButton onPress={() => setIsPurchaselVisible(false)}>
+						<AntDesign name="close" size={24} color={theme.colors.text} />
+					</CloseButton>
+					<Title>{t(TranslationsValues.help)}</Title>
+					<ScrollView>
+						<PurchaseContainer key={shortid()}>
+							<PurchaseTitle>
+								{componentPurchases[donateId]?.title ?? ''}{' '}
+								{componentPurchases[donateId]?.localizedPrice ?? ''}
+							</PurchaseTitle>
+							<PurchaseDescription>
+								{componentPurchases[donateId]?.description ?? ''}
+							</PurchaseDescription>
+							<PurchaseButton>
+								<ButtonLabel>{t(TranslationsValues.donate)}</ButtonLabel>
+							</PurchaseButton>
+						</PurchaseContainer>
+						<PurchaseContainer key={shortid()}>
+							<PurchaseTitle>
+								{componentPurchases[upgradeId]?.title ?? ''}{' '}
+								{componentPurchases[upgradeId]?.localizedPrice ?? ''}
+							</PurchaseTitle>
+							<PurchaseDescription>
+								{componentPurchases[upgradeId]?.description ?? ''}
+							</PurchaseDescription>
+							<PurchaseButton>
+								<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
+							</PurchaseButton>
+						</PurchaseContainer>
+					</ScrollView>
+				</Container>
+				<Modal visible={isDonateThanksOpen} animationType="fade">
+					<LikeContainer>
+						<CloseButton onPress={() => setDonateThanksOpen(false)}>
+							<AntDesign name="close" size={35} color={theme.colors.text} />
+						</CloseButton>
+						<LottieView
+							autoPlay
+							loop
+							source={Like}
+							resizeMode="contain"
+							autoSize
+							style={{
+								height: width * 0.5,
+								width: width * 0.5,
+								backgroundColor: theme.colors.background,
+							}}
+						/>
+						<LikeLabel>{t(TranslationsValues.thanks)}</LikeLabel>
+					</LikeContainer>
+				</Modal>
+			</>
+		);
+	}
+
+	if (donate) {
+		return (
+			<>
+				<Container
+					style={{
+						transform: [{ translateY }],
+					}}
+				>
+					<CloseButton onPress={() => setIsPurchaselVisible(false)}>
+						<AntDesign name="close" size={24} color={theme.colors.text} />
+					</CloseButton>
+					<Title>{t(TranslationsValues.help)}</Title>
+					<ScrollView>
+						<PurchaseContainer key={shortid()}>
+							<PurchaseTitle>
+								{componentPurchases[donateId]?.title ?? ''}{' '}
+								{componentPurchases[donateId]?.localizedPrice ?? ''}
+							</PurchaseTitle>
+							<PurchaseDescription>
+								{componentPurchases[donateId]?.description ?? ''}
+							</PurchaseDescription>
+							<PurchaseButton>
+								<ButtonLabel>{t(TranslationsValues.donate)}</ButtonLabel>
+							</PurchaseButton>
+						</PurchaseContainer>
+					</ScrollView>
+				</Container>
+				<Modal visible={isDonateThanksOpen} animationType="fade">
+					<LikeContainer>
+						<CloseButton onPress={() => setDonateThanksOpen(false)}>
+							<AntDesign name="close" size={35} color={theme.colors.text} />
+						</CloseButton>
+						<LottieView
+							autoPlay
+							loop
+							source={Like}
+							resizeMode="contain"
+							autoSize
+							style={{
+								height: width * 0.5,
+								width: width * 0.5,
+								backgroundColor: theme.colors.background,
+							}}
+						/>
+						<LikeLabel>{t(TranslationsValues.thanks)}</LikeLabel>
+					</LikeContainer>
+				</Modal>
+			</>
+		);
+	}
+
 	return (
-		<Container
-			style={{
-				transform: [{ translateY }],
-			}}
-		>
-			<PurchaseContainer key={shortid()}>
-				<Title>{componentPurchases[upgradeId]?.title}</Title>
-			</PurchaseContainer>
-			<PurchaseContainer key={shortid()}>
-				<Title>{componentPurchases[productId]?.title}</Title>
-			</PurchaseContainer>
-		</Container>
+		<>
+			<Container
+				style={{
+					transform: [{ translateY }],
+				}}
+			>
+				<CloseButton onPress={() => setIsPurchaselVisible(false)}>
+					<AntDesign name="close" size={24} color={theme.colors.text} />
+				</CloseButton>
+				<Title>{t(TranslationsValues.help)}</Title>
+				<ScrollView>
+					<PurchaseContainer key={shortid()}>
+						<PurchaseTitle>
+							{componentPurchases[productId]?.title ?? ''}{' '}
+							{componentPurchases[productId]?.localizedPrice ?? ''}
+						</PurchaseTitle>
+						<PurchaseDescription>
+							{componentPurchases[productId]?.description ?? ''}
+						</PurchaseDescription>
+						<PurchaseButton>
+							<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
+						</PurchaseButton>
+					</PurchaseContainer>
+					<PurchaseContainer key={shortid()}>
+						<PurchaseTitle>
+							{componentPurchases[donateId]?.title ?? ''}{' '}
+							{componentPurchases[donateId]?.localizedPrice ?? ''}
+						</PurchaseTitle>
+						{/* ANCHOR */}
+						<PurchaseDescription>
+							{componentPurchases[donateId]?.description ?? ''}
+						</PurchaseDescription>
+						<PurchaseButton onPress={() => purchase(donateId)}>
+							<ButtonLabel>{t(TranslationsValues.donate)}</ButtonLabel>
+						</PurchaseButton>
+					</PurchaseContainer>
+					<PurchaseContainer key={shortid()}>
+						<PurchaseTitle>
+							{componentPurchases[upgradeId]?.title ?? ''}{' '}
+							{componentPurchases[upgradeId]?.localizedPrice ?? ''}
+						</PurchaseTitle>
+						<PurchaseDescription>
+							{componentPurchases[upgradeId]?.description ?? ''}
+						</PurchaseDescription>
+						<PurchaseButton>
+							<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
+						</PurchaseButton>
+					</PurchaseContainer>
+				</ScrollView>
+			</Container>
+			<Modal visible={isDonateThanksOpen} animationType="fade">
+				<LikeContainer>
+					<CloseButton onPress={() => setDonateThanksOpen(false)}>
+						<AntDesign name="close" size={35} color={theme.colors.text} />
+					</CloseButton>
+					<LottieView
+						autoPlay
+						loop
+						source={Like}
+						resizeMode="contain"
+						autoSize
+						style={{
+							height: width * 0.5,
+							width: width * 0.5,
+							backgroundColor: theme.colors.background,
+						}}
+					/>
+					<LikeLabel>{t(TranslationsValues.thanks)}</LikeLabel>
+				</LikeContainer>
+			</Modal>
+		</>
 	);
 };

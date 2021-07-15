@@ -63,7 +63,8 @@
 		"react/require-default-props": "off",
 		"max-classes-per-file": "off",
 		"import/no-duplicates": "off",
-		"no-return-assign":"off"
+		"no-return-assign":"off",
+		"class-methods-use-this": "off"
 	},
 	"settings": {
     "import/resolver": {

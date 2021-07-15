@@ -1,18 +1,27 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
+import { ToastAndroid, View } from 'react-native';
 import Input, { IInputRef } from '@/components/input';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTruck } from '@/store/actions';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { routeNames, RootStackParamList } from '@/navigation/types';
 import { useSerivces } from '@/hooks/useServices';
 import AddTruckIcon from '@/icons/CreateTruckIcon.png';
 import { Button } from '@/components/button';
-import { ToastAndroid } from 'react-native';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
-import { Container, Image, Form, scrollView, ButtonContainer } from './styles';
+import { Purchase } from '@/components/purchase';
+import { IState } from '@/store/types';
+import {
+	Container,
+	AddTruckContainer,
+	Image,
+	Form,
+	scrollView,
+	ButtonContainer,
+} from './styles';
 
 interface IData {
 	name: string;
@@ -29,8 +38,11 @@ type Props = {
 };
 
 export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
+	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
+	const [enablePurchase, setEnablePurchase] = useState(false);
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
+	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { truckRepository } = useSerivces();
 	const { t } = useTranslation();
@@ -49,6 +61,11 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					abortEarly: false,
 				});
 				const { name, board } = data;
+				// buy
+				if (trucks.length > 0 && !enablePurchase) {
+					setIsPurchaselVisible(true);
+					return;
+				}
 				const newTruck = await truckRepository.createTruck({ name, board });
 				dispatch(addTruck(newTruck));
 				formRef.current.setErrors({});
@@ -71,7 +88,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				}
 			}
 		},
-		[dispatch, navigate, t, truckRepository],
+		[dispatch, enablePurchase, navigate, t, truckRepository, trucks.length],
 	);
 
 	const submit = useCallback(() => {
@@ -79,8 +96,8 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	}, []);
 
 	return (
-		<>
-			<Container contentContainerStyle={scrollView.content}>
+		<Container>
+			<AddTruckContainer contentContainerStyle={scrollView.content}>
 				<Image source={AddTruckIcon} />
 				<Form ref={formRef} onSubmit={handleSubmit}>
 					<Input
@@ -112,7 +129,18 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 						next
 					/>
 				</ButtonContainer>
-			</Container>
-		</>
+			</AddTruckContainer>
+			<Purchase
+				productId="1_add_truck_fin_truck"
+				upgradeId="1_premium_fin_truck"
+				donateId="1_donate_fin_truck"
+				// productId="android.test.purchased"
+				// upgradeId="android.test.canceled"
+				// donateId="android.test.refunded"
+				setEnablePurchase={setEnablePurchase}
+				isPurchaselVisible={isPurchaselVisible}
+				setIsPurchaselVisible={setIsPurchaselVisible}
+			/>
+		</Container>
 	);
 };

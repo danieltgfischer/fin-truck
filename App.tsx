@@ -14,6 +14,11 @@ import { Navigation } from '@/navigation/stack';
 import store from '@/store';
 import { LoadingContainer } from '@/navigation/style';
 import { preloadImages } from '@/utils/preload-images';
+import {
+	finishTransactionAsync,
+	IAPResponseCode,
+	setPurchaseListener,
+} from 'expo-in-app-purchases';
 
 // TODO load use terms and load firts time
 
@@ -44,6 +49,32 @@ const App: React.FC = () => {
 		]);
 		await Promise.all([...imageAssets, ...fontAssets]);
 	}, [cacheFonts, cacheImages]);
+
+	setPurchaseListener(({ responseCode, results, errorCode }) => {
+		// Purchase was successful
+		if (responseCode === IAPResponseCode.OK) {
+			results.forEach(purchase => {
+				console.log(purchase);
+				if (!purchase.acknowledged) {
+					console.log(`Successfully purchased ${purchase.productId}`);
+					// Process transaction here and unlock content...
+
+					// Then when you're done
+					finishTransactionAsync(purchase, true);
+				}
+			});
+		} else if (responseCode === IAPResponseCode.USER_CANCELED) {
+			console.log('User canceled the transaction');
+		} else if (responseCode === IAPResponseCode.DEFERRED) {
+			console.log(
+				'User does not have permissions to buy but requested parental approval (iOS only)',
+			);
+		} else {
+			console.warn(
+				`Something went wrong with the purchase. Received errorCode ${errorCode}`,
+			);
+		}
+	});
 
 	if (!isReady) {
 		return (

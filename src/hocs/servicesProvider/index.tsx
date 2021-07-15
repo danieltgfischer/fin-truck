@@ -11,7 +11,6 @@ import dark from '@/styles/themes/dark';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
-import { IAP } from '@/services/purchases/data';
 
 interface IProps {
 	children: ReactNode;
@@ -66,7 +65,6 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 			value={{
 				truckRepository: new TruckRepository(connection),
 				billingRepository: new BilliginRepository(connection),
-				inAppPurchases: new IAP(),
 			}}
 		>
 			{children}

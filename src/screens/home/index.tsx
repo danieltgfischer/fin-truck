@@ -14,8 +14,6 @@ import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
-
-import { Purchase } from '@/components/purchase';
 import {
 	ButtonIcon,
 	HomeContainer,
@@ -45,7 +43,6 @@ export type ListRenderItem<ItemT> = (
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [isPurchaselVisible, setIsPurchaselVisible] = useState(true);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
 	const { truckRepository } = useSerivces();
@@ -102,11 +99,15 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		[navigation],
 	);
 
+	const closeAll = useCallback(() => {
+		setIsModalVisible(false);
+	}, []);
+
 	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
 
 	return (
 		<Container>
-			<CloseMenuContainer onPress={() => setIsModalVisible(false)}>
+			<CloseMenuContainer onPress={closeAll}>
 				<HomeContainer>
 					<Title>{t(TranslationsValues.title_home)}:</Title>
 					<FlatList
@@ -135,13 +136,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 			<Menu
 				isModalVisible={isModalVisible}
 				setIsModalVisible={setIsModalVisible}
-			/>
-			<Purchase
-				productId="android.test.purchased"
-				upgradeId="android.test.canceled"
-				donateId="android.test.refuned"
-				isPurchaselVisible={isPurchaselVisible}
-				setIsPurchaselVisible={setIsPurchaselVisible}
 			/>
 		</Container>
 	);

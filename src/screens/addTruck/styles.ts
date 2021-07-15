@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Form as UnForm } from '@unform/mobile';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export const scrollView = StyleSheet.create({
 	content: {
@@ -12,10 +12,15 @@ export const scrollView = StyleSheet.create({
 	},
 });
 
-export const Container = styled.ScrollView`
+export const Container = styled.View`
+	height: ${height}px;
+	width: ${width}px;
+`;
+
+export const AddTruckContainer = styled.ScrollView`
 	display: flex;
-	height: 100%;
-	width: 100%;
+	height: ${height}px;
+	width: ${width}px;
 	background-color: ${({ theme }) => theme.colors.background};
 `;
 

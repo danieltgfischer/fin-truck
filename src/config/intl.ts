@@ -89,6 +89,10 @@ export enum TranslationsValues {
 	modal_terms_title = 'modal_terms_title',
 	network_offline = 'network_offline',
 	network_error = 'network_error',
+	help = 'help',
+	buy = 'buy',
+	donate = 'donate',
+	thanks = 'thanks',
 }
 
 export const translations = {
@@ -205,6 +209,10 @@ export const translations = {
 		network_offline:
 			'You are offline, you must be logged in to make a purchase',
 		network_error: 'Error checking connection',
+		help: 'I Need Your Help',
+		buy: 'Buy',
+		donate: 'Donate',
+		thanks: 'Thank you so much!',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -320,5 +328,9 @@ export const translations = {
 		network_offline:
 			'Você está offline, é necessário estar conectado para realizar uma compra',
 		network_error: 'Error ao verificar conexão',
+		help: 'Eu Preciso Da Sua Ajuda',
+		buy: 'Comprar',
+		donate: 'Doar',
+		thanks: 'Muito Obrigado!',
 	},
 };
