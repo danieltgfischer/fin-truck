@@ -3,11 +3,18 @@ import { Animated, Dimensions, StyleSheet } from 'react-native';
 import { darken } from 'polished';
 
 const { height, width } = Dimensions.get('window');
+const heightPurchase = height > 670 ? height * 1.2 : height * 1.8;
 
 export const scrollViewStyle = StyleSheet.create({
-	content: { minHeight: height },
+	content: {
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		paddingVertical: 5,
+		minHeight: heightPurchase,
+	},
 });
-export const Container = styled(Animated.View)`
+
+export const Container = styled(Animated.ScrollView)`
 	position: absolute;
 	height: ${height}px;
 	width: 100%;
@@ -17,8 +24,6 @@ export const Container = styled(Animated.View)`
 	border-top-color: ${({ theme }) =>
 		theme.name === 'dark' ? darken(0.05, theme.colors.text) : 'transparent'};
 	elevation: 15;
-	align-items: center;
-	justify-content: flex-start;
 `;
 
 export const LikeContainer = styled.View`
@@ -35,18 +40,38 @@ export const LikeLabel = styled.Text`
 	color: ${({ theme }) => theme.colors.text};
 `;
 
+export const UpgradeContainer = styled.View`
+	align-items: center;
+	justify-content: flex-start;
+	height: ${height * 0.9}px;
+	width: ${width * 0.9}px;
+	background-color: ${({ theme }) => theme.colors.background};
+`;
+
+export const UpgradeLabel = styled(LikeLabel)`
+	font-size: 24px;
+	text-align: center;
+	padding: 0 5px;
+	top: -35px;
+`;
+
 export const Title = styled.Text`
 	color: ${({ theme }) => theme.colors.text};
 	font-size: 32px;
 	margin: 5px 0;
 	font-family: Regular;
 `;
+interface IPContainer {
+	even?: boolean;
+}
 
-export const PurchaseContainer = styled.View`
+export const PurchaseContainer = styled.View<IPContainer>`
 	width: ${width}px;
 	align-items: center;
-	padding: 0 20px;
-	margin: 10px 0;
+	padding: 10px 20px;
+	margin: 5px 0;
+	background-color: ${({ even, theme }) =>
+		even ? theme.colors.secondary : theme.colors.background};
 `;
 
 export const PurchaseTitle = styled.Text`

@@ -21,6 +21,7 @@ import {
 } from 'expo-in-app-purchases';
 
 // TODO load use terms and load firts time
+// TODO wanrning Store connetc and Net connect
 
 const App: React.FC = () => {
 	const [isReady, setIsReady] = useState(false);

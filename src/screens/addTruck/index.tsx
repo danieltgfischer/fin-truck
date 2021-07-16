@@ -1,5 +1,10 @@
 import React, { useRef, useCallback, useState } from 'react';
-import { ToastAndroid, View } from 'react-native';
+import {
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	ToastAndroid,
+} from 'react-native';
 import Input, { IInputRef } from '@/components/input';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import * as Yup from 'yup';
@@ -97,39 +102,44 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 
 	return (
 		<Container>
-			<AddTruckContainer contentContainerStyle={scrollView.content}>
-				<Image source={AddTruckIcon} />
-				<Form ref={formRef} onSubmit={handleSubmit}>
-					<Input
-						name="name"
-						label={t(TranslationsValues.add_name_truck_label)}
-						returnKeyType="next"
-						requiredLabel
-						maxLength={16}
-						onSubmitEditing={() => nextInputRef.current?.focus()}
-					/>
-					<Input
-						name="board"
-						label={t(TranslationsValues.add_board_truck_label)}
-						maxLength={12}
-						requiredLabel
-						returnKeyType="send"
-						onSubmitEditing={submit}
-						ref={nextInputRef}
-					/>
-				</Form>
-				<ButtonContainer>
-					<Button
-						onPress={navigate}
-						buttonLabel={t(TranslationsValues.cancel)}
-					/>
-					<Button
-						onPress={submit}
-						buttonLabel={t(TranslationsValues.add)}
-						next
-					/>
-				</ButtonContainer>
-			</AddTruckContainer>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+				style={{ flex: 1 }}
+			>
+				<AddTruckContainer contentContainerStyle={scrollView.content}>
+					<Image source={AddTruckIcon} />
+					<Form ref={formRef} onSubmit={handleSubmit}>
+						<Input
+							name="name"
+							label={t(TranslationsValues.add_name_truck_label)}
+							returnKeyType="next"
+							requiredLabel
+							maxLength={16}
+							onSubmitEditing={() => nextInputRef.current?.focus()}
+						/>
+						<Input
+							name="board"
+							label={t(TranslationsValues.add_board_truck_label)}
+							maxLength={12}
+							requiredLabel
+							returnKeyType="send"
+							onSubmitEditing={submit}
+							ref={nextInputRef}
+						/>
+					</Form>
+					<ButtonContainer>
+						<Button
+							onPress={navigate}
+							buttonLabel={t(TranslationsValues.cancel)}
+						/>
+						<Button
+							onPress={submit}
+							buttonLabel={t(TranslationsValues.add)}
+							next
+						/>
+					</ButtonContainer>
+				</AddTruckContainer>
+			</KeyboardAvoidingView>
 			<Purchase
 				productId="1_add_truck_fin_truck"
 				upgradeId="1_premium_fin_truck"

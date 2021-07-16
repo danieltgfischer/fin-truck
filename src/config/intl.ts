@@ -93,6 +93,7 @@ export enum TranslationsValues {
 	buy = 'buy',
 	donate = 'donate',
 	thanks = 'thanks',
+	upgrade_message = 'upgrade_message',
 }
 
 export const translations = {
@@ -213,6 +214,8 @@ export const translations = {
 		buy: 'Buy',
 		donate: 'Donate',
 		thanks: 'Thank you so much!',
+		upgrade_message:
+			'Congratulations, you have just purchased the Premium plan. All features of this app in the Premium plan are accessible, now you can add more than one truck and share your monthly and yearly records without the presence of ads, except for commercial partnerships',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -332,5 +335,7 @@ export const translations = {
 		buy: 'Comprar',
 		donate: 'Doar',
 		thanks: 'Muito Obrigado!',
+		upgrade_message:
+			'Parabéns, você acaba de adquirir o plano Premium. Todas as funcionalidades deste aplicativo no plano Premium estão acessíveis, agora você pode adicionar mais de um caminhão e compartilhar seus registros mensais e anuais sem a presença de anúncios, exceto para parcerias comerciais',
 	},
 };

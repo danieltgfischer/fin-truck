@@ -28,32 +28,37 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 	const [isPurchasesCalled, setPurchasesCalled] = useState(false);
 	const [isPremium, setIsPremium] = useState(false);
 	const { getAvailablePurchases, connected, availablePurchases } = useIAP();
-	const updateIsPremium = useCallback(async () => {
-		// if (!connected) initConnection();
-		const premiumValueStoraged = JSON.parse(
-			await AsyncStorage.getItem('@PremiumApp'),
-		);
-		if (premiumValueStoraged) {
-			setIsPremium(premiumValueStoraged);
-			return;
-		}
-		if (connected && !isPurchasesCalled) {
-			getAvailablePurchases();
-			setPurchasesCalled(true);
-			const premiumValue = availablePurchases.some(p => {
-				console.log(p);
-				return p.productId === '1_premium_fin_truck';
-			});
-			await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
-			setIsPremium(premiumValue);
-			return;
-		}
-		setIsPremium(Boolean(premiumValueStoraged));
-	}, [availablePurchases, connected, getAvailablePurchases, isPurchasesCalled]);
+
+	const updateStorageIsPremium = useCallback(async () => {
+		const premiumValue = availablePurchases.some(p => {
+			return p.productId === '1_premium_fin_truck';
+		});
+		await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
+		setIsPremium(premiumValue);
+	}, [availablePurchases]);
 
 	useEffect(() => {
+		const updateIsPremium = async () => {
+			const premiumValue = JSON.parse(
+				await AsyncStorage.getItem('@PremiumApp'),
+			);
+			if (premiumValue) {
+				setIsPremium(premiumValue);
+				return;
+			}
+
+			setIsPremium(Boolean(premiumValue));
+			if (connected && !isPurchasesCalled && !premiumValue) {
+				getAvailablePurchases();
+				setPurchasesCalled(true);
+			}
+		};
 		updateIsPremium();
-	}, [updateIsPremium]);
+	}, [connected, getAvailablePurchases, isPurchasesCalled]);
+
+	useEffect(() => {
+		if (availablePurchases.length > 0) updateStorageIsPremium();
+	}, [availablePurchases, updateStorageIsPremium]);
 
 	const connect = useCallback(async () => {
 		try {
@@ -97,6 +102,7 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 				billingRepository: new BilliginRepository(connection),
 				isPremium,
 				setIsPremium,
+				isItemsStoreConnected: connected,
 			}}
 		>
 			{children}
