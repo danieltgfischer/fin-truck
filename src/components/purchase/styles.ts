@@ -3,7 +3,7 @@ import { Animated, Dimensions, StyleSheet } from 'react-native';
 import { darken } from 'polished';
 
 const { height, width } = Dimensions.get('window');
-const heightPurchase = height > 670 ? height * 1.2 : height * 1.8;
+const heightPurchase = height > 670 ? height * 1.2 : height * 1.5;
 
 export const scrollViewStyle = StyleSheet.create({
 	content: {
@@ -11,6 +11,14 @@ export const scrollViewStyle = StyleSheet.create({
 		justifyContent: 'flex-start',
 		paddingVertical: 5,
 		minHeight: heightPurchase,
+	},
+	upgradeScrollContent: {
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		height: height * 0.6,
+	},
+	upgradScroll: {
+		top: -75,
 	},
 });
 
@@ -24,35 +32,6 @@ export const Container = styled(Animated.ScrollView)`
 	border-top-color: ${({ theme }) =>
 		theme.name === 'dark' ? darken(0.05, theme.colors.text) : 'transparent'};
 	elevation: 15;
-`;
-
-export const LikeContainer = styled.View`
-	align-items: center;
-	justify-content: flex-start;
-	height: ${height * 0.6}px;
-	width: ${width * 0.9}px;
-	background-color: ${({ theme }) => theme.colors.background};
-`;
-
-export const LikeLabel = styled.Text`
-	font-family: Italic;
-	font-size: 32px;
-	color: ${({ theme }) => theme.colors.text};
-`;
-
-export const UpgradeContainer = styled.View`
-	align-items: center;
-	justify-content: flex-start;
-	height: ${height * 0.9}px;
-	width: ${width * 0.9}px;
-	background-color: ${({ theme }) => theme.colors.background};
-`;
-
-export const UpgradeLabel = styled(LikeLabel)`
-	font-size: 24px;
-	text-align: center;
-	padding: 0 5px;
-	top: -35px;
 `;
 
 export const Title = styled.Text`
@@ -105,4 +84,5 @@ export const ButtonLabel = styled.Text`
 export const CloseButton = styled.TouchableOpacity`
 	align-self: flex-end;
 	padding: 5px 15px 0;
+	z-index: 1;
 `;

@@ -3,10 +3,11 @@ import { Dimensions, Animated } from 'react-native';
 import { darken } from 'polished';
 
 const { height } = Dimensions.get('window');
+const heightMenuContainer = height >= 592 ? height * 0.6 : height * 0.7;
 
 export const Container = styled(Animated.View)`
 	position: absolute;
-	height: ${height * 0.7}px;
+	height: ${heightMenuContainer}px;
 	width: 100%;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
