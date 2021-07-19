@@ -67,7 +67,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				});
 				const { name, board } = data;
 				// buy
-				if (trucks.length > 0 && !enablePurchase) {
+				if (trucks.length > 0) {
 					setIsPurchaselVisible(true);
 					return;
 				}
@@ -93,7 +93,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				}
 			}
 		},
-		[dispatch, enablePurchase, navigate, t, truckRepository, trucks.length],
+		[dispatch, navigate, t, truckRepository, trucks.length],
 	);
 
 	const submit = useCallback(() => {
@@ -147,7 +147,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				// productId="android.test.purchased"
 				// upgradeId="android.test.canceled"
 				// donateId="android.test.refunded"
-				setEnablePurchase={setEnablePurchase}
+				purchasedFunctionCallback={() => null}
 				isPurchaselVisible={isPurchaselVisible}
 				setIsPurchaselVisible={setIsPurchaselVisible}
 			/>

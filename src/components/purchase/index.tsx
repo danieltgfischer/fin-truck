@@ -15,8 +15,10 @@ import {
 	Purchase as PurchaseProp,
 	requestPurchase,
 	useIAP,
+	requestSubscription,
 	PurchaseError,
 	ProductPurchase,
+	PurchaseStateAndroid,
 } from 'react-native-iap';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSerivces } from '@/hooks/useServices';
@@ -49,19 +51,12 @@ export const Purchase: React.FC<IProps> = ({
 	const [componentPurchases, setComponentPurchases] = useState<IAcc>({});
 	const [isDonateThanksOpen, setDonateThanksOpen] = useState(false);
 	const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
+	const [products, setProducts] = useState([]);
 	const { height } = useWindowDimensions();
 	const { setIsPremium } = useSerivces();
-	const { connected, products, getProducts, currentPurchase } = useIAP();
 	const translateY = useRef(new Animated.Value(height)).current;
-
 	const items = Platform.select({
-		android: [
-			'1_export_month_fin_truck',
-			'1_premium_fin_truck',
-			'1_add_truck_fin_truck',
-			'1_export_year_fin_truck',
-			'1_donate_fin_truck',
-		],
+		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
 	});
 
 	useEffect(() => {
@@ -80,15 +75,16 @@ export const Purchase: React.FC<IProps> = ({
 		}).start();
 	}, [height, props.isPurchaselVisible, translateY]);
 
-	useEffect(() => {
-		if (connected && products.length === 0) {
-			getProducts(items);
-			// ANCHOR
-			// consumeAllItemsAndroid();
-		}
-	}, [connected, getProducts, items, products.length]);
+	// useEffect(() => {
+	// 	if (connected && products.length === 0) {
+	// 		getProducts(items);
+	// 		// ANCHOR
+	// 		// consumeAllItemsAndroid();
+	// 	}
+	// }, [connected, getProducts, items, products.length]);
 
 	useEffect(() => {
+		// set items to component
 		if (products.length > 0) {
 			const selectedPurchases: IAcc = {};
 			products.forEach(p => {
@@ -107,46 +103,47 @@ export const Purchase: React.FC<IProps> = ({
 	}, [props.donateId, props.productId, products, props.upgradeId]);
 
 	useEffect(() => {
-		// TODO modal se upgrade for pendent
-		// TODO liberar produto se está pendente a compra  no errorListner
-		// TODO alterar mensagem de doação para recebemos sua doação
-		// TODO deixar scroll no upgrade modal e melhorar estilo
-		purchaseUpdatedListener((purchase: ProductPurchase) => {
-			console.log(purchase);
-		});
-		// purchaseErrorListener((error: PurchaseError) => {})
-	}, []);
-
-	useEffect(() => {
 		// ANCHOR
+		// updateListner
 		const checkCurrentPurchase = async (
 			purchase?: PurchaseProp,
 		): Promise<void> => {
+			console.log(
+				'CHECK_CURRENT_PURCHASE',
+				purchase.productId,
+				purchase.purchaseStateAndroid,
+				purchase.transactionReceipt,
+			);
+			// if(purchase)
 			if (purchase) {
 				const receipt = purchase.transactionReceipt;
-				if (receipt)
+				if (receipt) {
+					const allowUpgrade =
+						purchase.productId === props.upgradeId &&
+						purchase.purchaseStateAndroid === PurchaseStateAndroid.PURCHASED;
+					const allowItem = true;
+					// purchase.purchaseStateAndroid === PurchaseStateAndroid.PURCHASED;
 					try {
-						if (purchase.productId === props.upgradeId) {
-							await finishTransaction(purchase, false);
+						if (allowUpgrade) {
+							await finishTransaction(purchase);
 							await AsyncStorage.setItem('@PremiumApp', JSON.stringify(true));
 							setIsPremium(true);
 							setUpgradeModalOpen(true);
 							return;
 						}
-						const ackResult = await finishTransaction(purchase, true);
-						if (purchase.productId === props.donateId) {
-							console.log(purchase.productId);
-							setDonateThanksOpen(true);
+						if (allowItem) {
+							await finishTransaction(purchase);
+							if (purchase.productId === props.donateId) {
+								setDonateThanksOpen(true);
+							}
 						}
 					} catch (ackErr) {
 						console.error('ackErr', ackErr);
-						const res = await flushFailedPurchasesCachedAsPendingAndroid();
-						console.log(res);
 					}
+				}
 			}
 		};
-		checkCurrentPurchase(currentPurchase);
-	}, [currentPurchase, props.donateId, setIsPremium, props.upgradeId]);
+	}, [props.donateId, setIsPremium, props.upgradeId]);
 
 	const purchase = useCallback(
 		(id: string): void => {

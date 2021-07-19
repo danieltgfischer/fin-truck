@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, LogBox } from 'react-native';
-import { useIAP, initConnection } from 'react-native-iap';
+import { useIAP } from 'react-native-iap';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Connection, createConnection, getConnectionManager } from 'typeorm';
 import { ServicesConnectionContext } from '@/contexts/servicesConnection';
@@ -39,6 +39,7 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 
 	useEffect(() => {
 		const updateIsPremium = async () => {
+			// await AsyncStorage.clear();
 			const premiumValue = JSON.parse(
 				await AsyncStorage.getItem('@PremiumApp'),
 			);
@@ -46,7 +47,6 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 				setIsPremium(premiumValue);
 				return;
 			}
-
 			setIsPremium(Boolean(premiumValue));
 			if (connected && !isPurchasesCalled && !premiumValue) {
 				getAvailablePurchases();

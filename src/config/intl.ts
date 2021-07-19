@@ -93,7 +93,12 @@ export enum TranslationsValues {
 	buy = 'buy',
 	donate = 'donate',
 	thanks = 'thanks',
+	congrats = 'congrats',
 	upgrade_message = 'upgrade_message',
+	upgrade_feature1 = 'upgrade_feature1',
+	upgrade_feature2 = 'upgrade_feature2',
+	upgrade_feature3 = 'upgrade_feature3',
+	upgrade_feature4 = 'upgrade_feature4',
 }
 
 export const translations = {
@@ -213,9 +218,14 @@ export const translations = {
 		help: 'I Need Your Help',
 		buy: 'Buy',
 		donate: 'Donate',
-		thanks: 'Thank you so much!',
+		thanks: 'We received your donation. \nThank you so much!',
 		upgrade_message:
-			'Congratulations, you have just purchased the Premium plan. All features of this app in the Premium plan are accessible, now you can add more than one truck and share your monthly and yearly records without the presence of ads, except for commercial partnerships',
+			'You have just purchased the Premium plan. \n All features of this app in the Premium plan are accessible.',
+		congrats: 'Congratulations',
+		upgrade_feature1: 'Add more than one truck',
+		upgrade_feature2: 'Share monthly records',
+		upgrade_feature3: 'Share annual records',
+		upgrade_feature4: 'No ads, except commercial partnerships.',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -334,8 +344,13 @@ export const translations = {
 		help: 'Eu Preciso Da Sua Ajuda',
 		buy: 'Comprar',
 		donate: 'Doar',
-		thanks: 'Muito Obrigado!',
+		thanks: 'Recebemos sua doação. \nMuito Obrigado!',
 		upgrade_message:
-			'Parabéns, você acaba de adquirir o plano Premium. Todas as funcionalidades deste aplicativo no plano Premium estão acessíveis, agora você pode adicionar mais de um caminhão e compartilhar seus registros mensais e anuais sem a presença de anúncios, exceto para parcerias comerciais',
+			'Você acaba de adquirir o plano Premium. \n Todas as funcionalidades deste aplicativo no plano Premium estão acessíveis.',
+		congrats: 'Parabéns',
+		upgrade_feature1: 'Adicionar mais de um caminhão',
+		upgrade_feature2: 'Compartilhar registros mensais',
+		upgrade_feature3: 'Compartilhar registros anuais',
+		upgrade_feature4: 'Sem anúncios, exceto parcerias comerciais.',
 	},
 };

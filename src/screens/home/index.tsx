@@ -48,7 +48,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const { truckRepository, isPremium } = useSerivces();
 	const { colors } = useContext(ThemeContext);
 	const { t } = useTranslation();
-	console.log('home', isPremium);
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
