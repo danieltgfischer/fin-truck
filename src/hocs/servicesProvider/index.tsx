@@ -1,6 +1,12 @@
-import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, {
+	FC,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import { ActivityIndicator, LogBox } from 'react-native';
-import { useIAP } from 'react-native-iap';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Connection, createConnection, getConnectionManager } from 'typeorm';
 import { ServicesConnectionContext } from '@/contexts/servicesConnection';
@@ -13,6 +19,7 @@ import dark from '@/styles/themes/dark';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
+import { IAP } from '@/services/purchase/data';
 
 interface IProps {
 	children: ReactNode;
@@ -25,40 +32,52 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 }: IProps) => {
 	const { theme } = useSelector((state: IState) => state);
 	const [connection, setConnection] = useState<Connection | null>(null);
-	const [isPurchasesCalled, setPurchasesCalled] = useState(false);
+
+	const iapService = useRef(new IAP()).current;
+	const [isPurchaseStoreConnected, setIsPurchaseStoreConnected] =
+		useState(false);
 	const [isPremium, setIsPremium] = useState(false);
-	const { getAvailablePurchases, connected, availablePurchases } = useIAP();
+	const [availablePurchases, setAvailablePurchases] = useState([]);
+
+	useEffect(() => {
+		try {
+			iapService.startConnectionIAP().then(connection => {
+				setIsPurchaseStoreConnected(connection);
+			});
+		} catch (error) {
+			console.error(error);
+		}
+		return () => {
+			iapService.endConnectionIAP();
+		};
+	}, [iapService]);
 
 	const updateStorageIsPremium = useCallback(async () => {
-		const premiumValue = availablePurchases.some(p => {
-			return p.productId === '1_premium_fin_truck';
+		const premiumValue = availablePurchases?.some(p => {
+			return p.productId === '1_monthly_fin_truck';
 		});
 		await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
 		setIsPremium(premiumValue);
 	}, [availablePurchases]);
 
 	useEffect(() => {
-		const updateIsPremium = async () => {
-			// await AsyncStorage.clear();
-			const premiumValue = JSON.parse(
-				await AsyncStorage.getItem('@PremiumApp'),
-			);
-			if (premiumValue) {
-				setIsPremium(premiumValue);
-				return;
-			}
-			setIsPremium(Boolean(premiumValue));
-			if (connected && !isPurchasesCalled && !premiumValue) {
-				getAvailablePurchases();
-				setPurchasesCalled(true);
+		const setUserPurchases = async () => {
+			try {
+				const storeAvailablePurchases =
+					await iapService.getAvailablePurchases();
+				setAvailablePurchases(storeAvailablePurchases);
+			} catch (error) {
+				console.error(error);
 			}
 		};
-		updateIsPremium();
-	}, [connected, getAvailablePurchases, isPurchasesCalled]);
+		if (isPurchaseStoreConnected) {
+			setUserPurchases();
+		}
+	}, [iapService, isPurchaseStoreConnected]);
 
 	useEffect(() => {
 		if (availablePurchases.length > 0) updateStorageIsPremium();
-	}, [availablePurchases, updateStorageIsPremium]);
+	}, [availablePurchases.length, updateStorageIsPremium]);
 
 	const connect = useCallback(async () => {
 		try {
@@ -83,6 +102,7 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 	useEffect(() => {
 		connect();
 	}, [connect, connection]);
+
 	const defaultTheme = theme === 'light' ? light : dark;
 
 	if (!connection) {
@@ -100,9 +120,10 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 			value={{
 				truckRepository: new TruckRepository(connection),
 				billingRepository: new BilliginRepository(connection),
+				iapService,
 				isPremium,
 				setIsPremium,
-				isItemsStoreConnected: connected,
+				isPurchaseStoreConnected,
 			}}
 		>
 			{children}
