@@ -1,4 +1,4 @@
-import React, { Dispatch, useContext } from 'react';
+import React, { Dispatch, useContext, useState } from 'react';
 import { Animated, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import shortid from 'shortid';
@@ -17,19 +17,16 @@ import {
 	PurchaseTitle,
 	PurchaseDescription,
 } from '../purchase/styles';
-import { IAcc } from '../purchase';
 
 export interface IPurchaseDonateProps {
 	translateY: Animated.Value;
-	setIsPurchaselVisible: Dispatch<boolean>;
-	donateId: string;
-	purchase(id: string): void;
-	isDonateThanksOpen: boolean;
-	setDonateThanksOpen: Dispatch<boolean>;
-	componentPurchases: IAcc;
 }
 
-export const PurchaseDonate: React.FC<IPurchaseDonateProps> = (props: IPurchaseDonateProps) => {
+export const PurchaseDonate: React.FC<IPurchaseDonateProps> = (
+	props: IPurchaseDonateProps,
+) => {
+	const [isDonateThanksOpen, setDonateThanksOpen] = useState(false);
+
 	const theme = useContext(ThemeContext);
 	const { t } = useTranslation();
 
@@ -41,13 +38,13 @@ export const PurchaseDonate: React.FC<IPurchaseDonateProps> = (props: IPurchaseD
 				}}
 				contentContainerStyle={scrollViewStyle.content}
 			>
-				<CloseButton onPress={() => props.setIsPurchaselVisible(false)}>
+				<CloseButton onPress={() => null}>
 					<AntDesign name="close" size={24} color={theme.colors.text} />
 				</CloseButton>
 				<Title>{t(TranslationsValues.help)}</Title>
 				<ScrollView contentContainerStyle={scrollViewStyle.content}>
 					<PurchaseContainer key={shortid()} even>
-						<PurchaseTitle>
+						{/* <PurchaseTitle>
 							{props.componentPurchases[props.donateId]?.title ?? ''}{' '}
 							{props.componentPurchases[props.donateId]?.localizedPrice ?? ''}
 						</PurchaseTitle>
@@ -56,13 +53,13 @@ export const PurchaseDonate: React.FC<IPurchaseDonateProps> = (props: IPurchaseD
 						</PurchaseDescription>
 						<PurchaseButton>
 							<ButtonLabel>{t(TranslationsValues.donate)}</ButtonLabel>
-						</PurchaseButton>
+						</PurchaseButton> */}
 					</PurchaseContainer>
 				</ScrollView>
 			</Container>
 			<ModalLike
-				isDonateThanksOpen={props.isDonateThanksOpen}
-				setDonateThanksOpen={props.setDonateThanksOpen}
+				isDonateThanksOpen={isDonateThanksOpen}
+				setDonateThanksOpen={setDonateThanksOpen}
 			/>
 		</>
 	);

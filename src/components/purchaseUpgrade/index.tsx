@@ -1,27 +1,34 @@
-import React, { Dispatch, useContext } from 'react';
-import { ScrollView } from 'react-native';
+import React, { Dispatch, useContext, useCallback, useState } from 'react';
+import { Animated, Platform, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import shortid from 'shortid';
 import { TranslationsValues } from '@/config/intl';
 import { ThemeContext } from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
-import { ModalLike } from '../modalLike';
+import { useSerivces } from '@/hooks/useServices';
+import { useEffect } from 'react';
+import {
+	consumeAllItemsAndroid,
+	Subscription,
+	SubscriptionPurchase,
+} from 'react-native-iap';
 import {
 	Container,
 	CloseButton,
 	scrollViewStyle,
 	Title,
+	Description,
 	PurchaseContainer,
 	ButtonLabel,
 	PurchaseButton,
 	PurchaseTitle,
 	PurchaseDescription,
 } from '../purchase/styles';
-import { IPurchaseDonateProps } from '../purchaseDonate';
 import { ModalUpgrade } from '../modalUpgrade';
 
-export interface IPurchaseUpgradeProps extends IPurchaseDonateProps {
-	upgradeId: string;
+interface IPurchaseUpgradeProps {
+	translateY: Animated.Value;
+	setIsPurchaselVisible: Dispatch<boolean>;
 	isUpgradeModalOpen: boolean;
 	setUpgradeModalOpen: Dispatch<boolean>;
 }
@@ -29,8 +36,32 @@ export interface IPurchaseUpgradeProps extends IPurchaseDonateProps {
 export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 	props: IPurchaseUpgradeProps,
 ) => {
+	const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
 	const theme = useContext(ThemeContext);
 	const { t } = useTranslation();
+	const { iapService, isPurchaseStoreConnected } = useSerivces();
+
+	const items = Platform.select({
+		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
+	});
+
+	useEffect(() => {
+		// consumeAllItemsAndroid();
+		if (isPurchaseStoreConnected && subscriptions.length === 0) {
+			iapService.getSubscriptions(items).then(setSubscriptions);
+		}
+	}, [iapService, isPurchaseStoreConnected, items, subscriptions.length]);
+
+	const purchaseSubcription = useCallback(
+		async (id: string): Promise<void> => {
+			try {
+				await iapService.requestSubscription(id);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		[iapService],
+	);
 
 	return (
 		<>
@@ -43,38 +74,22 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 				<CloseButton onPress={() => props.setIsPurchaselVisible(false)}>
 					<AntDesign name="close" size={24} color={theme.colors.text} />
 				</CloseButton>
-				<Title>{t(TranslationsValues.help)}</Title>
+				<Title>{t(TranslationsValues.upgrade_title)}</Title>
+				<Description>{t(TranslationsValues.upgrade_description)}</Description>
 				<ScrollView contentContainerStyle={scrollViewStyle.content}>
-					<PurchaseContainer key={shortid()}>
-						<PurchaseTitle>
-							{props.componentPurchases[props.donateId]?.title ?? ''}{' '}
-							{props.componentPurchases[props.donateId]?.localizedPrice ?? ''}
-						</PurchaseTitle>
-						<PurchaseDescription>
-							{props.componentPurchases[props.donateId]?.description ?? ''}
-						</PurchaseDescription>
-						<PurchaseButton>
-							<ButtonLabel>{t(TranslationsValues.donate)}</ButtonLabel>
-						</PurchaseButton>
-					</PurchaseContainer>
-					<PurchaseContainer key={shortid()} even>
-						<PurchaseTitle>
-							{props.componentPurchases[props.upgradeId]?.title ?? ''}{' '}
-							{props.componentPurchases[props.upgradeId]?.localizedPrice ?? ''}
-						</PurchaseTitle>
-						<PurchaseDescription>
-							{props.componentPurchases[props.upgradeId]?.description ?? ''}
-						</PurchaseDescription>
-						<PurchaseButton>
-							<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
-						</PurchaseButton>
-					</PurchaseContainer>
+					{(subscriptions ?? []).map((s, i) => (
+						<PurchaseContainer key={shortid()} even={i % 2 === 0}>
+							<PurchaseTitle>
+								{s?.title ?? ''} {s?.localizedPrice ?? ''}
+							</PurchaseTitle>
+							<PurchaseDescription>{s?.description ?? ''}</PurchaseDescription>
+							<PurchaseButton onPress={() => purchaseSubcription(s?.productId)}>
+								<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
+							</PurchaseButton>
+						</PurchaseContainer>
+					))}
 				</ScrollView>
 			</Container>
-			<ModalLike
-				isDonateThanksOpen={props.isDonateThanksOpen}
-				setDonateThanksOpen={props.setDonateThanksOpen}
-			/>
 			<ModalUpgrade
 				isUpgradeModalOpen={props.isUpgradeModalOpen}
 				setUpgradeModalOpen={props.setUpgradeModalOpen}

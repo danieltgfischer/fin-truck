@@ -99,6 +99,8 @@ export enum TranslationsValues {
 	upgrade_feature2 = 'upgrade_feature2',
 	upgrade_feature3 = 'upgrade_feature3',
 	upgrade_feature4 = 'upgrade_feature4',
+	upgrade_title = 'upgrade_title',
+	upgrade_description = 'upgrade_description',
 }
 
 export const translations = {
@@ -226,6 +228,9 @@ export const translations = {
 		upgrade_feature2: 'Share monthly records',
 		upgrade_feature3: 'Share annual records',
 		upgrade_feature4: 'No ads, except commercial partnerships.',
+		upgrade_title: 'Upgrade your account',
+		upgrade_description:
+			'Have all the functionality of the Fin Truck app unlocked. By subscribing you will have 7 days free to try and you can cancel whenever you want.',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -352,5 +357,8 @@ export const translations = {
 		upgrade_feature2: 'Compartilhar registros mensais',
 		upgrade_feature3: 'Compartilhar registros anuais',
 		upgrade_feature4: 'Sem anúncios, exceto parcerias comerciais.',
+		upgrade_title: 'Faça o upgrade da sua conta',
+		upgrade_description:
+			'Tenha todas as funcionalidades do aplicativo Fin Truck desbloqueadas. Ao assinar você terá 7 dias gráts para testar e pode cancelar quando quiser.',
 	},
 };

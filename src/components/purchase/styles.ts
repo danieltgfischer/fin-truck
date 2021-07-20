@@ -3,7 +3,7 @@ import { Animated, Dimensions, StyleSheet } from 'react-native';
 import { darken } from 'polished';
 
 const { height, width } = Dimensions.get('window');
-const heightPurchase = height > 670 ? height * 1.2 : height * 1.5;
+const heightPurchase = height > 670 ? height : height * 1.2;
 
 export const scrollViewStyle = StyleSheet.create({
 	content: {
@@ -40,6 +40,16 @@ export const Title = styled.Text`
 	margin: 5px 0;
 	font-family: Regular;
 `;
+
+export const Description = styled.Text`
+	color: ${({ theme }) => theme.colors.text};
+	font-size: 20px;
+	margin: 5px 0;
+	text-align: center;
+	padding: 0 15px;
+	font-family: Italic;
+`;
+
 interface IPContainer {
 	even?: boolean;
 }

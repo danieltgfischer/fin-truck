@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
 import { IAP } from '@/services/purchase/data';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 interface IProps {
 	children: ReactNode;
@@ -32,7 +33,7 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 }: IProps) => {
 	const { theme } = useSelector((state: IState) => state);
 	const [connection, setConnection] = useState<Connection | null>(null);
-
+	const netInfo = useNetInfo();
 	const iapService = useRef(new IAP()).current;
 	const [isPurchaseStoreConnected, setIsPurchaseStoreConnected] =
 		useState(false);
@@ -41,16 +42,21 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 
 	useEffect(() => {
 		try {
-			iapService.startConnectionIAP().then(connection => {
-				setIsPurchaseStoreConnected(connection);
-			});
+			if (netInfo.isConnected)
+				iapService.startConnectionIAP().then(connection => {
+					setIsPurchaseStoreConnected(connection);
+				});
 		} catch (error) {
 			console.error(error);
 		}
 		return () => {
-			iapService.endConnectionIAP();
+			try {
+				if (netInfo.isConnected) iapService.endConnectionIAP();
+			} catch (error) {
+				console.error(error);
+			}
 		};
-	}, [iapService]);
+	}, [iapService, netInfo.isConnected]);
 
 	const updateStorageIsPremium = useCallback(async () => {
 		const premiumValue = availablePurchases?.some(p => {
@@ -70,14 +76,34 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 				console.error(error);
 			}
 		};
-		if (isPurchaseStoreConnected) {
+		if (netInfo.isConnected && isPurchaseStoreConnected) {
 			setUserPurchases();
 		}
-	}, [iapService, isPurchaseStoreConnected]);
+	}, [iapService, isPurchaseStoreConnected, netInfo.isConnected]);
 
 	useEffect(() => {
-		if (availablePurchases.length > 0) updateStorageIsPremium();
-	}, [availablePurchases.length, updateStorageIsPremium]);
+		if ((availablePurchases ?? []).length > 0) {
+			updateStorageIsPremium();
+			return;
+		}
+		AsyncStorage.getItem('@PremiumApp').then(premiumValueStoraged => {
+			setIsPremium(Boolean(JSON.parse(premiumValueStoraged)));
+		});
+	}, [availablePurchases, updateStorageIsPremium]);
+
+	useEffect(() => {
+		if (isPurchaseStoreConnected) {
+			try {
+				iapService
+					.purchaseListner()
+					.then(currentPurchase =>
+						console.log('purchaseListner', currentPurchase),
+					);
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}, [iapService, isPurchaseStoreConnected]);
 
 	const connect = useCallback(async () => {
 		try {
