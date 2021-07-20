@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useSerivces } from '@/hooks/useServices';
 import { useEffect } from 'react';
 import { consumeAllItemsAndroid, Subscription } from 'react-native-iap';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
 	Container,
 	CloseButton,
@@ -35,7 +36,8 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 	const theme = useContext(ThemeContext);
 	const { t } = useTranslation();
 	const { iapService, isPurchaseStoreConnected, isPremium } = useSerivces();
-
+	const route = useRoute();
+	console.log(route.name);
 	const items = Platform.select({
 		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
 	});
@@ -45,8 +47,6 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 			setUpgradeModalOpen(true);
 		}
 	}, [isPremium, isUpgradeModalOpen]);
-
-	console.log('rendered');
 
 	useEffect(() => {
 		// consumeAllItemsAndroid();

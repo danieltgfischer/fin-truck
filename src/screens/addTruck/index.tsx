@@ -72,7 +72,6 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					abortEarly: false,
 				});
 				const { name, board } = data;
-				// modal fremium netWork isConnectedStore and netConnected
 				if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
 					setModalConnectionVisible(true);
 					return;

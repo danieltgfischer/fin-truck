@@ -12,6 +12,9 @@ import { Modal as StyledModal } from '@/components/modal';
 import { DeleteTruck } from '@/components/deleteTruck';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
+import { useSerivces } from '@/hooks/useServices';
+import { ModalConnection } from '@/components/modalConnection';
+import { Purchase } from '@/components/purchase';
 import {
 	Container,
 	FlatList,
@@ -37,8 +40,12 @@ type Props = {
 
 export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
+	const [isModalConnectionVisible, setModalConnectionVisible] = useState(false);
+	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { t } = useTranslation();
+	const { isPremium, isNetworkConnected, isPurchaseStoreConnected } =
+		useSerivces();
 	const theme = useContext(ThemeContext);
 
 	const renderItem: ListRenderItem<IOptionItem> = ({
@@ -73,8 +80,17 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	);
 
 	const openEditModal = useCallback(() => {
+		console.log(isPremium);
+		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+			setModalConnectionVisible(true);
+			return;
+		}
+		if (!isPremium) {
+			setIsPurchaselVisible(true);
+			return;
+		}
 		setEditModalVisible(true);
-	}, []);
+	}, [isNetworkConnected, isPremium, isPurchaseStoreConnected]);
 
 	const isDark = theme.name === 'dark';
 
@@ -126,6 +142,14 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 			>
 				<DeleteTruck closeModal={() => setDeleteModalVisible(false)} />
 			</StyledModal>
+			<ModalConnection
+				visible={isModalConnectionVisible}
+				setIsVisible={setModalConnectionVisible}
+			/>
+			<Purchase
+				isPurchaselVisible={isPurchaselVisible}
+				setIsPurchaselVisible={setIsPurchaselVisible}
+			/>
 		</>
 	);
 };

@@ -21,6 +21,7 @@ import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
 import { IAP } from '@/services/purchase/data';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { PurchaseStateAndroid } from 'react-native-iap';
 
 interface IProps {
 	children: ReactNode;
@@ -94,11 +95,20 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 	useEffect(() => {
 		if (isPurchaseStoreConnected) {
 			try {
-				iapService
-					.purchaseListner()
-					.then(currentPurchase =>
-						console.log('purchaseListner', currentPurchase),
-					);
+				iapService.purchaseListner().then(currentPurchase => {
+					const enableApp =
+						currentPurchase?.purchaseStateAndroid ===
+							PurchaseStateAndroid.PENDING ||
+						currentPurchase?.purchaseStateAndroid ===
+							PurchaseStateAndroid.PURCHASED;
+					if (enableApp) {
+						AsyncStorage.setItem('@PremiumApp', JSON.stringify(true)).then(
+							() => {
+								setIsPremium(true);
+							},
+						);
+					}
+				});
 			} catch (error) {
 				console.error(error);
 			}

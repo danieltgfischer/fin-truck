@@ -9,8 +9,8 @@ export const scrollViewStyle = StyleSheet.create({
 	content: {
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		paddingVertical: 5,
 		minHeight: heightPurchase,
+		height,
 	},
 	upgradeScrollContent: {
 		alignItems: 'center',
@@ -26,6 +26,7 @@ export const Container = styled(Animated.ScrollView)`
 	position: absolute;
 	height: ${height}px;
 	width: 100%;
+	padding: 115px 0 0;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
 	border-top-width: 0.3px;
