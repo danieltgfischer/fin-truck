@@ -10,6 +10,7 @@ export interface ISerivcesConnectionContext {
 	setIsPremium: Dispatch<boolean>;
 	isPurchaseStoreConnected: boolean;
 	iapService: IInAppPurchase;
+	isNetworkConnected: boolean;
 }
 
 export const ServicesConnectionContext =

@@ -1,10 +1,4 @@
-import React, {
-	useEffect,
-	useRef,
-	SetStateAction,
-	Dispatch,
-	useState,
-} from 'react';
+import React, { useEffect, useRef, SetStateAction, Dispatch } from 'react';
 import { Animated, useWindowDimensions } from 'react-native';
 import { PurchaseUpgrade } from '../purchaseUpgrade';
 
@@ -14,7 +8,6 @@ interface IProps {
 }
 
 export const Purchase: React.FC<IProps> = (props: IProps) => {
-	const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
 	const { height } = useWindowDimensions();
 	const translateY = useRef(new Animated.Value(height)).current;
 
@@ -38,8 +31,6 @@ export const Purchase: React.FC<IProps> = (props: IProps) => {
 		<PurchaseUpgrade
 			translateY={translateY}
 			setIsPurchaselVisible={props.setIsPurchaselVisible}
-			isUpgradeModalOpen={isUpgradeModalOpen}
-			setUpgradeModalOpen={setUpgradeModalOpen}
 		/>
 	);
 };

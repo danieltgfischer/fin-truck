@@ -7,11 +7,7 @@ import { ThemeContext } from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { useSerivces } from '@/hooks/useServices';
 import { useEffect } from 'react';
-import {
-	consumeAllItemsAndroid,
-	Subscription,
-	SubscriptionPurchase,
-} from 'react-native-iap';
+import { consumeAllItemsAndroid, Subscription } from 'react-native-iap';
 import {
 	Container,
 	CloseButton,
@@ -29,28 +25,35 @@ import { ModalUpgrade } from '../modalUpgrade';
 interface IPurchaseUpgradeProps {
 	translateY: Animated.Value;
 	setIsPurchaselVisible: Dispatch<boolean>;
-	isUpgradeModalOpen: boolean;
-	setUpgradeModalOpen: Dispatch<boolean>;
 }
 
 export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 	props: IPurchaseUpgradeProps,
 ) => {
+	const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
 	const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
 	const theme = useContext(ThemeContext);
 	const { t } = useTranslation();
-	const { iapService, isPurchaseStoreConnected } = useSerivces();
+	const { iapService, isPurchaseStoreConnected, isPremium } = useSerivces();
 
 	const items = Platform.select({
 		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
 	});
 
 	useEffect(() => {
+		if (isPremium && !isUpgradeModalOpen) {
+			setUpgradeModalOpen(true);
+		}
+	}, [isPremium, isUpgradeModalOpen]);
+
+	console.log('rendered');
+
+	useEffect(() => {
 		// consumeAllItemsAndroid();
 		if (isPurchaseStoreConnected && subscriptions.length === 0) {
 			iapService.getSubscriptions(items).then(setSubscriptions);
 		}
-	}, [iapService, isPurchaseStoreConnected, items, subscriptions.length]);
+	}, [iapService, isPurchaseStoreConnected, items, subscriptions?.length]);
 
 	const purchaseSubcription = useCallback(
 		async (id: string): Promise<void> => {
@@ -84,15 +87,21 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 							</PurchaseTitle>
 							<PurchaseDescription>{s?.description ?? ''}</PurchaseDescription>
 							<PurchaseButton onPress={() => purchaseSubcription(s?.productId)}>
-								<ButtonLabel>{t(TranslationsValues.buy)}</ButtonLabel>
+								<ButtonLabel>
+									{t(
+										s.productId === '1_monthly_fin_truck'
+											? TranslationsValues.subscribe_monthly
+											: TranslationsValues.subscribe_yearly,
+									)}
+								</ButtonLabel>
 							</PurchaseButton>
 						</PurchaseContainer>
 					))}
 				</ScrollView>
 			</Container>
 			<ModalUpgrade
-				isUpgradeModalOpen={props.isUpgradeModalOpen}
-				setUpgradeModalOpen={props.setUpgradeModalOpen}
+				isUpgradeModalOpen={isUpgradeModalOpen}
+				setUpgradeModalOpen={setUpgradeModalOpen}
 			/>
 		</>
 	);

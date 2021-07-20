@@ -19,6 +19,7 @@ import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { Purchase } from '@/components/purchase';
 import { IState } from '@/store/types';
+import { ModalConnection } from '@/components/modalConnection';
 import {
 	Container,
 	AddTruckContainer,
@@ -44,12 +45,17 @@ type Props = {
 
 export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
-	const [enablePurchase, setEnablePurchase] = useState(false);
+	const [isModalConnectionVisible, setModalConnectionVisible] = useState(false);
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const { truckRepository } = useSerivces();
+	const {
+		truckRepository,
+		isPremium,
+		isNetworkConnected,
+		isPurchaseStoreConnected,
+	} = useSerivces();
 	const { t } = useTranslation();
 
 	const navigate = useCallback(() => {
@@ -66,8 +72,13 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					abortEarly: false,
 				});
 				const { name, board } = data;
+				// modal fremium netWork isConnectedStore and netConnected
+				if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+					setModalConnectionVisible(true);
+					return;
+				}
 				// buy
-				if (trucks.length > 0) {
+				if (trucks.length > 0 && !isPremium) {
 					setIsPurchaselVisible(true);
 					return;
 				}
@@ -93,7 +104,16 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				}
 			}
 		},
-		[dispatch, navigate, t, truckRepository, trucks.length],
+		[
+			dispatch,
+			isNetworkConnected,
+			isPremium,
+			isPurchaseStoreConnected,
+			navigate,
+			t,
+			truckRepository,
+			trucks?.length,
+		],
 	);
 
 	const submit = useCallback(() => {
@@ -141,15 +161,12 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				</AddTruckContainer>
 			</KeyboardAvoidingView>
 			<Purchase
-				productId="1_add_truck_fin_truck"
-				upgradeId="1_premium_fin_truck"
-				donateId="1_donate_fin_truck"
-				// productId="android.test.purchased"
-				// upgradeId="android.test.canceled"
-				// donateId="android.test.refunded"
-				purchasedFunctionCallback={() => null}
 				isPurchaselVisible={isPurchaselVisible}
 				setIsPurchaselVisible={setIsPurchaselVisible}
+			/>
+			<ModalConnection
+				visible={isModalConnectionVisible}
+				setIsVisible={setModalConnectionVisible}
 			/>
 		</Container>
 	);

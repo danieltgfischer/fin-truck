@@ -90,7 +90,9 @@ export enum TranslationsValues {
 	network_offline = 'network_offline',
 	network_error = 'network_error',
 	help = 'help',
-	buy = 'buy',
+	subscribe_monthly = 'subscribe_monthly',
+	subscribe_yearly = 'subscribe_yearly',
+	unsubscribe = 'unsubscribe',
 	donate = 'donate',
 	thanks = 'thanks',
 	congrats = 'congrats',
@@ -101,6 +103,13 @@ export enum TranslationsValues {
 	upgrade_feature4 = 'upgrade_feature4',
 	upgrade_title = 'upgrade_title',
 	upgrade_description = 'upgrade_description',
+	warning = 'warning',
+	connection_message = 'connection_message',
+	network_warning = 'network_warning',
+	play_store_warning = 'play_store_warning',
+	apple_store_warning = 'apple_store_warning',
+	attention = 'attention',
+	offline_message = 'offline_message',
 }
 
 export const translations = {
@@ -218,7 +227,6 @@ export const translations = {
 			'You are offline, you must be logged in to make a purchase',
 		network_error: 'Error checking connection',
 		help: 'I Need Your Help',
-		buy: 'Buy',
 		donate: 'Donate',
 		thanks: 'We received your donation. \nThank you so much!',
 		upgrade_message:
@@ -231,6 +239,18 @@ export const translations = {
 		upgrade_title: 'Upgrade your account',
 		upgrade_description:
 			'Have all the functionality of the Fin Truck app unlocked. By subscribing you will have 7 days free to try and you can cancel whenever you want.',
+		subscribe_monthly: 'Subscribe monthly plan',
+		subscribe_yearly: 'Subscribe annual plan',
+		unsubscribe: 'Unsubscribe',
+		warning: 'Warning',
+		connection_message:
+			'Hello friend, you are currently using the Fin Truck app on the Fremium plan. \n In this plan the use of the application is limited. To proceed you need to subscribe to our application, the value is symbolic, so you help us to maintain and improve our service. \n Please check that:',
+		network_warning: 'Has internet connection',
+		play_store_warning: 'You are connected to PlayStore',
+		apple_store_warning: 'Is connected to the AppleStore',
+		attention: 'Attention',
+		offline_message:
+			'The Fin Truck app works offline, you only need to be logged in to subscribe and upgrade to the Premium plan.',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -360,5 +380,17 @@ export const translations = {
 		upgrade_title: 'Faça o upgrade da sua conta',
 		upgrade_description:
 			'Tenha todas as funcionalidades do aplicativo Fin Truck desbloqueadas. Ao assinar você terá 7 dias gráts para testar e pode cancelar quando quiser.',
+		subscribe_monthly: 'Assinar plano mensal',
+		subscribe_yearly: 'Assinar plano anual',
+		unsubscribe: 'Cancelar Assinatura',
+		warning: 'Aviso',
+		connection_message:
+			'Olá amigo, atualmente você está utilizando o aplicativo Fin Truck no plano Fremium. \n Nesse plano o uso do aplicativo é limitado. Para prosseguir você precisa assinar nosso aplicativo, o valor é simbólico, assim você nos ajuda a manter e a melhorar nosso serviço. \n Por favor, verifique se:',
+		network_warning: 'Possui conexão com a Internt',
+		play_store_warning: 'Está conectado com a PlayStore',
+		apple_store_warning: 'Está conectado com a AppleStore',
+		attention: 'Atenção',
+		offline_message:
+			'O aplicativo Fin Truck funciona offline, você precisa estar conectado apenas para assinar e fazer o upgrade para o plano Premium.',
 	},
 };

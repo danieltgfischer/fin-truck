@@ -150,6 +150,7 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 				isPremium,
 				setIsPremium,
 				isPurchaseStoreConnected,
+				isNetworkConnected: netInfo.isConnected,
 			}}
 		>
 			{children}
