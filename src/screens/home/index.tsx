@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { ListRenderItemInfo } from 'react-native';
+import { ListRenderItemInfo, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -43,8 +43,10 @@ export type ListRenderItem<ItemT> = (
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [isLoading, setLoading] = useState(true);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
+	const theme = useContext(ThemeContext);
 	const { truckRepository } = useSerivces();
 	const { colors } = useContext(ThemeContext);
 	const { t } = useTranslation();
@@ -53,6 +55,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		const unsubscribe = navigation.addListener('focus', () => {
 			truckRepository?.getAllTrucks().then(response => {
 				dispatch(updateTrucks(response));
+				setLoading(false);
 			});
 		});
 		return unsubscribe;
@@ -104,21 +107,31 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	}, []);
 
 	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
+	const isDark = theme.name === 'dark';
 
 	return (
 		<Container>
 			<CloseMenuContainer onPress={closeAll}>
 				<HomeContainer>
 					<Title>{t(TranslationsValues.title_home)}:</Title>
-					<FlatList
-						data={data}
-						renderItem={renderItem}
-						keyExtractor={(item: ITruckItemProps) => item.id}
-						contentContainerStyle={flatListStyle.content}
-						numColumns={3}
-						columnWrapperStyle={flatListStyle.collumnWrapper}
-						ListEmptyComponent={EmptyTrucks}
-					/>
+					{isLoading && (
+						<ActivityIndicator
+							style={{ flex: 1 }}
+							color={isDark ? theme.colors.text : '#B63B34'}
+							size="small"
+						/>
+					)}
+					{!isLoading && (
+						<FlatList
+							data={data}
+							renderItem={renderItem}
+							keyExtractor={(item: ITruckItemProps) => item.id}
+							contentContainerStyle={flatListStyle.content}
+							numColumns={3}
+							columnWrapperStyle={flatListStyle.collumnWrapper}
+							ListEmptyComponent={EmptyTrucks}
+						/>
+					)}
 					<Footer>
 						<FooterAddContainer>
 							<FooterLabel>

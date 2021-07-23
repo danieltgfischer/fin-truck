@@ -42,12 +42,17 @@ export const MenuButtonsContainer = styled.View`
 export const MenuConfigContainer = styled.View`
 	width: 100%;
 `;
+interface IItemLabel {
+	textCenter: boolean;
+}
 
-export const ItemLabel = styled.Text`
+export const ItemLabel = styled.Text<IItemLabel>`
 	font-family: Semi_Bold;
 	font-size: 26px;
 	color: ${({ theme }) => theme.colors.text};
 	padding: 0 0 0 10px;
+	width: 100%;
+	text-align: ${({ textCenter }) => (textCenter ? 'center' : 'left')};
 `;
 
 export const HeaderLabel = styled.Text`

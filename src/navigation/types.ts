@@ -6,6 +6,7 @@ export enum routeNames {
 	AddOption = 'AddOption',
 	Timeline = 'Timeline',
 	Welcome = 'Welcome',
+	Donate = 'Donate',
 }
 
 export type RootStackParamList = {
@@ -17,6 +18,7 @@ export type RootStackParamList = {
 	[routeNames.DrawerRoot]: undefined;
 	[routeNames.Timeline]: undefined;
 	[routeNames.Welcome]: undefined;
+	[routeNames.Donate]: undefined;
 };
 
 export type DrawerParamList = {

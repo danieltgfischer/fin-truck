@@ -23,6 +23,8 @@ import { HomeScreen } from '@/screens/home';
 import { AddTruckScreen } from '@/screens/addTruck';
 import { AddOptionScreen } from '@/screens/addOption';
 import { Timeline } from '@/screens/timeline';
+import { Donate } from '@/screens/donate';
+
 import { Welcome } from '@/screens/welcome';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
@@ -222,6 +224,14 @@ export const Navigation: React.FC = () => {
 						component={Timeline}
 						options={{
 							title: '',
+							...options,
+						}}
+					/>
+					<Stack.Screen
+						name={routeNames.Donate}
+						component={Donate}
+						options={{
+							title: t(TranslationsValues.donate),
 							...options,
 						}}
 					/>

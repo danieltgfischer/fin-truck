@@ -1,14 +1,15 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import TrucksIcon from '@/icons/TrucksIcon.png';
-import Timeline from '@/icons/Timeline.png';
+import { locale } from 'expo-localization';
 import { useNavigation } from '@react-navigation/native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
-import { routeNames } from '@/navigation/types';
-import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
-import { ButtonIcon } from '@/navigation/style';
 import { AntDesign } from '@expo/vector-icons';
+import TrucksIcon from '@/icons/TrucksIcon.png';
+import Timeline from '@/icons/Timeline.png';
+import { ButtonIcon } from '@/navigation/style';
+import { routeNames } from '@/navigation/types';
+import { TranslationsValues } from '@/config/intl';
 import { DrawerItem } from './DrawerItem';
 import { Menu } from '../menu';
 import {
@@ -42,7 +43,7 @@ export const DrawerComponent: React.FC = () => {
 	);
 
 	const isDark = theme.name === 'dark';
-
+	const br = locale === 'pt-BR';
 	return (
 		<Container>
 			<DrawerContainer onPress={() => setIsModalVisible(false)}>
@@ -61,6 +62,13 @@ export const DrawerComponent: React.FC = () => {
 							name={t(TranslationsValues.history)}
 							onPress={() => navigate(routeNames.Timeline)}
 						/>
+						{br && (
+							<DrawerItem
+								name="Nos ajude"
+								onPress={() => navigate(routeNames.Donate)}
+								textCenter
+							/>
+						)}
 					</MenuButtonsContainer>
 					<MenuConfigContainer>
 						<ButtonIcon onPress={() => setIsModalVisible(true)}>

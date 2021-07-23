@@ -80,7 +80,7 @@ export const BillingItem: React.FC<IProps> = ({
 			return;
 		}
 		setDeleteModalVisible(true);
-	}, []);
+	}, [isNetworkConnected, isPremium, isPurchaseStoreConnected, timelineCtx]);
 
 	const localeFormat =
 		locale.country_code === 'pt-BR'

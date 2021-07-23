@@ -228,7 +228,7 @@ export const translations = {
 		network_error: 'Error checking connection',
 		help: 'I Need Your Help',
 		donate: 'Donate',
-		thanks: 'We received your donation. \nThank you so much!',
+		thanks: 'Thank you so much!',
 		upgrade_message:
 			'You have just purchased the Premium plan. \n All features of this app in the Premium plan are accessible.',
 		congrats: 'Congratulations',
@@ -371,7 +371,7 @@ export const translations = {
 		help: 'Eu Preciso Da Sua Ajuda',
 		buy: 'Comprar',
 		donate: 'Doar',
-		thanks: 'Recebemos sua doação. \nMuito Obrigado!',
+		thanks: 'Muito Obrigado!',
 		upgrade_message:
 			'Você acaba de adquirir o plano Premium. \n Todas as funcionalidades deste aplicativo no plano Premium estão acessíveis.',
 		congrats: 'Parabéns',
