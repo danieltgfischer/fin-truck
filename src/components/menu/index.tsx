@@ -4,12 +4,15 @@ import React, {
 	SetStateAction,
 	Dispatch,
 	useContext,
+	useState,
 } from 'react';
-import { Animated, useWindowDimensions } from 'react-native';
+import { Animated, Linking, useWindowDimensions } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
+import { useCallback } from 'react';
+import { useSerivces } from '@/hooks/useServices';
 import { LanguageSwitch } from '../languageSwitch';
 import { ThemeSwitch } from '../themeSwitch';
 import {
@@ -17,8 +20,15 @@ import {
 	ButtonIcon,
 	Rotate,
 	Label,
-	ContainerSwitch,
+	ContainerMenu,
+	CancelSubscriptionButton,
+	LabelButton,
+	CancelSubscriptionContainer,
+	CloseButton,
+	SubscriptionTitle,
+	Message,
 } from './styles';
+import { Modal } from '../modal';
 
 interface IProps {
 	isModalVisible: boolean;
@@ -29,11 +39,32 @@ export const Menu: React.FC<IProps> = ({
 	isModalVisible,
 	setIsModalVisible,
 }: IProps) => {
+	const [isModalSubscriptionVisible, setModalSubscriptionVisible] =
+		useState(false);
 	const { height } = useWindowDimensions();
 	const { t } = useTranslation();
 	const { name, colors } = useContext(ThemeContext);
 	const translateY = useRef(new Animated.Value(height)).current;
 	const rotate = useRef(new Animated.Value(0)).current;
+	const { isPremium } = useSerivces();
+	const opacity = useRef(new Animated.Value(0)).current;
+
+	useEffect(() => {
+		Animated.loop(
+			Animated.sequence([
+				Animated.timing(opacity, {
+					useNativeDriver: true,
+					toValue: 1,
+					duration: 1000,
+				}),
+				Animated.timing(opacity, {
+					useNativeDriver: true,
+					toValue: 0,
+					duration: 1000,
+				}),
+			]),
+		).start();
+	}, [opacity]);
 
 	useEffect(() => {
 		if (isModalVisible) {
@@ -67,6 +98,10 @@ export const Menu: React.FC<IProps> = ({
 
 	const dark = name === 'dark';
 
+	const cancelSubscription = useCallback(() => {
+		Linking.openURL('https://play.google.com/store/account/subscriptions');
+	}, []);
+
 	return (
 		<Container
 			style={{
@@ -94,13 +129,40 @@ export const Menu: React.FC<IProps> = ({
 				</Rotate>
 			</ButtonIcon>
 			<Label>{t(TranslationsValues.language)}:</Label>
-			<ContainerSwitch>
+			<ContainerMenu>
 				<LanguageSwitch />
-			</ContainerSwitch>
+			</ContainerMenu>
 			<Label>{t(TranslationsValues.theme)}:</Label>
-			<ContainerSwitch>
+			<ContainerMenu>
 				<ThemeSwitch />
-			</ContainerSwitch>
+			</ContainerMenu>
+			{isPremium && (
+				<CancelSubscriptionButton
+					onPress={() => setModalSubscriptionVisible(true)}
+				>
+					<LabelButton>{t(TranslationsValues.unsubscribe)}</LabelButton>
+				</CancelSubscriptionButton>
+			)}
+			<Modal visible={isModalSubscriptionVisible} animationType="fade">
+				<CancelSubscriptionContainer>
+					<CloseButton onPress={() => setModalSubscriptionVisible(false)}>
+						<AntDesign name="close" size={24} color={colors.text} />
+					</CloseButton>
+					<SubscriptionTitle
+						style={{
+							opacity,
+						}}
+					>
+						{t(TranslationsValues.attention)}:
+					</SubscriptionTitle>
+					<Message style={{ paddingTop: 5 }}>
+						{t(TranslationsValues.unsubscribe_message)}
+					</Message>
+					<CancelSubscriptionButton onPress={cancelSubscription}>
+						<LabelButton>{t(TranslationsValues.unsubscribe)}</LabelButton>
+					</CancelSubscriptionButton>
+				</CancelSubscriptionContainer>
+			</Modal>
 		</Container>
 	);
 };

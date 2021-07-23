@@ -9,30 +9,31 @@ export const scrollViewStyle = StyleSheet.create({
 	content: {
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		minHeight: heightPurchase,
 		height,
 	},
 	upgradeScrollContent: {
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		height: height * 0.6,
-	},
-	upgradScroll: {
-		top: -75,
+		// height: height * 0.6,
 	},
 });
 
-export const Container = styled(Animated.ScrollView)`
+interface IContainer {
+	addPaddingTop: boolean;
+}
+
+export const Container = styled(Animated.View)<IContainer>`
 	position: absolute;
 	height: ${height}px;
 	width: 100%;
-	padding: 115px 0 0;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
+	padding-top: ${({ addPaddingTop }) => (addPaddingTop ? '115px' : 0)};
 	border-top-width: 0.3px;
 	border-top-color: ${({ theme }) =>
 		theme.name === 'dark' ? darken(0.05, theme.colors.text) : 'transparent'};
 	elevation: 15;
+	align-items: center;
 `;
 
 export const Title = styled.Text`

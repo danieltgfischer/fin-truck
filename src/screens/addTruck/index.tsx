@@ -44,7 +44,6 @@ type Props = {
 };
 
 export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
-	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
 	const [isModalConnectionVisible, setModalConnectionVisible] = useState(false);
 	const formRef = useRef<FormHandles>(null);
 	const nextInputRef = useRef<IInputRef>(null);
@@ -55,6 +54,8 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		isPremium,
 		isNetworkConnected,
 		isPurchaseStoreConnected,
+		isPurchaselVisible,
+		setIsPurchaselVisible,
 	} = useSerivces();
 	const { t } = useTranslation();
 
@@ -109,9 +110,10 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 			isPremium,
 			isPurchaseStoreConnected,
 			navigate,
+			setIsPurchaselVisible,
 			t,
 			truckRepository,
-			trucks?.length,
+			trucks.length,
 		],
 	);
 

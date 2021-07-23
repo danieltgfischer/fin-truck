@@ -1,4 +1,10 @@
-import React, { Dispatch, useContext, useCallback, useState } from 'react';
+import React, {
+	Dispatch,
+	useContext,
+	useCallback,
+	useState,
+	useEffect,
+} from 'react';
 import { Animated, Platform, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import shortid from 'shortid';
@@ -6,9 +12,11 @@ import { TranslationsValues } from '@/config/intl';
 import { ThemeContext } from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { useSerivces } from '@/hooks/useServices';
-import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { consumeAllItemsAndroid, Subscription } from 'react-native-iap';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+import { useWindowDimensions } from 'react-native';
+import { routeNames } from '@/navigation/types';
 import {
 	Container,
 	CloseButton,
@@ -35,18 +43,29 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 	const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
 	const theme = useContext(ThemeContext);
 	const { t } = useTranslation();
+	const { height } = useWindowDimensions();
 	const { iapService, isPurchaseStoreConnected, isPremium } = useSerivces();
 	const route = useRoute();
-	console.log(route.name);
+
 	const items = Platform.select({
 		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
 	});
 
-	useEffect(() => {
-		if (isPremium && !isUpgradeModalOpen) {
+	const addPaddingTop = route.name !== routeNames.AddTruck;
+
+	const showModalUpgrade = useCallback(async () => {
+		const showed = Boolean(
+			JSON.parse(await AsyncStorage.getItem('@IsUpgradedShow')),
+		);
+		if (isPremium && !showed) {
 			setUpgradeModalOpen(true);
+			await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(true));
 		}
-	}, [isPremium, isUpgradeModalOpen]);
+	}, [isPremium]);
+
+	useEffect(() => {
+		showModalUpgrade();
+	}, [showModalUpgrade]);
 
 	useEffect(() => {
 		// consumeAllItemsAndroid();
@@ -72,14 +91,17 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 				style={{
 					transform: [{ translateY: props.translateY }],
 				}}
-				contentContainerStyle={scrollViewStyle.content}
+				addPaddingTop={addPaddingTop}
 			>
 				<CloseButton onPress={() => props.setIsPurchaselVisible(false)}>
 					<AntDesign name="close" size={24} color={theme.colors.text} />
 				</CloseButton>
 				<Title>{t(TranslationsValues.upgrade_title)}</Title>
 				<Description>{t(TranslationsValues.upgrade_description)}</Description>
-				<ScrollView contentContainerStyle={scrollViewStyle.content}>
+				<ScrollView
+					contentContainerStyle={scrollViewStyle.content}
+					style={{ height }}
+				>
 					{(subscriptions ?? []).map((s, i) => (
 						<PurchaseContainer key={shortid()} even={i % 2 === 0}>
 							<PurchaseTitle>

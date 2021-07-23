@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { asyncShareDatabase } from '@/utils/export-database';
 import { Entypo } from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components';
+import { TimelineModalContext } from '@/contexts/timelineModal';
 import { monthsNames } from './months';
 import {
 	Container,
@@ -40,11 +41,17 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
-	const { billingRepository } = useSerivces();
+	const {
+		billingRepository,
+		isPremium,
+		isNetworkConnected,
+		isPurchaseStoreConnected,
+	} = useSerivces();
 	const [isOpen, setIsOpen] = useState(
 		new Date().getFullYear() === Number(year),
 	);
 	const [called, setCalled] = useState(false);
+	const timelineCtx = useContext(TimelineModalContext);
 
 	const getCurrentYearInfo = useCallback(async () => {
 		const resume = await billingRepository.getYearInfo(year, current_truck.id);
@@ -57,6 +64,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 			getCurrentYearInfo();
 		}
 	}, [called, getCurrentYearInfo, isOpen]);
+
 	const months = useMemo(
 		() => Object.keys(monthsNames).map(m => monthsNames[m]),
 		[],
@@ -72,7 +80,15 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		sub_total: null,
 	};
 
-	const exportYearData = useCallback(async () => {
+	const shareYearData = useCallback(async () => {
+		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+			timelineCtx.setModalConnectionVisible(true);
+			return;
+		}
+		if (!isPremium) {
+			timelineCtx.setIsPurchaselVisible(true);
+			return;
+		}
 		const data = await billingRepository.getBillingOptionsByYear({
 			truckId: current_truck.id,
 			year,
@@ -89,11 +105,16 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		current_truck.board,
 		current_truck.id,
 		current_truck.name,
+		isNetworkConnected,
+		isPremium,
+		isPurchaseStoreConnected,
 		locale.country_code,
+		timelineCtx,
 		year,
 	]);
 
 	const { currency } = locale[locale.country_code];
+
 	return (
 		<Container>
 			<Button onPress={toogleOpen}>
@@ -106,7 +127,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 					<SubHeader>
 						<ButtonDBContainer>
 							<Label>{t(TranslationsValues.share)}</Label>
-							<DatabseExportButton onPress={() => exportYearData()}>
+							<DatabseExportButton onPress={() => shareYearData()}>
 								<Entypo name="share" size={30} color={theme.colors.text} />
 							</DatabseExportButton>
 						</ButtonDBContainer>

@@ -1,5 +1,4 @@
 import React, {
-	FC,
 	ReactNode,
 	useCallback,
 	useEffect,
@@ -19,9 +18,14 @@ import dark from '@/styles/themes/dark';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
+import * as iap from 'react-native-iap';
 import { IAP } from '@/services/purchase/data';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { PurchaseStateAndroid } from 'react-native-iap';
+import {
+	Purchase,
+	PurchaseStateAndroid,
+	SubscriptionPurchase,
+} from 'react-native-iap';
 
 interface IProps {
 	children: ReactNode;
@@ -29,7 +33,7 @@ interface IProps {
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
-export const ServicesConnectionProvider: FC<IProps> = ({
+export const ServicesConnectionProvider: React.FC<IProps> = ({
 	children,
 }: IProps) => {
 	const { theme } = useSelector((state: IState) => state);
@@ -39,8 +43,10 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 	const [isPurchaseStoreConnected, setIsPurchaseStoreConnected] =
 		useState(false);
 	const [isPremium, setIsPremium] = useState(false);
-	const [availablePurchases, setAvailablePurchases] = useState([]);
+	const [availablePurchases, setAvailablePurchases] = useState<Purchase[]>([]);
+	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
 
+	// ANCHOR init connection with store android|ios
 	useEffect(() => {
 		try {
 			if (netInfo.isConnected)
@@ -59,56 +65,93 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 		};
 	}, [iapService, netInfo.isConnected]);
 
-	const updateStorageIsPremium = useCallback(async () => {
-		const premiumValue = availablePurchases?.some(p => {
-			return p.productId === '1_monthly_fin_truck';
-		});
-		await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
-		setIsPremium(premiumValue);
-	}, [availablePurchases]);
+	// set user purchases
+	const setUserPurchases = useCallback(async () => {
+		try {
+			const storeAvailablePurchases = await iapService.getAvailablePurchases();
+			if (storeAvailablePurchases) {
+				setAvailablePurchases(storeAvailablePurchases);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}, [iapService]);
 
 	useEffect(() => {
-		const setUserPurchases = async () => {
-			try {
-				const storeAvailablePurchases =
-					await iapService.getAvailablePurchases();
-				setAvailablePurchases(storeAvailablePurchases);
-			} catch (error) {
-				console.error(error);
-			}
-		};
 		if (netInfo.isConnected && isPurchaseStoreConnected) {
 			setUserPurchases();
 		}
-	}, [iapService, isPurchaseStoreConnected, netInfo.isConnected]);
+	}, [
+		iapService,
+		isPurchaseStoreConnected,
+		netInfo.isConnected,
+		setUserPurchases,
+	]);
 
-	useEffect(() => {
-		if ((availablePurchases ?? []).length > 0) {
-			updateStorageIsPremium();
+	const updatePremiumPlan = useCallback(async () => {
+		if (netInfo.isConnected) {
+			if (availablePurchases?.length === 0) {
+				await AsyncStorage.setItem('@PremiumApp', JSON.stringify(false));
+				await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
+				setIsPremium(false);
+				return;
+			}
+			const premiumValue = availablePurchases[0]?.autoRenewingAndroid;
+			await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
+			setIsPremium(premiumValue);
+			if (!premiumValue) {
+				await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
+			}
 			return;
 		}
-		AsyncStorage.getItem('@PremiumApp').then(premiumValueStoraged => {
-			setIsPremium(Boolean(JSON.parse(premiumValueStoraged)));
-		});
-	}, [availablePurchases, updateStorageIsPremium]);
+		const premiumValue = Boolean(
+			JSON.parse(await AsyncStorage.getItem('@PremiumApp')),
+		);
+		setIsPremium(premiumValue);
+	}, [availablePurchases, netInfo.isConnected]);
 
+	// ANCHOR verify if is premium every time app started
+	useEffect(() => {
+		updatePremiumPlan();
+	}, [availablePurchases, updatePremiumPlan]);
+
+	// ANCHOR set if upgraded modal was showed
+	useEffect(() => {
+		(async () => {
+			const premiumValueStoraged = Boolean(
+				JSON.parse(await AsyncStorage.getItem('@PremiumApp')),
+			);
+			const upgradedShowValue = Boolean(
+				JSON.parse(await AsyncStorage.getItem('@IsUpgradedShow')),
+			);
+			if (!premiumValueStoraged && upgradedShowValue) {
+				await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
+			}
+		})();
+	}, [isPremium]);
+
+	// ANCHOR set premium app on just purchased subscription
 	useEffect(() => {
 		if (isPurchaseStoreConnected) {
 			try {
-				iapService.purchaseListner().then(currentPurchase => {
-					const enableApp =
-						currentPurchase?.purchaseStateAndroid ===
-							PurchaseStateAndroid.PENDING ||
-						currentPurchase?.purchaseStateAndroid ===
-							PurchaseStateAndroid.PURCHASED;
-					if (enableApp) {
-						AsyncStorage.setItem('@PremiumApp', JSON.stringify(true)).then(
-							() => {
-								setIsPremium(true);
-							},
-						);
-					}
-				});
+				iapService.purchaseListner(
+					(currentPurchase: SubscriptionPurchase): void => {
+						console.log('purchaseListner', currentPurchase);
+						const enableApp =
+							currentPurchase?.purchaseStateAndroid ===
+								PurchaseStateAndroid.PENDING ||
+							currentPurchase?.purchaseStateAndroid ===
+								PurchaseStateAndroid.PURCHASED;
+						if (enableApp) {
+							AsyncStorage.setItem('@PremiumApp', JSON.stringify(true)).then(
+								() => {
+									setIsPremium(true);
+									setIsPurchaselVisible(false);
+								},
+							);
+						}
+					},
+				);
 			} catch (error) {
 				console.error(error);
 			}
@@ -161,6 +204,8 @@ export const ServicesConnectionProvider: FC<IProps> = ({
 				setIsPremium,
 				isPurchaseStoreConnected,
 				isNetworkConnected: netInfo.isConnected,
+				isPurchaselVisible,
+				setIsPurchaselVisible,
 			}}
 		>
 			{children}

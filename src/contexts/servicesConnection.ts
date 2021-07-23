@@ -11,6 +11,8 @@ export interface ISerivcesConnectionContext {
 	isPurchaseStoreConnected: boolean;
 	iapService: IInAppPurchase;
 	isNetworkConnected: boolean;
+	isPurchaselVisible: boolean;
+	setIsPurchaselVisible: Dispatch<boolean>;
 }
 
 export const ServicesConnectionContext =

@@ -13,6 +13,9 @@ import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
+import { Purchase } from '@/components/purchase';
+import { ModalConnection } from '@/components/modalConnection';
+import { TimelineModalContext } from '@/contexts/timelineModal';
 import {
 	Container,
 	Image,
@@ -32,7 +35,8 @@ type Props = {
 };
 
 export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
-	const { billingRepository, truckRepository } = useSerivces();
+	const [isModalConnectionVisible, setModalConnectionVisible] = useState(false);
+	const servicesCtx = useSerivces();
 	const [isLoading, setIsLoading] = useState(true);
 	const { current_truck, total_years } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
@@ -50,20 +54,22 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	useEffect(() => {
 		if (isLoading) {
 			const unsubscribe = navigation.addListener('focus', () => {
-				billingRepository.getYears(current_truck.id).then(({ total_years }) => {
-					dispatch(updateYears(total_years));
-					setIsLoading(false);
-				});
+				servicesCtx.billingRepository
+					.getYears(current_truck.id)
+					.then(({ total_years }) => {
+						dispatch(updateYears(total_years));
+						setIsLoading(false);
+					});
 			});
 			return () => unsubscribe;
 		}
 	}, [
-		billingRepository,
+		servicesCtx.billingRepository,
 		current_truck.id,
 		dispatch,
 		isLoading,
 		navigation,
-		truckRepository,
+		servicesCtx.truckRepository,
 	]);
 
 	const isDark = theme.name === 'dark';
@@ -77,22 +83,39 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 				/>
 				<Title>{t(TranslationsValues.history)}</Title>
 			</SubHeader>
-			<ScrollView contentContainerStyle={scrollViewStyle.content}>
-				{isLoading ? (
-					<ActivityIndicator
-						color={isDark ? theme.colors.text : '#B63B34'}
-						size="small"
-					/>
-				) : (
-					<>
-						{total_years.length > 0 &&
-							total_years.map(year => <YearTimeline year={year} key={year} />)}
-						{total_years.length === 0 && (
-							<Warning>{t(TranslationsValues.empty_timeline)}</Warning>
-						)}
-					</>
-				)}
-			</ScrollView>
+			<TimelineModalContext.Provider
+				value={{
+					setModalConnectionVisible,
+					setIsPurchaselVisible: servicesCtx.setIsPurchaselVisible,
+				}}
+			>
+				<ScrollView contentContainerStyle={scrollViewStyle.content}>
+					{isLoading ? (
+						<ActivityIndicator
+							color={isDark ? theme.colors.text : '#B63B34'}
+							size="small"
+						/>
+					) : (
+						<>
+							{total_years.length > 0 &&
+								total_years.map(year => (
+									<YearTimeline year={year} key={year} />
+								))}
+							{total_years.length === 0 && (
+								<Warning>{t(TranslationsValues.empty_timeline)}</Warning>
+							)}
+						</>
+					)}
+				</ScrollView>
+			</TimelineModalContext.Provider>
+			<Purchase
+				isPurchaselVisible={servicesCtx.isPurchaselVisible}
+				setIsPurchaselVisible={servicesCtx.setIsPurchaselVisible}
+			/>
+			<ModalConnection
+				visible={isModalConnectionVisible}
+				setIsVisible={setModalConnectionVisible}
+			/>
 		</Container>
 	);
 };

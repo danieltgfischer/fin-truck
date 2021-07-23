@@ -9,6 +9,7 @@ export const Button = styled.TouchableOpacity`
 	justify-content: center;
 	flex-direction: row;
 	z-index: 100;
+	position: relative;
 `;
 
 export const Year = styled.Text`

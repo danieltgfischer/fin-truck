@@ -1,6 +1,6 @@
 import 'intl/locale-data/jsonp/pt-BR';
 import 'intl/locale-data/jsonp/en-US';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { Modal } from 'react-native';
 import { format } from 'date-fns';
 import usLocale from 'date-fns/locale/en-US';
@@ -12,6 +12,8 @@ import { SimpleLineIcons, FontAwesome5 } from '@expo/vector-icons';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
+import { TimelineModalContext } from '@/contexts/timelineModal';
+import { useSerivces } from '@/hooks/useServices';
 import { EditBilling } from '../editBilling';
 import { DeleteOption } from '../deleteOption';
 import {
@@ -51,7 +53,34 @@ export const BillingItem: React.FC<IProps> = ({
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { locale } = useSelector((state: IState) => state);
 	const { t } = useTranslation();
+	const { isNetworkConnected, isPremium, isPurchaseStoreConnected } =
+		useSerivces();
 	const theme = useContext(ThemeContext);
+	const timelineCtx = useContext(TimelineModalContext);
+
+	const editBilling = useCallback(() => {
+		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+			timelineCtx.setModalConnectionVisible(true);
+			return;
+		}
+		if (!isPremium) {
+			timelineCtx.setIsPurchaselVisible(true);
+			return;
+		}
+		setEditModalVisible(true);
+	}, [isNetworkConnected, isPremium, isPurchaseStoreConnected, timelineCtx]);
+
+	const deleteBilling = useCallback(() => {
+		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+			timelineCtx.setModalConnectionVisible(true);
+			return;
+		}
+		if (!isPremium) {
+			timelineCtx.setIsPurchaselVisible(true);
+			return;
+		}
+		setDeleteModalVisible(true);
+	}, []);
 
 	const localeFormat =
 		locale.country_code === 'pt-BR'
@@ -73,20 +102,14 @@ export const BillingItem: React.FC<IProps> = ({
 				</TimelineContainer>
 				<InfoContainer>
 					<ContainerButtons>
-						<ButtonIcon
-							even={index % 2 === 0}
-							onPress={() => setEditModalVisible(!isEditModalVisible)}
-						>
+						<ButtonIcon even={index % 2 === 0} onPress={editBilling}>
 							<SimpleLineIcons
 								name="pencil"
 								size={20}
 								color={theme.colors.text}
 							/>
 						</ButtonIcon>
-						<ButtonIcon
-							onPress={() => setDeleteModalVisible(true)}
-							even={index % 2 === 0}
-						>
+						<ButtonIcon onPress={deleteBilling} even={index % 2 === 0}>
 							<FontAwesome5
 								name="trash-alt"
 								size={20}

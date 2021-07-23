@@ -110,8 +110,8 @@ export enum TranslationsValues {
 	apple_store_warning = 'apple_store_warning',
 	attention = 'attention',
 	offline_message = 'offline_message',
+	unsubscribe_message = 'unsubscribe_message',
 }
-
 export const translations = {
 	en: {
 		title_home: 'Added Trucks',
@@ -251,6 +251,8 @@ export const translations = {
 		attention: 'Attention',
 		offline_message:
 			'The Fin Truck app works offline, you only need to be logged in to subscribe and upgrade to the Premium plan.',
+		unsubscribe_message:
+			'Your subscription is not canceled immediately. You can use the Premium plan until the expiration date, you can check this date when canceling your subscription!',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -392,5 +394,7 @@ export const translations = {
 		attention: 'Atenção',
 		offline_message:
 			'O aplicativo Fin Truck funciona offline, você precisa estar conectado apenas para assinar e fazer o upgrade para o plano Premium.',
+		unsubscribe_message:
+			'A sua assinatura não é cancelada de imediato. Você pode usar o plano Premium até a data do vencimento, você pode verificar essa data ao cancelar a assinatura!',
 	},
 };

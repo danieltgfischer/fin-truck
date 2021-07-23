@@ -5,7 +5,7 @@ import RNIap, {
 	Subscription,
 	Purchase,
 } from 'react-native-iap';
-import { IInAppPurchase } from '../domain';
+import { IInAppPurchase, ListnerCallback } from '../domain';
 
 export class IAP implements IInAppPurchase {
 	purchaseUpdateSubscription = null;
@@ -21,14 +21,13 @@ export class IAP implements IInAppPurchase {
 		}
 	}
 
-	async purchaseListner(): Promise<SubscriptionPurchase> {
+	async purchaseListner(
+		callback: (arg: SubscriptionPurchase) => void,
+	): Promise<void> {
 		try {
-			const ghosts = await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
-			console.log('purchaseListner|ghosts', ghosts);
-			let currentPurchse = null;
+			await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
 			this.purchaseUpdateSubscription = purchaseUpdatedListener(
 				async (purchase: SubscriptionPurchase) => {
-					console.log('purchaseListner|purchase', purchase);
 					const receipt = purchase.transactionReceipt;
 					if (
 						receipt &&
@@ -36,10 +35,9 @@ export class IAP implements IInAppPurchase {
 					) {
 						await RNIap.finishTransaction(purchase);
 					}
-					currentPurchse = purchase;
+					callback(purchase);
 				},
 			);
-			return currentPurchse;
 		} catch (error) {
 			console.error('purchaseListner', error);
 		}

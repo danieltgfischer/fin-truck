@@ -187,7 +187,7 @@ export const Navigation: React.FC = () => {
 						name={routeNames.Home}
 						component={HomeScreen}
 						options={{
-							title: 'HOME',
+							title: 'Fin Truck',
 							headerTitleAlign: 'center',
 							headerTitleStyle: {
 								color: isDark ? '#fbfbff' : '#fff',

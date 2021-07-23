@@ -41,11 +41,9 @@ type Props = {
 export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isModalConnectionVisible, setModalConnectionVisible] = useState(false);
-	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { t } = useTranslation();
-	const { isPremium, isNetworkConnected, isPurchaseStoreConnected } =
-		useSerivces();
+	const serviceCtx = useSerivces();
 	const theme = useContext(ThemeContext);
 
 	const renderItem: ListRenderItem<IOptionItem> = ({
@@ -80,17 +78,20 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	);
 
 	const openEditModal = useCallback(() => {
-		console.log(isPremium);
-		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+		if (
+			(!serviceCtx.isNetworkConnected ||
+				!serviceCtx.isPurchaseStoreConnected) &&
+			!serviceCtx.isPremium
+		) {
 			setModalConnectionVisible(true);
 			return;
 		}
-		if (!isPremium) {
-			setIsPurchaselVisible(true);
+		if (!serviceCtx.isPremium) {
+			serviceCtx.setIsPurchaselVisible(true);
 			return;
 		}
 		setEditModalVisible(true);
-	}, [isNetworkConnected, isPremium, isPurchaseStoreConnected]);
+	}, [serviceCtx]);
 
 	const isDark = theme.name === 'dark';
 
@@ -130,6 +131,10 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					contentContainerStyle={flatListStyle.content}
 					numColumns={3}
 				/>
+				<Purchase
+					isPurchaselVisible={serviceCtx.isPurchaselVisible}
+					setIsPurchaselVisible={serviceCtx.setIsPurchaselVisible}
+				/>
 			</Container>
 			<Modal visible={isEditModalVisible} animationType="slide">
 				<EditTruck closeModal={() => setEditModalVisible(false)} />
@@ -145,10 +150,6 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 			<ModalConnection
 				visible={isModalConnectionVisible}
 				setIsVisible={setModalConnectionVisible}
-			/>
-			<Purchase
-				isPurchaselVisible={isPurchaselVisible}
-				setIsPurchaselVisible={setIsPurchaselVisible}
 			/>
 		</>
 	);

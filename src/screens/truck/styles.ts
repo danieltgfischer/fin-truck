@@ -23,6 +23,7 @@ export const Form = styled(UnForm)`
 
 export const Container = styled.SafeAreaView`
 	display: flex;
+	position: relative;
 	height: 100%;
 	width: 100%;
 	background-color: ${({ theme }) => theme.colors.background};

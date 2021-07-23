@@ -22,6 +22,7 @@ import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components';
 import { asyncShareDatabase } from '@/utils/export-database';
+import { TimelineModalContext } from '@/contexts/timelineModal';
 import { optionsObj } from './options';
 import {
 	Container,
@@ -48,7 +49,12 @@ const MonthTimeline: React.FC<IProps> = ({
 	monthNumber,
 	year,
 }: IProps) => {
-	const { billingRepository } = useSerivces();
+	const {
+		billingRepository,
+		isNetworkConnected,
+		isPremium,
+		isPurchaseStoreConnected,
+	} = useSerivces();
 	const { current_truck, years, monthResume, locale } = useSelector(
 		(state: IState) => state,
 	);
@@ -61,6 +67,7 @@ const MonthTimeline: React.FC<IProps> = ({
 	);
 	const [called, setCalled] = useState(false);
 	const theme = useContext(ThemeContext);
+	const timelineCtx = useContext(TimelineModalContext);
 
 	const openMonth = useCallback(async () => {
 		setIsLoading(true);
@@ -149,6 +156,34 @@ const MonthTimeline: React.FC<IProps> = ({
 		return [];
 	}, [monthNumber, year, years]);
 
+	const shareYearData = useCallback(async () => {
+		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
+			timelineCtx.setModalConnectionVisible(true);
+			return;
+		}
+		if (!isPremium) {
+			timelineCtx.setIsPurchaselVisible(true);
+			return;
+		}
+		await asyncShareDatabase({
+			data,
+			xlsx_name: `${month}_${year}`,
+			path: `${current_truck.name}_${current_truck.board}_${month}_${year}`,
+			locale: locale.country_code,
+		});
+	}, [
+		current_truck.board,
+		current_truck.name,
+		data,
+		isNetworkConnected,
+		isPremium,
+		isPurchaseStoreConnected,
+		locale.country_code,
+		month,
+		timelineCtx,
+		year,
+	]);
+
 	const monthYear = useMemo(
 		() =>
 			monthResume[year] ?? {
@@ -183,16 +218,7 @@ const MonthTimeline: React.FC<IProps> = ({
 					<SubHeader>
 						<ButtonDBContainer>
 							<Label>{t(TranslationsValues.share)}</Label>
-							<DatabseExportButton
-								onPress={() =>
-									asyncShareDatabase({
-										data,
-										xlsx_name: `${month}_${year}`,
-										path: `${current_truck.name}_${current_truck.board}_${month}_${year}`,
-										locale: locale.country_code,
-									})
-								}
-							>
+							<DatabseExportButton onPress={shareYearData}>
 								<Entypo name="share" size={30} color={theme.colors.text} />
 							</DatabseExportButton>
 						</ButtonDBContainer>

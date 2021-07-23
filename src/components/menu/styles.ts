@@ -2,8 +2,8 @@ import styled from 'styled-components/native';
 import { Dimensions, Animated } from 'react-native';
 import { darken } from 'polished';
 
-const { height } = Dimensions.get('window');
-const heightMenuContainer = height >= 592 ? height * 0.6 : height * 0.7;
+const { height, width } = Dimensions.get('window');
+const heightMenuContainer = height >= 592 ? height * 0.65 : height * 0.7;
 
 export const Container = styled(Animated.View)`
 	position: absolute;
@@ -38,8 +38,52 @@ export const Label = styled.Text`
 	margin: 0 0 0 15px;
 `;
 
-export const ContainerSwitch = styled.View`
+export const ContainerMenu = styled.View`
 	width: 100%;
 	padding: 0 5%;
 	margin: 2% 0;
+`;
+
+export const CancelSubscriptionButton = styled.TouchableOpacity`
+	background-color: ${({ theme }) => theme.colors.buttons.cancel};
+	align-self: center;
+	margin: 15px 0 25px;
+	align-items: center;
+	padding: 10px 20px;
+	border-radius: 7px;
+`;
+
+export const LabelButton = styled.Text`
+	color: #fafafa;
+	font-size: 24px;
+	font-family: Regular;
+`;
+
+export const CloseButton = styled.TouchableOpacity`
+	align-self: flex-end;
+	padding: 5px 15px 0;
+	z-index: 1;
+`;
+
+export const CancelSubscriptionContainer = styled.View`
+	background-color: ${({ theme }) => theme.colors.background};
+	width: ${width * 0.9}px;
+	justify-content: space-around;
+	height: ${height * 0.55}px;
+`;
+
+export const SubscriptionTitle = styled(Animated.Text)`
+	color: ${({ theme }) => theme.colors.text};
+	font-size: 28px;
+	font-family: Regular;
+	text-align: center;
+	margin: 15px 0 0;
+`;
+
+export const Message = styled.Text`
+	color: ${({ theme }) => theme.colors.text};
+	font-size: 20px;
+	font-family: Italic;
+	text-align: center;
+	padding: 25px 15px;
 `;
