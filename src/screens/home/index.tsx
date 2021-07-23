@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { ListRenderItemInfo, Platform } from 'react-native';
+import { ListRenderItemInfo } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -45,7 +45,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const { trucks } = useSelector((state: IState) => state);
 	const dispatch = useDispatch();
-	const { truckRepository, isPremium } = useSerivces();
+	const { truckRepository } = useSerivces();
 	const { colors } = useContext(ThemeContext);
 	const { t } = useTranslation();
 
@@ -104,8 +104,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	}, []);
 
 	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
-	const isAndroid = Platform.OS === 'android';
-	// TODO create message to sync upgrade purchase
+
 	return (
 		<Container>
 			<CloseMenuContainer onPress={closeAll}>
@@ -117,6 +116,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 						keyExtractor={(item: ITruckItemProps) => item.id}
 						contentContainerStyle={flatListStyle.content}
 						numColumns={3}
+						columnWrapperStyle={flatListStyle.collumnWrapper}
 						ListEmptyComponent={EmptyTrucks}
 					/>
 					<Footer>

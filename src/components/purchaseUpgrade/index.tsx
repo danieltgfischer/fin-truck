@@ -69,10 +69,16 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = (
 
 	useEffect(() => {
 		// consumeAllItemsAndroid();
-		if (isPurchaseStoreConnected && subscriptions.length === 0) {
+		if (isPurchaseStoreConnected && (subscriptions || [])?.length === 0) {
 			iapService.getSubscriptions(items).then(setSubscriptions);
 		}
-	}, [iapService, isPurchaseStoreConnected, items, subscriptions?.length]);
+	}, [
+		iapService,
+		isPurchaseStoreConnected,
+		items,
+		subscriptions,
+		subscriptions.length,
+	]);
 
 	const purchaseSubcription = useCallback(
 		async (id: string): Promise<void> => {

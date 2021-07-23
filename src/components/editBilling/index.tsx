@@ -10,7 +10,12 @@ import MultiInput, { IInputRef } from '@/components/multipleInput ';
 import { Button } from '@/components/button';
 import { optionsObj } from '@/screens/truck/options';
 import { updateTimeline } from '@/store/actions';
-import { Animated, ToastAndroid } from 'react-native';
+import {
+	Animated,
+	KeyboardAvoidingView,
+	Platform,
+	ToastAndroid,
+} from 'react-native';
 import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
@@ -144,43 +149,48 @@ export const EditBilling: React.FC<IProps> = ({
 	}, []);
 
 	return (
-		<Container contentContainerStyle={scrollView.content}>
-			<Title>
-				{t(TranslationsValues.edit_option_title, {
-					value: t(optionValue),
-				})}
-			</Title>
-			<Image source={source} resizeMode="contain" />
-			<Form ref={formRef} onSubmit={handleSubmit}>
-				<Input
-					name="value"
-					label={t(TranslationsValues.edit_option_value_label)}
-					numeric
-					currency
-					returnKeyType="next"
-					maxLength={16}
-					keyboardType="numeric"
-					requiredLabel
-					onSubmitEditing={() => nextInputRef.current?.focus()}
-				/>
-				<MultiInput
-					name="description"
-					label={t(TranslationsValues.edit_option_description_label)}
-					maxLength={60}
-					ref={nextInputRef}
-				/>
-			</Form>
-			<ButtonContainer>
-				<Button
-					buttonLabel={t(TranslationsValues.cancel)}
-					onPress={closeModal}
-				/>
-				<Button
-					buttonLabel={t(TranslationsValues.save)}
-					onPress={submit}
-					next
-				/>
-			</ButtonContainer>
-		</Container>
+		<KeyboardAvoidingView
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			style={{ flex: 1 }}
+		>
+			<Container contentContainerStyle={scrollView.content}>
+				<Title>
+					{t(TranslationsValues.edit_option_title, {
+						value: t(optionValue),
+					})}
+				</Title>
+				<Image source={source} resizeMode="contain" />
+				<Form ref={formRef} onSubmit={handleSubmit}>
+					<Input
+						name="value"
+						label={t(TranslationsValues.edit_option_value_label)}
+						numeric
+						currency
+						returnKeyType="next"
+						maxLength={16}
+						keyboardType="numeric"
+						requiredLabel
+						onSubmitEditing={() => nextInputRef.current?.focus()}
+					/>
+					<MultiInput
+						name="description"
+						label={t(TranslationsValues.edit_option_description_label)}
+						maxLength={60}
+						ref={nextInputRef}
+					/>
+				</Form>
+				<ButtonContainer>
+					<Button
+						buttonLabel={t(TranslationsValues.cancel)}
+						onPress={closeModal}
+					/>
+					<Button
+						buttonLabel={t(TranslationsValues.save)}
+						onPress={submit}
+						next
+					/>
+				</ButtonContainer>
+			</Container>
+		</KeyboardAvoidingView>
 	);
 };

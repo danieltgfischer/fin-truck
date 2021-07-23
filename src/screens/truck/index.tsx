@@ -130,6 +130,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					keyExtractor={() => shortid()}
 					contentContainerStyle={flatListStyle.content}
 					numColumns={3}
+					columnWrapperStyle={flatListStyle.collumnWrapper}
 				/>
 				<Purchase
 					isPurchaselVisible={serviceCtx.isPurchaselVisible}

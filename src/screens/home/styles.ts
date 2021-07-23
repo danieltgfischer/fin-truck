@@ -5,6 +5,14 @@ const { width } = Dimensions.get('window');
 
 export const flatListStyle = StyleSheet.create({
 	content: { alignItems: 'center', width: '100%' },
+	collumnWrapper: {
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		alignContent: 'center',
+		width,
+		paddingHorizontal: 4,
+		paddingVertical: 8,
+	},
 });
 
 export const FlatList = styled.FlatList`
@@ -59,7 +67,6 @@ export const EmptyCell = styled.View`
 	width: 100px;
 	height: 125px;
 	background: transparent;
-	margin: 3%;
 `;
 
 export const FooterAddContainer = styled.View`

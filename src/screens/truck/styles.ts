@@ -11,6 +11,14 @@ export const flatListStyle = StyleSheet.create({
 		paddingBottom: 50,
 		paddingTop: 25,
 	},
+	collumnWrapper: {
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		alignContent: 'center',
+		width,
+		paddingHorizontal: 4,
+		paddingVertical: 4,
+	},
 });
 
 export const FlatList = styled.FlatList`
