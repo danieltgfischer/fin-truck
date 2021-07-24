@@ -188,6 +188,11 @@ export const AddOptionScreen: React.FC<Props> = ({
 		[animate, createBillingOption, step, t],
 	);
 
+	const openHelp = useCallback(() => {
+		formRef.current.reset();
+		setModalVisible(true);
+	}, []);
+
 	const submit = useCallback(() => {
 		formRef.current.submitForm();
 	}, []);
@@ -199,7 +204,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 		<>
 			<_.Container contentContainerStyle={_.scrollView.content}>
 				<_.ButtonHeaderContainer>
-					<_.IconButton onPress={() => setModalVisible(!isModalVisible)}>
+					<_.IconButton onPress={openHelp}>
 						<Feather
 							name="help-circle"
 							size={24}
