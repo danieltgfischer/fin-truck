@@ -22,8 +22,8 @@ export const SubHeader = styled.View`
 	width: ${width}px;
 	justify-content: center;
 	align-items: baseline;
-	margin: 0 0 20px;
-	padding: 20px 0;
+	margin: 0 0 10px;
+	padding: 15px 0 5px;
 	position: relative;
 	background-color: ${({ theme }) => theme.colors.background};
 	elevation: 1;

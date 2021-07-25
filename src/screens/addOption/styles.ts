@@ -12,10 +12,14 @@ export const scrollView = StyleSheet.create({
 		paddingVertical: 10,
 		paddingBottom: 20,
 	},
+	modalContainer: {
+		alignItems: 'center',
+		height: '100%',
+		paddingVertical: 50,
+	},
 });
 
 export const Container = styled.ScrollView`
-	display: flex;
 	height: 100%;
 	width: 100%;
 	background-color: ${({ theme }) => theme.colors.background};
@@ -66,11 +70,8 @@ export const Title = styled.Text`
 	margin: 0 0 0 15px;
 `;
 
-export const ModalContainer = styled.View`
+export const ModalContainer = styled.ScrollView`
 	background-color: ${({ theme }) => theme.colors.background};
-	height: 100%;
-	align-items: center;
-	padding: 50px 0;
 `;
 
 export const ModalImage = styled.Image`

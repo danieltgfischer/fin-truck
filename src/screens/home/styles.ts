@@ -27,9 +27,9 @@ export const Container = styled.SafeAreaView`
 
 export const HomeContainer = styled.View`
 	height: 100%;
+	align-items: center;
 	width: 100%;
 	background-color: ${({ theme }) => theme.colors.background};
-	padding: 20px 0 0;
 `;
 
 export const Title = styled.Text`
@@ -37,6 +37,7 @@ export const Title = styled.Text`
 	font-size: 24px;
 	text-align: center;
 	font-family: 'Italic';
+	padding: 10px 0 0;
 `;
 
 export const Footer = styled.View`
@@ -45,6 +46,7 @@ export const Footer = styled.View`
 	justify-content: space-between;
 	align-items: center;
 	height: 100px;
+	width: ${width}px;
 	padding: 15px 0 0;
 `;
 

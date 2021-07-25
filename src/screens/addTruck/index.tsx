@@ -1,10 +1,6 @@
-import React, { useRef, useCallback, useState } from 'react';
-import {
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	ToastAndroid,
-} from 'react-native';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
+import { ToastAndroid } from 'react-native';
+import Constants from 'expo-constants';
 import Input, { IInputRef } from '@/components/input';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import * as Yup from 'yup';
@@ -20,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Purchase } from '@/components/purchase';
 import { IState } from '@/store/types';
 import { ModalConnection } from '@/components/modalConnection';
+import { AdMobBanner } from 'expo-ads-admob';
 import {
 	Container,
 	AddTruckContainer,
@@ -121,46 +118,57 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 		formRef.current.submitForm();
 	}, []);
 
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
+
 	return (
-		<Container>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				style={{ flex: 1 }}
-			>
-				<AddTruckContainer contentContainerStyle={scrollView.content}>
-					<Image source={AddTruckIcon} />
-					<Form ref={formRef} onSubmit={handleSubmit}>
-						<Input
-							name="name"
-							label={t(TranslationsValues.add_name_truck_label)}
-							returnKeyType="next"
-							requiredLabel
-							maxLength={16}
-							onSubmitEditing={() => nextInputRef.current?.focus()}
-						/>
-						<Input
-							name="board"
-							label={t(TranslationsValues.add_board_truck_label)}
-							maxLength={12}
-							requiredLabel
-							returnKeyType="send"
-							onSubmitEditing={submit}
-							ref={nextInputRef}
-						/>
-					</Form>
-					<ButtonContainer>
-						<Button
-							onPress={navigate}
-							buttonLabel={t(TranslationsValues.cancel)}
-						/>
-						<Button
-							onPress={submit}
-							buttonLabel={t(TranslationsValues.add)}
-							next
-						/>
-					</ButtonContainer>
-				</AddTruckContainer>
-			</KeyboardAvoidingView>
+		<Container contentContainerStyle={scrollView.content}>
+			<AddTruckContainer contentContainerStyle={scrollView.content}>
+				{!isPremium && (
+					<AdMobBanner
+						bannerSize="banner"
+						adUnitID={adUnitID}
+						style={{ marginTop: 5 }}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
+				<Image source={AddTruckIcon} />
+				<Form ref={formRef} onSubmit={handleSubmit}>
+					<Input
+						name="name"
+						label={t(TranslationsValues.add_name_truck_label)}
+						returnKeyType="next"
+						requiredLabel
+						maxLength={16}
+						onSubmitEditing={() => nextInputRef.current?.focus()}
+					/>
+					<Input
+						name="board"
+						label={t(TranslationsValues.add_board_truck_label)}
+						maxLength={12}
+						requiredLabel
+						returnKeyType="send"
+						onSubmitEditing={submit}
+						ref={nextInputRef}
+					/>
+				</Form>
+				<ButtonContainer>
+					<Button
+						onPress={navigate}
+						buttonLabel={t(TranslationsValues.cancel)}
+					/>
+					<Button
+						onPress={submit}
+						buttonLabel={t(TranslationsValues.add)}
+						next
+					/>
+				</ButtonContainer>
+			</AddTruckContainer>
 			<Purchase
 				isPurchaselVisible={isPurchaselVisible}
 				setIsPurchaselVisible={setIsPurchaselVisible}

@@ -5,6 +5,8 @@ import React, {
 	useEffect,
 	useContext,
 } from 'react';
+import Constants from 'expo-constants';
+import { AdMobBanner } from 'expo-ads-admob';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '@/store/types';
@@ -114,6 +116,10 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	]);
 
 	const { currency } = locale[locale.country_code];
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
 
 	return (
 		<Container>
@@ -122,6 +128,19 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 				<Year>{year}</Year>
 				<Line />
 			</Button>
+			{!isPremium && isOpen && (
+				<AdMobBanner
+					style={{
+						alignSelf: 'center',
+					}}
+					bannerSize="largeBanner"
+					adUnitID={adUnitID}
+					servePersonalizedAds
+					onDidFailToReceiveAdWithError={e =>
+						console.log('onDidFailToReceiveAdWithError', e)
+					}
+				/>
+			)}
 			{isOpen && (
 				<>
 					<SubHeader>

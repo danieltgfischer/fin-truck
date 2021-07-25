@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState, useContext } from 'react';
 import { ListRenderItem, Modal } from 'react-native';
+import Constants from 'expo-constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import shortid from 'shortid';
 import OptionItem, { IOptionItem } from '@/components/optionItem';
@@ -15,6 +16,7 @@ import { ThemeContext } from 'styled-components/native';
 import { useSerivces } from '@/hooks/useServices';
 import { ModalConnection } from '@/components/modalConnection';
 import { Purchase } from '@/components/purchase';
+import { AdMobBanner } from 'expo-ads-admob';
 import {
 	Container,
 	FlatList,
@@ -98,6 +100,10 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	}, [serviceCtx]);
 
 	const isDark = theme.name === 'dark';
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
 
 	return (
 		<>
@@ -137,6 +143,20 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					numColumns={3}
 					columnWrapperStyle={flatListStyle.collumnWrapper}
 				/>
+				{!serviceCtx.isPremium && (
+					<AdMobBanner
+						style={{
+							paddingTop: 15,
+							alignSelf: 'center',
+						}}
+						bannerSize="banner"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
 				<Purchase
 					isPurchaselVisible={serviceCtx.isPurchaselVisible}
 					setIsPurchaselVisible={serviceCtx.setIsPurchaselVisible}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
+import Constants from 'expo-constants';
+import { AdMobBanner } from 'expo-ads-admob';
 import { RootStackParamList, routeNames } from '@/navigation/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,7 +44,6 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
-
 	const title = current_truck?.name ?? '';
 
 	useEffect(() => {
@@ -73,9 +74,26 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 	]);
 
 	const isDark = theme.name === 'dark';
-
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
 	return (
 		<Container>
+			{!servicesCtx.isPremium && (
+				<AdMobBanner
+					style={{
+						paddingTop: 15,
+						alignSelf: 'center',
+					}}
+					bannerSize="banner"
+					adUnitID={adUnitID}
+					servePersonalizedAds
+					onDidFailToReceiveAdWithError={e =>
+						console.log('onDidFailToReceiveAdWithError', e)
+					}
+				/>
+			)}
 			<SubHeader>
 				<Image
 					source={isDark ? TimelineIconLight : TimelineIcon}

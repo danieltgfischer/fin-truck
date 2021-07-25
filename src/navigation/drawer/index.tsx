@@ -68,6 +68,7 @@ export const DrawerScreen: React.FC<Props> = ({ navigation }: Props) => {
 	return (
 		<Drawer.Navigator
 			drawerType="front"
+			drawerStyle={{ width: 320 }}
 			drawerContent={() => <DrawerComponent />}
 			initialRouteName={routeNames.Truck}
 		>

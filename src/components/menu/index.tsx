@@ -7,12 +7,14 @@ import React, {
 	useState,
 } from 'react';
 import { Animated, Linking, useWindowDimensions } from 'react-native';
+import Constants from 'expo-constants';
 import { AntDesign } from '@expo/vector-icons';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
 import { useCallback } from 'react';
 import { useSerivces } from '@/hooks/useServices';
+import { AdMobBanner } from 'expo-ads-admob';
 import { LanguageSwitch } from '../languageSwitch';
 import { ThemeSwitch } from '../themeSwitch';
 import {
@@ -102,6 +104,11 @@ export const Menu: React.FC<IProps> = ({
 		Linking.openURL('https://play.google.com/store/account/subscriptions');
 	}, []);
 
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
+
 	return (
 		<Container
 			style={{
@@ -143,6 +150,7 @@ export const Menu: React.FC<IProps> = ({
 					<LabelButton>{t(TranslationsValues.unsubscribe)}</LabelButton>
 				</CancelSubscriptionButton>
 			)}
+
 			<Modal visible={isModalSubscriptionVisible} animationType="fade">
 				<CancelSubscriptionContainer>
 					<CloseButton onPress={() => setModalSubscriptionVisible(false)}>
@@ -163,6 +171,22 @@ export const Menu: React.FC<IProps> = ({
 					</CancelSubscriptionButton>
 				</CancelSubscriptionContainer>
 			</Modal>
+			{!isPremium && (
+				<AdMobBanner
+					style={{
+						paddingTop: 15,
+						maxWidth: '100%',
+						position: 'absolute',
+						bottom: 0,
+					}}
+					bannerSize="banner"
+					adUnitID={adUnitID}
+					servePersonalizedAds
+					onDidFailToReceiveAdWithError={e =>
+						console.log('onDidFailToReceiveAdWithError', e)
+					}
+				/>
+			)}
 		</Container>
 	);
 };

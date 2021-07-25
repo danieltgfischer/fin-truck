@@ -3,14 +3,15 @@ import { Dimensions, Animated } from 'react-native';
 import { darken } from 'polished';
 
 const { height, width } = Dimensions.get('window');
-const heightMenuContainer = height >= 592 ? height * 0.65 : height * 0.7;
 
 export const Container = styled(Animated.View)`
 	position: absolute;
-	height: ${heightMenuContainer}px;
+	height: ${height * 0.65}px;
 	width: 100%;
+	align-items: center;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
+	padding: 5px 0 0;
 	border-top-width: 0.3px;
 	border-top-color: ${({ theme }) =>
 		theme.name === 'dark' ? darken(0.05, theme.colors.text) : 'transparent'};
@@ -35,13 +36,14 @@ export const Label = styled.Text`
 	color: ${({ theme }) => theme.colors.text};
 	font-size: 20px;
 	font-family: Semi_Bold;
-	margin: 0 0 0 15px;
+	margin: 10px 0 0 15px;
+	align-self: flex-start;
 `;
 
 export const ContainerMenu = styled.View`
 	width: 100%;
 	padding: 0 5%;
-	margin: 2% 0;
+	/* margin: 1% 0; */
 `;
 
 export const CancelSubscriptionButton = styled.TouchableOpacity`

@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { Modal, Animated, Dimensions, ToastAndroid } from 'react-native';
 import Input from '@/components/input';
+import Constants from 'expo-constants';
 import MultiInput, { IInputRef } from '@/components/multipleInput ';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import * as Yup from 'yup';
@@ -22,6 +23,7 @@ import { RouteProp } from '@react-navigation/native';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
+import { AdMobBanner } from 'expo-ads-admob';
 import * as _ from './styles';
 import { optionsObj } from './options';
 import { monthsNames } from './months';
@@ -59,7 +61,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const nextInputRef = useRef<IInputRef>(null);
 	const translateXForm = useRef(new Animated.Value(0)).current;
 	const translateXReview = useRef(new Animated.Value(width)).current;
-	const { billingRepository } = useSerivces();
+	const { billingRepository, isPremium } = useSerivces();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
 
@@ -199,10 +201,27 @@ export const AddOptionScreen: React.FC<Props> = ({
 
 	const { currency } = locale[locale.country_code];
 	const isDark = theme.name === 'dark';
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
 
 	return (
 		<>
 			<_.Container contentContainerStyle={_.scrollView.content}>
+				{!isPremium && (
+					<AdMobBanner
+						style={{
+							maxWidth: '100%',
+						}}
+						bannerSize="banner"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
 				<_.ButtonHeaderContainer>
 					<_.IconButton onPress={openHelp}>
 						<Feather
@@ -295,7 +314,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 				</_.ButtonContainer>
 			</_.Container>
 			<Modal visible={isModalVisible} animationType="fade" statusBarTranslucent>
-				<_.ModalContainer>
+				<_.ModalContainer contentContainerStyle={_.scrollView.modalContainer}>
 					<_.Title>{t(value)}</_.Title>
 					<_.ModalImage
 						resizeMode="stretch"
@@ -305,6 +324,19 @@ export const AddOptionScreen: React.FC<Props> = ({
 								: optionsObj[option].source
 						}
 					/>
+					{!isPremium && (
+						<AdMobBanner
+							style={{
+								marginBottom: 10,
+							}}
+							bannerSize="largeBanner"
+							adUnitID={adUnitID}
+							servePersonalizedAds
+							onDidFailToReceiveAdWithError={e =>
+								console.log('onDidFailToReceiveAdWithError', e)
+							}
+						/>
+					)}
 					<_.ModalDescription>{t(`${value}_description`)}</_.ModalDescription>
 					<Button
 						onPress={() => setModalVisible(!isModalVisible)}

@@ -13,5 +13,5 @@ export const LanguageContainer = styled.View`
 	justify-content: space-around;
 	background-color: ${({ theme }) =>
 		theme.name === 'dark' ? lighten(0.05, theme.colors.background) : '#fafafa'};
-	padding: 5%;
+	padding: 5px 5%;
 `;

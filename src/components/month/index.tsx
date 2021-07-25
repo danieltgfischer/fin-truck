@@ -5,9 +5,11 @@ import React, {
 	useMemo,
 	useContext,
 } from 'react';
+import Constants from 'expo-constants';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
+import { AdMobBanner } from 'expo-ads-admob';
 import { BillingItem } from '@/components/billingItem';
 import { Entypo } from '@expo/vector-icons';
 import { useSerivces } from '@/hooks/useServices';
@@ -24,6 +26,7 @@ import { ThemeContext } from 'styled-components';
 import { asyncShareDatabase } from '@/utils/export-database';
 import { TimelineModalContext } from '@/contexts/timelineModal';
 import { optionsObj } from './options';
+
 import {
 	Container,
 	Month,
@@ -199,7 +202,10 @@ const MonthTimeline: React.FC<IProps> = ({
 	};
 
 	const { currency } = locale[locale.country_code];
-
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
 	return (
 		<>
 			<Container onPress={openMonth}>
@@ -207,6 +213,20 @@ const MonthTimeline: React.FC<IProps> = ({
 				<Month>{month}</Month>
 				<Line />
 			</Container>
+			{!isPremium && isOpen && (
+				<AdMobBanner
+					style={{
+						paddingTop: 15,
+						alignSelf: 'center',
+					}}
+					bannerSize="banner"
+					adUnitID={adUnitID}
+					servePersonalizedAds
+					onDidFailToReceiveAdWithError={e =>
+						console.log('onDidFailToReceiveAdWithError', e)
+					}
+				/>
+			)}
 			{!isLoading && isOpen && data.length === 0 && (
 				<EmptyData>{t(TranslationsValues.empty_month)}</EmptyData>
 			)}

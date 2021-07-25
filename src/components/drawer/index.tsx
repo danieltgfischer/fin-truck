@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react';
-import { locale } from 'expo-localization';
 import { useNavigation } from '@react-navigation/native';
+import Constants from 'expo-constants';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
@@ -10,6 +10,8 @@ import Timeline from '@/icons/Timeline.png';
 import { ButtonIcon } from '@/navigation/style';
 import { routeNames } from '@/navigation/types';
 import { TranslationsValues } from '@/config/intl';
+import { AdMobBanner } from 'expo-ads-admob';
+import { useSerivces } from '@/hooks/useServices';
 import { DrawerItem } from './DrawerItem';
 import { Menu } from '../menu';
 import {
@@ -26,6 +28,7 @@ export const DrawerComponent: React.FC = () => {
 	const navigation = useNavigation();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
+	const { isPremium } = useSerivces();
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const isDrawerOpen = useIsDrawerOpen();
 
@@ -43,7 +46,11 @@ export const DrawerComponent: React.FC = () => {
 	);
 
 	const isDark = theme.name === 'dark';
-	const br = locale === 'pt-BR';
+
+	const adUnitID =
+		Constants.isDevice && !__DEV__
+			? 'ca-app-pub-9490699886096845/2625998185'
+			: 'ca-app-pub-3940256099942544/6300978111';
 	return (
 		<Container>
 			<DrawerContainer onPress={() => setIsModalVisible(false)}>
@@ -62,13 +69,6 @@ export const DrawerComponent: React.FC = () => {
 							name={t(TranslationsValues.history)}
 							onPress={() => navigate(routeNames.Timeline)}
 						/>
-						{br && (
-							<DrawerItem
-								name="Nos ajude"
-								onPress={() => navigate(routeNames.Donate)}
-								textCenter
-							/>
-						)}
 					</MenuButtonsContainer>
 					<MenuConfigContainer>
 						<ButtonIcon onPress={() => setIsModalVisible(true)}>
@@ -78,6 +78,20 @@ export const DrawerComponent: React.FC = () => {
 								color={isDark ? theme.colors.text : '#ccc'}
 							/>
 						</ButtonIcon>
+						{!isPremium && (
+							<AdMobBanner
+								bannerSize="largeBanner"
+								adUnitID={adUnitID}
+								style={{
+									alignSelf: 'center',
+									paddingTop: 5,
+								}}
+								servePersonalizedAds
+								onDidFailToReceiveAdWithError={e =>
+									console.log('onDidFailToReceiveAdWithError', e)
+								}
+							/>
+						)}
 					</MenuConfigContainer>
 				</DrawerContentContainer>
 			</DrawerContainer>

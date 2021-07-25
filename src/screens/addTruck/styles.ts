@@ -7,14 +7,16 @@ const { width, height } = Dimensions.get('window');
 export const scrollView = StyleSheet.create({
 	content: {
 		alignItems: 'center',
+		justifyContent: 'flex-start',
 		paddingHorizontal: 50,
-		paddingVertical: 20,
+		paddingBottom: 20,
 	},
 });
 
-export const Container = styled.View`
-	height: ${height}px;
-	width: ${width}px;
+export const Container = styled.ScrollView`
+	height: 100%;
+	width: 100%;
+	background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const AddTruckContainer = styled.ScrollView`
@@ -24,7 +26,9 @@ export const AddTruckContainer = styled.ScrollView`
 	background-color: ${({ theme }) => theme.colors.background};
 `;
 
-export const Image = styled.Image``;
+export const Image = styled.Image`
+	margin: 10px 0 0;
+`;
 
 export const ButtonContainer = styled.View`
 	flex-direction: row;
