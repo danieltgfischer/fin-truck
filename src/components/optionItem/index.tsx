@@ -1,10 +1,10 @@
 import React, {
 	useCallback,
-	FC,
 	useEffect,
 	useMemo,
 	useContext,
 	memo,
+	Dispatch,
 } from 'react';
 import { Animated, Easing } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,30 +18,43 @@ export interface IOptionItem {
 	source: string;
 	value: string;
 	delay: number;
+	index: number;
 	source_light?: string;
+	animationDone: boolean;
+	setAniamtionDone: Dispatch<boolean>;
 }
 
-const OptionItem: FC<IOptionItem> = ({
+const OptionItem: React.FC<IOptionItem> = ({
 	big_name,
 	source,
 	value,
 	source_light,
+	animationDone,
+	setAniamtionDone,
 	delay,
+	index,
 }: IOptionItem) => {
 	const navigation = useNavigation();
 	const scale = useMemo(() => new Animated.Value(0), []);
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
-
 	useEffect(() => {
+		if (animationDone) {
+			scale.setValue(1);
+			return;
+		}
 		Animated.timing(scale, {
 			toValue: 1,
 			duration: 500,
 			easing: Easing.elastic(1),
 			useNativeDriver: true,
 			delay,
-		}).start();
-	}, [delay, scale]);
+		}).start(({ finished }) => {
+			if (index === 14 && finished) {
+				setAniamtionDone(true);
+			}
+		});
+	}, [animationDone, delay, index, scale, setAniamtionDone]);
 
 	const navigate = useCallback(() => {
 		navigation.navigate(routeNames.AddOption, { option: value });

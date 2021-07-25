@@ -42,6 +42,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [isEditModalVisible, setEditModalVisible] = useState(false);
 	const [isModalConnectionVisible, setModalConnectionVisible] = useState(false);
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+	const [animationDone, setAniamtionDone] = useState(false);
 	const { t } = useTranslation();
 	const serviceCtx = useSerivces();
 	const theme = useContext(ThemeContext);
@@ -56,6 +57,9 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				source_light={source_light}
 				big_name={big_name}
 				value={value}
+				animationDone={animationDone}
+				setAniamtionDone={setAniamtionDone}
+				index={index}
 				delay={index * 150}
 			/>
 		);
@@ -125,6 +129,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				</ContainerButtons>
 				<Title>{t('title_truck')}:</Title>
 				<FlatList
+					focusable
 					data={data}
 					renderItem={renderItem}
 					keyExtractor={() => shortid()}

@@ -25,7 +25,10 @@
       "icon": "./assets/icon.png",
       "backgroundColor": "#ffffff",
       "package": "com.danieltgfischer.fintruck",
-      "versionCode": 1
+      "versionCode": 1,
+			"config": {
+        "googleMobileAdsAppId":"ca-app-pub-9490699886096845~2245890085"
+      }
     },
     "androidNavigationBar": {
       "barStyle": "light-content",
