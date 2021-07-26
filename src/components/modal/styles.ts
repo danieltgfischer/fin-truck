@@ -1,9 +1,7 @@
 import styled from 'styled-components/native';
 import { ModalProps } from 'react-native';
 
-export const Modal = styled.Modal<ModalProps>`
-	background-color: transparent;
-`;
+export const Modal = styled.Modal<ModalProps>``;
 
 export const Container = styled.View`
 	align-items: center;

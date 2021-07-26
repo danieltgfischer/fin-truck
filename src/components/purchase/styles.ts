@@ -34,6 +34,19 @@ export const Container = styled(Animated.View)<IContainer>`
 	align-items: center;
 `;
 
+export const ConainerAd = styled.View`
+	align-items: center;
+	justify-content: center;
+	background-color: ${({ theme }) => theme.colors.background};
+	height: ${height * 0.8}px;
+	width: ${width * 0.95}px;
+`;
+export const AdWarning = styled.Text`
+	color: ${({ theme }) => theme.colors.text};
+	font-size: 22px;
+	font-family: Italic;
+`;
+
 export const Title = styled.Text`
 	color: ${({ theme }) => theme.colors.text};
 	font-size: 32px;

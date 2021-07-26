@@ -143,7 +143,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 					numColumns={3}
 					columnWrapperStyle={flatListStyle.collumnWrapper}
 				/>
-				{!serviceCtx.isPremium && (
+				{!serviceCtx.isPremium && animationDone && (
 					<AdMobBanner
 						style={{
 							paddingTop: 15,
@@ -152,6 +152,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 						bannerSize="banner"
 						adUnitID={adUnitID}
 						servePersonalizedAds
+						onAdViewDidReceiveAd={() => console.log('load')}
 						onDidFailToReceiveAdWithError={e =>
 							console.log('onDidFailToReceiveAdWithError', e)
 						}
@@ -160,6 +161,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 				<Purchase
 					isPurchaselVisible={serviceCtx.isPurchaselVisible}
 					setIsPurchaselVisible={serviceCtx.setIsPurchaselVisible}
+					enableFeature={() => setEditModalVisible(true)}
 				/>
 			</Container>
 			<Modal visible={isEditModalVisible} animationType="slide">

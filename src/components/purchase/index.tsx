@@ -4,10 +4,14 @@ import { PurchaseUpgrade } from '../purchaseUpgrade';
 
 interface IProps {
 	isPurchaselVisible: boolean;
+	enableFeature?(): void | Promise<void>;
 	setIsPurchaselVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Purchase: React.FC<IProps> = (props: IProps) => {
+export const Purchase: React.FC<IProps> = ({
+	enableFeature = () => null,
+	...props
+}: IProps) => {
 	const { height } = useWindowDimensions();
 	const translateY = useRef(new Animated.Value(height)).current;
 
@@ -29,6 +33,7 @@ export const Purchase: React.FC<IProps> = (props: IProps) => {
 
 	return (
 		<PurchaseUpgrade
+			enableFeature={enableFeature}
 			translateY={translateY}
 			setIsPurchaselVisible={props.setIsPurchaselVisible}
 		/>

@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react';
+import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
@@ -30,8 +31,9 @@ export const DrawerComponent: React.FC = () => {
 	const theme = useContext(ThemeContext);
 	const { isPremium } = useSerivces();
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const { height } = useWindowDimensions();
 	const isDrawerOpen = useIsDrawerOpen();
-
+	console.log(height);
 	useEffect(() => {
 		if (!isDrawerOpen) {
 			setIsModalVisible(false);
@@ -46,11 +48,11 @@ export const DrawerComponent: React.FC = () => {
 	);
 
 	const isDark = theme.name === 'dark';
+	const isDev = Constants.isDevice && __DEV__;
+	const adUnitID = !isDev
+		? 'ca-app-pub-9490699886096845/2625998185'
+		: 'ca-app-pub-3940256099942544/6300978111';
 
-	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
 	return (
 		<Container>
 			<DrawerContainer onPress={() => setIsModalVisible(false)}>
@@ -69,6 +71,20 @@ export const DrawerComponent: React.FC = () => {
 							name={t(TranslationsValues.history)}
 							onPress={() => navigate(routeNames.Timeline)}
 						/>
+						{!isPremium && height > 800 && (
+							<AdMobBanner
+								bannerSize="mediumRectangle"
+								adUnitID={adUnitID}
+								style={{
+									alignSelf: 'center',
+									paddingTop: 5,
+								}}
+								servePersonalizedAds
+								onDidFailToReceiveAdWithError={e =>
+									console.log('onDidFailToReceiveAdWithError', e)
+								}
+							/>
+						)}
 					</MenuButtonsContainer>
 					<MenuConfigContainer>
 						<ButtonIcon onPress={() => setIsModalVisible(true)}>

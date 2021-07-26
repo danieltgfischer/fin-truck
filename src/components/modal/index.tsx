@@ -13,7 +13,7 @@ interface IProps {
 export type CModalProps = ModalProps & IProps;
 
 export const Modal: React.FC<IProps> = ({ children, ...rest }: IProps) => (
-	<StyledModal {...rest}>
+	<StyledModal {...rest} transparent>
 		<Container>{children}</Container>
 	</StyledModal>
 );
