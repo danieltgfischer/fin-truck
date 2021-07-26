@@ -6,7 +6,7 @@ const { height, width } = Dimensions.get('window');
 
 export const Container = styled(Animated.View)`
 	position: absolute;
-	height: ${height * 0.65}px;
+	height: ${height * 0.75}px;
 	width: 100%;
 	align-items: center;
 	background: ${props => props.theme.colors.background};

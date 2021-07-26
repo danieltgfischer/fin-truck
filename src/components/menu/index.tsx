@@ -171,7 +171,7 @@ export const Menu: React.FC<IProps> = ({
 					</CancelSubscriptionButton>
 				</CancelSubscriptionContainer>
 			</Modal>
-			{!isPremium && (
+			{!isPremium && height < 800 && (
 				<AdMobBanner
 					style={{
 						paddingTop: 15,
@@ -181,6 +181,20 @@ export const Menu: React.FC<IProps> = ({
 					}}
 					bannerSize="banner"
 					adUnitID={adUnitID}
+					servePersonalizedAds
+					onDidFailToReceiveAdWithError={e =>
+						console.log('onDidFailToReceiveAdWithError', e)
+					}
+				/>
+			)}
+			{!isPremium && height > 800 && (
+				<AdMobBanner
+					bannerSize="mediumRectangle"
+					adUnitID={adUnitID}
+					style={{
+						alignSelf: 'center',
+						paddingTop: 5,
+					}}
 					servePersonalizedAds
 					onDidFailToReceiveAdWithError={e =>
 						console.log('onDidFailToReceiveAdWithError', e)

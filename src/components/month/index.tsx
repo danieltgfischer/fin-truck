@@ -26,7 +26,7 @@ import { ThemeContext } from 'styled-components';
 import { asyncShareDatabase } from '@/utils/export-database';
 import { TimelineModalContext } from '@/contexts/timelineModal';
 import { optionsObj } from './options';
-
+import { PurchaseTimeline } from '../purchaseTimeline';
 import {
 	Container,
 	Month,
@@ -58,6 +58,7 @@ const MonthTimeline: React.FC<IProps> = ({
 		isPremium,
 		isPurchaseStoreConnected,
 	} = useSerivces();
+	const [isPurchaselVisible, setPurchaselVisible] = useState(false);
 	const { current_truck, years, monthResume, locale } = useSelector(
 		(state: IState) => state,
 	);
@@ -159,13 +160,29 @@ const MonthTimeline: React.FC<IProps> = ({
 		return [];
 	}, [monthNumber, year, years]);
 
-	const shareYearData = useCallback(async () => {
+	const enableShareMonthData = useCallback(async () => {
+		await asyncShareDatabase({
+			data,
+			xlsx_name: `${month}_${year}`,
+			path: `${current_truck.name}_${current_truck.board}_${month}_${year}`,
+			locale: locale.country_code,
+		});
+	}, [
+		current_truck.board,
+		current_truck.name,
+		data,
+		locale.country_code,
+		month,
+		year,
+	]);
+
+	const shareMonthData = useCallback(async () => {
 		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
 			timelineCtx.setModalConnectionVisible(true);
 			return;
 		}
 		if (!isPremium) {
-			timelineCtx.setIsPurchaselVisible(true);
+			setPurchaselVisible(true);
 			return;
 		}
 		await asyncShareDatabase({
@@ -238,7 +255,7 @@ const MonthTimeline: React.FC<IProps> = ({
 					<SubHeader>
 						<ButtonDBContainer>
 							<Label>{t(TranslationsValues.share)}</Label>
-							<DatabseExportButton onPress={shareYearData}>
+							<DatabseExportButton onPress={shareMonthData}>
 								<Entypo name="share" size={30} color={theme.colors.text} />
 							</DatabseExportButton>
 						</ButtonDBContainer>
@@ -286,6 +303,11 @@ const MonthTimeline: React.FC<IProps> = ({
 						keyExtractor={() => shortid()}
 						renderItem={renderItem}
 						nestedScrollEnabled
+					/>
+					<PurchaseTimeline
+						isPurchaselVisible={isPurchaselVisible}
+						setPurchaselVisible={setPurchaselVisible}
+						enableFeature={enableShareMonthData}
 					/>
 				</>
 			)}

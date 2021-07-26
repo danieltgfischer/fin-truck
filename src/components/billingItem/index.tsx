@@ -29,6 +29,7 @@ import {
 	ButtonIcon,
 	ContainerButtons,
 } from './styles';
+import { PurchaseTimeline } from '../purchaseTimeline';
 
 interface IProps {
 	value: number;
@@ -53,6 +54,8 @@ export const BillingItem: React.FC<IProps> = ({
 	const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 	const { locale } = useSelector((state: IState) => state);
 	const { t } = useTranslation();
+	const [isDeletePurchaselVisible, setDeletePurchaselVisible] = useState(false);
+	const [isEditPurchaselVisible, setEditPurchaselVisible] = useState(false);
 	const { isNetworkConnected, isPremium, isPurchaseStoreConnected } =
 		useSerivces();
 	const theme = useContext(ThemeContext);
@@ -64,7 +67,7 @@ export const BillingItem: React.FC<IProps> = ({
 			return;
 		}
 		if (!isPremium) {
-			timelineCtx.setIsPurchaselVisible(true);
+			setEditPurchaselVisible(true);
 			return;
 		}
 		setEditModalVisible(true);
@@ -76,7 +79,7 @@ export const BillingItem: React.FC<IProps> = ({
 			return;
 		}
 		if (!isPremium) {
-			timelineCtx.setIsPurchaselVisible(true);
+			setDeletePurchaselVisible(true);
 			return;
 		}
 		setDeleteModalVisible(true);
@@ -157,6 +160,16 @@ export const BillingItem: React.FC<IProps> = ({
 					source={source}
 				/>
 			</StyledModal>
+			<PurchaseTimeline
+				isPurchaselVisible={isEditPurchaselVisible}
+				setPurchaselVisible={setEditPurchaselVisible}
+				enableFeature={() => setEditModalVisible(true)}
+			/>
+			<PurchaseTimeline
+				isPurchaselVisible={isDeletePurchaselVisible}
+				setPurchaselVisible={setDeletePurchaselVisible}
+				enableFeature={() => setDeleteModalVisible(true)}
+			/>
 		</>
 	);
 };

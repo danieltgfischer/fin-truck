@@ -15,7 +15,6 @@ import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
-import { Purchase } from '@/components/purchase';
 import { ModalConnection } from '@/components/modalConnection';
 import { TimelineModalContext } from '@/contexts/timelineModal';
 import {
@@ -78,6 +77,7 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 		Constants.isDevice && !__DEV__
 			? 'ca-app-pub-9490699886096845/2625998185'
 			: 'ca-app-pub-3940256099942544/6300978111';
+
 	return (
 		<Container>
 			{!servicesCtx.isPremium && (
@@ -104,7 +104,6 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 			<TimelineModalContext.Provider
 				value={{
 					setModalConnectionVisible,
-					setIsPurchaselVisible: servicesCtx.setIsPurchaselVisible,
 				}}
 			>
 				<ScrollView contentContainerStyle={scrollViewStyle.content}>
@@ -126,10 +125,6 @@ export const Timeline: React.FC<Props> = ({ navigation }: Props) => {
 					)}
 				</ScrollView>
 			</TimelineModalContext.Provider>
-			<Purchase
-				isPurchaselVisible={servicesCtx.isPurchaselVisible}
-				setIsPurchaselVisible={servicesCtx.setIsPurchaselVisible}
-			/>
 			<ModalConnection
 				visible={isModalConnectionVisible}
 				setIsVisible={setModalConnectionVisible}

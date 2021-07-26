@@ -33,7 +33,7 @@ export const DrawerComponent: React.FC = () => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const { height } = useWindowDimensions();
 	const isDrawerOpen = useIsDrawerOpen();
-	console.log(height);
+
 	useEffect(() => {
 		if (!isDrawerOpen) {
 			setIsModalVisible(false);

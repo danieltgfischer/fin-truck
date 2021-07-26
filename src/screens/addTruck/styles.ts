@@ -13,9 +13,10 @@ export const scrollView = StyleSheet.create({
 	},
 });
 
-export const Container = styled.ScrollView`
+export const Container = styled.View`
 	height: 100%;
 	width: 100%;
+	position: relative;
 	background-color: ${({ theme }) => theme.colors.background};
 `;
 

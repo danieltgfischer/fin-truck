@@ -6,7 +6,7 @@ import React, {
 	useEffect,
 } from 'react';
 import {
-	Animated,
+	Modal as ModalRN,
 	Platform,
 	ScrollView,
 	ActivityIndicator,
@@ -21,9 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useSerivces } from '@/hooks/useServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { consumeAllItemsAndroid, Subscription } from 'react-native-iap';
-import { useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
-import { routeNames } from '@/navigation/types';
 import {
 	Container,
 	CloseButton,
@@ -37,17 +35,17 @@ import {
 	PurchaseDescription,
 	ConainerAd,
 	AdWarning,
-} from '../purchase/styles';
+} from './styles';
 import { ModalUpgrade } from '../modalUpgrade';
 import { Modal } from '../modal';
 
 interface IPurchaseUpgradeProps {
-	translateY: Animated.Value;
-	setIsPurchaselVisible: Dispatch<boolean>;
+	setPurchaselVisible: Dispatch<boolean>;
+	isPurchaselVisible: boolean;
 	enableFeature?(): void | Promise<void>;
 }
 
-export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
+export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 	enableFeature = () => null,
 	...props
 }: IPurchaseUpgradeProps) => {
@@ -58,7 +56,6 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 	const { t } = useTranslation();
 	const { height } = useWindowDimensions();
 	const { iapService, isPurchaseStoreConnected, isPremium } = useSerivces();
-	const route = useRoute();
 
 	const items = Platform.select({
 		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
@@ -103,6 +100,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 	);
 
 	const isDev = Constants.isDevice && __DEV__;
+
 	const initRewardAds = useCallback(async () => {
 		setRewardAdLoding(true);
 		const adUnitID = !isDev
@@ -116,24 +114,28 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 		AdMobRewarded.addEventListener('rewardedVideoDidPresent', () => {
 			setRewardAdLoding(false);
 		});
+
+		AdMobRewarded.addEventListener('rewardedVideoDidFailToLoad', () => {
+			setRewardAdLoding(false);
+		});
+		AdMobRewarded.addEventListener('rewardedVideoDidFailToPresent', () => {
+			setRewardAdLoding(false);
+		});
 		AdMobRewarded.addEventListener('rewardedVideoUserDidEarnReward', () => {
 			setRewardAdLoding(false);
-			props.setIsPurchaselVisible(false);
+			props.setPurchaselVisible(false);
 			enableFeature();
 		});
 		await AdMobRewarded.showAdAsync();
 	}, [enableFeature, isDev, props]);
+
 	const adUnitID = !isDev
 		? 'ca-app-pub-9490699886096845/2625998185'
 		: 'ca-app-pub-3940256099942544/6300978111';
+
 	return (
-		<>
-			<Container
-				style={{
-					transform: [{ translateY: props.translateY }],
-				}}
-				addPaddingTop
-			>
+		<ModalRN visible={props.isPurchaselVisible} animationType="slide">
+			<Container>
 				<AdMobBanner
 					bannerSize="banner"
 					adUnitID={adUnitID}
@@ -142,7 +144,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 						console.log('onDidFailToReceiveAdWithError', e)
 					}
 				/>
-				<CloseButton onPress={() => props.setIsPurchaselVisible(false)}>
+				<CloseButton onPress={() => props.setPurchaselVisible(false)}>
 					<AntDesign name="close" size={24} color={theme.colors.text} />
 				</CloseButton>
 				<Title>{t(TranslationsValues.upgrade_title)}</Title>
@@ -151,19 +153,15 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 					contentContainerStyle={scrollViewStyle.content}
 					style={{ height }}
 				>
-					{route.name !== routeNames.AddTruck && (
-						<PurchaseContainer key={shortid()}>
-							<PurchaseTitle>
-								{t(TranslationsValues.release_once)}
-							</PurchaseTitle>
-							<PurchaseDescription>
-								{t(TranslationsValues.watch_video)}
-							</PurchaseDescription>
-							<PurchaseButton onPress={initRewardAds}>
-								<ButtonLabel>{t(TranslationsValues.watch)}</ButtonLabel>
-							</PurchaseButton>
-						</PurchaseContainer>
-					)}
+					<PurchaseContainer key={shortid()}>
+						<PurchaseTitle>{t(TranslationsValues.release_once)}</PurchaseTitle>
+						<PurchaseDescription>
+							{t(TranslationsValues.watch_video)}
+						</PurchaseDescription>
+						<PurchaseButton onPress={initRewardAds}>
+							<ButtonLabel>{t(TranslationsValues.watch)}</ButtonLabel>
+						</PurchaseButton>
+					</PurchaseContainer>
 					{(subscriptions ?? []).map((s, i) => (
 						<PurchaseContainer key={shortid()} even={i % 2 === 0}>
 							<PurchaseTitle>
@@ -193,6 +191,6 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 					<ActivityIndicator color="#B63B34" size="large" />
 				</ConainerAd>
 			</Modal>
-		</>
+		</ModalRN>
 	);
 };

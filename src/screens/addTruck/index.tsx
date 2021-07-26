@@ -124,7 +124,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 			: 'ca-app-pub-3940256099942544/6300978111';
 
 	return (
-		<Container contentContainerStyle={scrollView.content}>
+		<Container>
 			<AddTruckContainer contentContainerStyle={scrollView.content}>
 				{!isPremium && (
 					<AdMobBanner

@@ -20,6 +20,7 @@ import { Entypo } from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components';
 import { TimelineModalContext } from '@/contexts/timelineModal';
 import { monthsNames } from './months';
+import { PurchaseTimeline } from '../purchaseTimeline';
 import {
 	Container,
 	Year,
@@ -40,6 +41,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 	const { locale, current_truck, yearResume } = useSelector(
 		(state: IState) => state,
 	);
+	const [isPurchaselVisible, setPurchaselVisible] = useState(false);
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
@@ -82,13 +84,34 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 		sub_total: null,
 	};
 
+	const enableShareYearData = useCallback(async () => {
+		const data = await billingRepository.getBillingOptionsByYear({
+			truckId: current_truck.id,
+			year,
+		});
+
+		await asyncShareDatabase({
+			data,
+			xlsx_name: `${year}`,
+			path: `${current_truck.name}_${current_truck.board}_${year}`,
+			locale: locale.country_code,
+		});
+	}, [
+		billingRepository,
+		current_truck.board,
+		current_truck.id,
+		current_truck.name,
+		locale.country_code,
+		year,
+	]);
+
 	const shareYearData = useCallback(async () => {
 		if ((!isNetworkConnected || !isPurchaseStoreConnected) && !isPremium) {
 			timelineCtx.setModalConnectionVisible(true);
 			return;
 		}
 		if (!isPremium) {
-			timelineCtx.setIsPurchaselVisible(true);
+			setPurchaselVisible(true);
 			return;
 		}
 		const data = await billingRepository.getBillingOptionsByYear({
@@ -194,6 +217,11 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 					))}
 				</>
 			)}
+			<PurchaseTimeline
+				isPurchaselVisible={isPurchaselVisible}
+				setPurchaselVisible={setPurchaselVisible}
+				enableFeature={enableShareYearData}
+			/>
 		</Container>
 	);
 };

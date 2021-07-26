@@ -152,7 +152,6 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 						bannerSize="banner"
 						adUnitID={adUnitID}
 						servePersonalizedAds
-						onAdViewDidReceiveAd={() => console.log('load')}
 						onDidFailToReceiveAdWithError={e =>
 							console.log('onDidFailToReceiveAdWithError', e)
 						}

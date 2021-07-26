@@ -111,6 +111,10 @@ export enum TranslationsValues {
 	attention = 'attention',
 	offline_message = 'offline_message',
 	unsubscribe_message = 'unsubscribe_message',
+	release_once = 'release_once',
+	watch_video = 'watch_video',
+	watch = 'watch',
+	loading = 'loading',
 }
 export const translations = {
 	en: {
@@ -253,6 +257,11 @@ export const translations = {
 			'The Fin Truck app works offline, you only need to be logged in to subscribe and upgrade to the Premium plan.',
 		unsubscribe_message:
 			'Your subscription is not canceled immediately. You can use the Premium plan until the expiration date, you can check this date when canceling your subscription!',
+		release_once: 'Release once',
+		watch_video:
+			'Watch an advertising video and unlock this feature. You must watch the full video.',
+		watch: 'Watch',
+		loading: 'Loading',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -396,5 +405,10 @@ export const translations = {
 			'O aplicativo Fin Truck funciona offline, você precisa estar conectado apenas para assinar e fazer o upgrade para o plano Premium.',
 		unsubscribe_message:
 			'A sua assinatura não é cancelada de imediato. Você pode usar o plano Premium até a data do vencimento, você pode verificar essa data ao cancelar a assinatura!',
+		release_once: 'Liberar uma vez',
+		watch_video:
+			'Assista a um video de propaganda e desbloqueie esse recurso. É preciso assistir ao vídeo completo.',
+		watch: 'Assistir',
+		loading: 'Carregando',
 	},
 };
