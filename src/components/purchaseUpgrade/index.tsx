@@ -138,6 +138,9 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 				}}
 				addPaddingTop
 			>
+				<CloseButton onPress={() => props.setIsPurchaselVisible(false)}>
+					<AntDesign name="close" size={24} color={theme.colors.text} />
+				</CloseButton>
 				<AdMobBanner
 					bannerSize="banner"
 					adUnitID={adUnitID}
@@ -146,9 +149,6 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 						console.log('onDidFailToReceiveAdWithError', e)
 					}
 				/>
-				<CloseButton onPress={() => props.setIsPurchaselVisible(false)}>
-					<AntDesign name="close" size={24} color={theme.colors.text} />
-				</CloseButton>
 				<Title>{t(TranslationsValues.upgrade_title)}</Title>
 				<Description>{t(TranslationsValues.upgrade_description)}</Description>
 				<ScrollView
@@ -193,6 +193,12 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 			/>
 			<Modal visible={isRewardAdLoding} animationType="fade">
 				<ConainerAd>
+					<CloseButton
+						style={{ top: 15, position: 'absolute' }}
+						onPress={() => setRewardAdLoding(false)}
+					>
+						<AntDesign name="close" size={24} color={theme.colors.text} />
+					</CloseButton>
 					<AdMobBanner
 						bannerSize="mediumRectangle"
 						adUnitID={adUnitID}

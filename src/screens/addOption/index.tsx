@@ -361,6 +361,19 @@ export const AddOptionScreen: React.FC<Props> = ({
 						onPress={() => setModalVisible(!isModalVisible)}
 						buttonLabel={t(TranslationsValues.close)}
 					/>
+					{!isPremium && height > 810 && (
+						<AdMobBanner
+							style={{
+								marginTop: 20,
+							}}
+							bannerSize="largeBanner"
+							adUnitID={adUnitID}
+							servePersonalizedAds
+							onDidFailToReceiveAdWithError={e =>
+								console.log('onDidFailToReceiveAdWithError', e)
+							}
+						/>
+					)}
 				</_.ModalContainer>
 			</Modal>
 		</>

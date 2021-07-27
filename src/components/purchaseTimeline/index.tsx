@@ -141,6 +141,9 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 	return (
 		<ModalRN visible={props.isPurchaselVisible} animationType="slide">
 			<Container>
+				<CloseButton onPress={() => props.setPurchaselVisible(false)}>
+					<AntDesign name="close" size={24} color={theme.colors.text} />
+				</CloseButton>
 				<AdMobBanner
 					bannerSize="banner"
 					adUnitID={adUnitID}
@@ -149,9 +152,6 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 						console.log('onDidFailToReceiveAdWithError', e)
 					}
 				/>
-				<CloseButton onPress={() => props.setPurchaselVisible(false)}>
-					<AntDesign name="close" size={24} color={theme.colors.text} />
-				</CloseButton>
 				<Title>{t(TranslationsValues.upgrade_title)}</Title>
 				<Description>{t(TranslationsValues.upgrade_description)}</Description>
 				<ScrollView
@@ -192,6 +192,9 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 			/>
 			<Modal visible={isRewardAdLoding} animationType="fade">
 				<ConainerAd>
+					<CloseButton onPress={() => setRewardAdLoding(false)}>
+						<AntDesign name="close" size={24} color={theme.colors.text} />
+					</CloseButton>
 					<AdMobBanner
 						bannerSize="mediumRectangle"
 						adUnitID={adUnitID}

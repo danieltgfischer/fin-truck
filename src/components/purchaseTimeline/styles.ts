@@ -31,11 +31,12 @@ export const Container = styled.View`
 
 export const ConainerAd = styled.View`
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	background-color: ${({ theme }) => theme.colors.background};
 	height: ${height * 0.95}px;
 	width: ${width * 0.95}px;
 `;
+
 export const AdWarning = styled.Text`
 	color: ${({ theme }) => theme.colors.text};
 	font-size: 22px;
@@ -104,5 +105,8 @@ export const ButtonLabel = styled.Text`
 export const CloseButton = styled.TouchableOpacity`
 	align-self: flex-end;
 	padding: 5px 15px 0;
+	margin: 0 0 25px;
 	z-index: 1;
+	top: 5px;
+	position: relative;
 `;
