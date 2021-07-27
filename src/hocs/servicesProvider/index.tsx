@@ -18,7 +18,6 @@ import dark from '@/styles/themes/dark';
 import { useSelector } from 'react-redux';
 import { IState } from '@/store/types';
 import { ThemeProvider } from 'styled-components';
-import * as iap from 'react-native-iap';
 import { IAP } from '@/services/purchase/data';
 import { useNetInfo } from '@react-native-community/netinfo';
 import {
@@ -96,13 +95,9 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 				setIsPremium(false);
 				return;
 			}
-			const premiumValue = availablePurchases[0]?.autoRenewingAndroid;
+			const premiumValue = availablePurchases?.length > 0; // ANCHOR !IMPORTANT verify if is premium
 			await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
 			setIsPremium(premiumValue);
-			if (!premiumValue) {
-				await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
-			}
-			return;
 		}
 		const premiumValue = Boolean(
 			JSON.parse(await AsyncStorage.getItem('@PremiumApp')),
@@ -145,6 +140,7 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 						if (enableApp) {
 							AsyncStorage.setItem('@PremiumApp', JSON.stringify(true)).then(
 								() => {
+									AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(true));
 									setIsPremium(true);
 									setIsPurchaselVisible(false);
 								},
