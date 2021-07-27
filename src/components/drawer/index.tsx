@@ -8,6 +8,7 @@ import { ThemeContext } from 'styled-components/native';
 import { AntDesign } from '@expo/vector-icons';
 import TrucksIcon from '@/icons/TrucksIcon.png';
 import Timeline from '@/icons/Timeline.png';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { ButtonIcon } from '@/navigation/style';
 import { routeNames } from '@/navigation/types';
 import { TranslationsValues } from '@/config/intl';
@@ -49,9 +50,7 @@ export const DrawerComponent: React.FC = () => {
 
 	const isDark = theme.name === 'dark';
 	const isDev = Constants.isDevice && __DEV__;
-	const adUnitID = !isDev
-		? 'ca-app-pub-9490699886096845/2625998185'
-		: 'ca-app-pub-3940256099942544/6300978111';
+	const adUnitID = !isDev ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<Container>

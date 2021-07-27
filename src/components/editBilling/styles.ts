@@ -47,5 +47,5 @@ export const ButtonContainer = styled.View`
 	justify-content: center;
 	align-items: center;
 	width: ${width}px;
-	margin: 32px 0;
+	margin: 20px 0;
 `;

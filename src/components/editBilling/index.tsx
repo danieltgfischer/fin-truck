@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useEffect, useContext } from 'react';
+import Constants from 'expo-constants';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -6,7 +7,7 @@ import { useSerivces } from '@/hooks/useServices';
 import { IState } from '@/store/types';
 import Input from '@/components/input';
 import MultiInput, { IInputRef } from '@/components/multipleInput ';
-
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { Button } from '@/components/button';
 import { optionsObj } from '@/screens/truck/options';
 import { updateTimeline } from '@/store/actions';
@@ -20,6 +21,8 @@ import { MonthInfoContext } from '@/contexts/montInfo';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
+import { AdMobBanner } from 'expo-ads-admob';
+import { useWindowDimensions } from 'react-native';
 import {
 	Container,
 	Form,
@@ -56,7 +59,8 @@ export const EditBilling: React.FC<IProps> = ({
 	const dispatch = useDispatch();
 	const { year, monthNumber } = useContext(MonthInfoContext);
 	const theme = useContext(ThemeContext);
-	const { billingRepository } = useSerivces();
+	const { billingRepository, isPremium } = useSerivces();
+	const { height } = useWindowDimensions();
 	const { t } = useTranslation();
 	const isDark = theme.name === 'dark';
 	const { value: optionValue } = optionsObj[option];
@@ -148,12 +152,24 @@ export const EditBilling: React.FC<IProps> = ({
 		formRef.current?.submitForm();
 	}, []);
 
+	const adUnitID =
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			style={{ flex: 1 }}
 		>
 			<Container contentContainerStyle={scrollView.content}>
+				{!isPremium && (
+					<AdMobBanner
+						bannerSize="banner"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
 				<Title>
 					{t(TranslationsValues.edit_option_title, {
 						value: t(optionValue),
@@ -190,6 +206,19 @@ export const EditBilling: React.FC<IProps> = ({
 						next
 					/>
 				</ButtonContainer>
+				{!isPremium && height > 810 && (
+					<AdMobBanner
+						style={{
+							top: 0,
+						}}
+						bannerSize="largeBanner"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
 			</Container>
 		</KeyboardAvoidingView>
 	);

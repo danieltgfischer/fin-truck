@@ -6,7 +6,13 @@ import React, {
 	useContext,
 	useMemo,
 } from 'react';
-import { Modal, Animated, Dimensions, ToastAndroid } from 'react-native';
+import {
+	Modal,
+	Animated,
+	Dimensions,
+	ToastAndroid,
+	useWindowDimensions,
+} from 'react-native';
 import Input from '@/components/input';
 import Constants from 'expo-constants';
 import MultiInput, { IInputRef } from '@/components/multipleInput ';
@@ -22,6 +28,7 @@ import { IState } from '@/store/types';
 import { RouteProp } from '@react-navigation/native';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { ThemeContext } from 'styled-components/native';
 import { AdMobBanner } from 'expo-ads-admob';
 import * as _ from './styles';
@@ -64,6 +71,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const { billingRepository, isPremium } = useSerivces();
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
+	const { height } = useWindowDimensions();
 
 	const title = current_truck?.name ?? '';
 	const option = route?.params?.option ?? '';
@@ -202,9 +210,7 @@ export const AddOptionScreen: React.FC<Props> = ({
 	const { currency } = locale[locale.country_code];
 	const isDark = theme.name === 'dark';
 	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<>
@@ -312,6 +318,19 @@ export const AddOptionScreen: React.FC<Props> = ({
 						next
 					/>
 				</_.ButtonContainer>
+				{!isPremium && height > 810 && (
+					<AdMobBanner
+						style={{
+							top: 20,
+						}}
+						bannerSize="largeBanner"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
 			</_.Container>
 			<Modal visible={isModalVisible} animationType="fade" statusBarTranslucent>
 				<_.ModalContainer contentContainerStyle={_.scrollView.modalContainer}>

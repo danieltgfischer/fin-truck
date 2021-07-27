@@ -20,7 +20,16 @@ import { ThemeContext } from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { useSerivces } from '@/hooks/useServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { consumeAllItemsAndroid, Subscription } from 'react-native-iap';
+import {
+	ID_BANNER_PRODUCTION,
+	ID_REWARDED_PRODUCTION,
+	ID_REWARDED_DEV,
+	ID_BANNER_DEV,
+	PURCHASE_MONTHLY,
+	PURCHASE_YEARLY,
+} from 'react-native-dotenv';
+
+import { Subscription } from 'react-native-iap';
 import { useWindowDimensions } from 'react-native';
 import {
 	Container,
@@ -58,7 +67,7 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 	const { iapService, isPurchaseStoreConnected, isPremium } = useSerivces();
 
 	const items = Platform.select({
-		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
+		android: [PURCHASE_MONTHLY, PURCHASE_YEARLY],
 	});
 
 	const showModalUpgrade = useCallback(async () => {
@@ -103,9 +112,7 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 
 	const initRewardAds = useCallback(async () => {
 		setRewardAdLoding(true);
-		const adUnitID = !isDev
-			? 'ca-app-pub-9490699886096845/2051283113'
-			: 'ca-app-pub-3940256099942544/5224354917';
+		const adUnitID = !isDev ? ID_REWARDED_PRODUCTION : ID_REWARDED_DEV;
 		await AdMobRewarded.setAdUnitID(adUnitID);
 		await AdMobRewarded.requestAdAsync();
 		AdMobRewarded.addEventListener('rewardedVideoDidDismiss', () => {
@@ -129,9 +136,7 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 		await AdMobRewarded.showAdAsync();
 	}, [enableFeature, isDev, props]);
 
-	const adUnitID = !isDev
-		? 'ca-app-pub-9490699886096845/2625998185'
-		: 'ca-app-pub-3940256099942544/6300978111';
+	const adUnitID = !isDev ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<ModalRN visible={props.isPurchaselVisible} animationType="slide">
@@ -171,7 +176,7 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 							<PurchaseButton onPress={() => purchaseSubcription(s?.productId)}>
 								<ButtonLabel>
 									{t(
-										s.productId === '1_monthly_fin_truck'
+										s.productId === PURCHASE_MONTHLY
 											? TranslationsValues.subscribe_monthly
 											: TranslationsValues.subscribe_yearly,
 									)}
@@ -187,8 +192,24 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 			/>
 			<Modal visible={isRewardAdLoding} animationType="fade">
 				<ConainerAd>
+					<AdMobBanner
+						bannerSize="mediumRectangle"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
 					<AdWarning>{t(TranslationsValues.loading)}...</AdWarning>
 					<ActivityIndicator color="#B63B34" size="large" />
+					<AdMobBanner
+						bannerSize="mediumRectangle"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
 				</ConainerAd>
 			</Modal>
 		</ModalRN>

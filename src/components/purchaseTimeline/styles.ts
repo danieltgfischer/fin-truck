@@ -33,7 +33,7 @@ export const ConainerAd = styled.View`
 	align-items: center;
 	justify-content: center;
 	background-color: ${({ theme }) => theme.colors.background};
-	height: ${height * 0.8}px;
+	height: ${height * 0.95}px;
 	width: ${width * 0.95}px;
 `;
 export const AdWarning = styled.Text`

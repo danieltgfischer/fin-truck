@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { ThemeContext } from 'styled-components/native';
 import { useSerivces } from '@/hooks/useServices';
 import { ModalConnection } from '@/components/modalConnection';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { Purchase } from '@/components/purchase';
 import { AdMobBanner } from 'expo-ads-admob';
 import {
@@ -101,9 +102,7 @@ export const TruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 
 	const isDark = theme.name === 'dark';
 	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<>

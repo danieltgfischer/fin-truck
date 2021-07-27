@@ -15,6 +15,7 @@ import { updateTrucks } from '@/store/actions';
 import { TranslationsValues } from '@/config/intl';
 import { Menu } from '@/components/menu';
 import { useTranslation } from 'react-i18next';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { ThemeContext } from 'styled-components/native';
 import {
 	ButtonIcon,
@@ -70,9 +71,9 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 		return unsubscribe;
 	}, [dispatch, navigation, truckRepository]);
 
-	useEffect(() => {
-		setTestDeviceIDAsync('EMULATOR');
-	}, []);
+	// useEffect(() => {
+	// 	setTestDeviceIDAsync();
+	// }, []);
 
 	function createRows(trucks, columns) {
 		if (trucks.length > 0) {
@@ -115,9 +116,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const data = trucks.length > 0 ? createRows(trucks, 3) : [];
 	const isDark = theme.name === 'dark';
 	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<Container>

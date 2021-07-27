@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import { Form as UnForm } from '@unform/mobile';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export const scrollView = StyleSheet.create({
 	content: {
@@ -20,7 +20,7 @@ export const scrollView = StyleSheet.create({
 });
 
 export const Container = styled.ScrollView`
-	height: 100%;
+	height: ${height}px;
 	width: 100%;
 	background-color: ${({ theme }) => theme.colors.background};
 `;

@@ -13,6 +13,7 @@ import AddTruckIcon from '@/icons/CreateTruckIcon.png';
 import { Button } from '@/components/button';
 import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { Purchase } from '@/components/purchase';
 import { IState } from '@/store/types';
 import { ModalConnection } from '@/components/modalConnection';
@@ -119,9 +120,7 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 	}, []);
 
 	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<Container>

@@ -15,6 +15,7 @@ import { ThemeContext } from 'styled-components/native';
 import { useCallback } from 'react';
 import { useSerivces } from '@/hooks/useServices';
 import { AdMobBanner } from 'expo-ads-admob';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { LanguageSwitch } from '../languageSwitch';
 import { ThemeSwitch } from '../themeSwitch';
 import {
@@ -105,9 +106,7 @@ export const Menu: React.FC<IProps> = ({
 	}, []);
 
 	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<Container

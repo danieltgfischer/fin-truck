@@ -17,6 +17,7 @@ import { TranslationsValues } from '@/config/intl';
 import { useTranslation } from 'react-i18next';
 import { asyncShareDatabase } from '@/utils/export-database';
 import { Entypo } from '@expo/vector-icons';
+import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
 import { ThemeContext } from 'styled-components';
 import { TimelineModalContext } from '@/contexts/timelineModal';
 import { monthsNames } from './months';
@@ -140,9 +141,7 @@ export const YearTimeline: React.FC<IProps> = ({ year }: IProps) => {
 
 	const { currency } = locale[locale.country_code];
 	const adUnitID =
-		Constants.isDevice && !__DEV__
-			? 'ca-app-pub-9490699886096845/2625998185'
-			: 'ca-app-pub-3940256099942544/6300978111';
+		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
 	return (
 		<Container>

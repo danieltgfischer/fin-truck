@@ -14,13 +14,21 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { AdMobRewarded, AdMobBanner } from 'expo-ads-admob';
+import {
+	ID_BANNER_PRODUCTION,
+	ID_REWARDED_PRODUCTION,
+	ID_REWARDED_DEV,
+	ID_BANNER_DEV,
+	PURCHASE_MONTHLY,
+	PURCHASE_YEARLY,
+} from 'react-native-dotenv';
 import shortid from 'shortid';
 import { TranslationsValues } from '@/config/intl';
 import { ThemeContext } from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { useSerivces } from '@/hooks/useServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { consumeAllItemsAndroid, Subscription } from 'react-native-iap';
+import { Subscription } from 'react-native-iap';
 import { useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import { routeNames } from '@/navigation/types';
@@ -61,7 +69,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 	const route = useRoute();
 
 	const items = Platform.select({
-		android: ['1_monthly_fin_truck', '1_yearly_fin_truck'],
+		android: [PURCHASE_MONTHLY, PURCHASE_YEARLY],
 	});
 
 	const showModalUpgrade = useCallback(async () => {
@@ -105,9 +113,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 	const isDev = Constants.isDevice && __DEV__;
 	const initRewardAds = useCallback(async () => {
 		setRewardAdLoding(true);
-		const adUnitID = !isDev
-			? 'ca-app-pub-9490699886096845/2051283113'
-			: 'ca-app-pub-3940256099942544/5224354917';
+		const adUnitID = !isDev ? ID_REWARDED_PRODUCTION : ID_REWARDED_DEV;
 		await AdMobRewarded.setAdUnitID(adUnitID);
 		await AdMobRewarded.requestAdAsync();
 		AdMobRewarded.addEventListener('rewardedVideoDidDismiss', () => {
@@ -123,9 +129,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 		});
 		await AdMobRewarded.showAdAsync();
 	}, [enableFeature, isDev, props]);
-	const adUnitID = !isDev
-		? 'ca-app-pub-9490699886096845/2625998185'
-		: 'ca-app-pub-3940256099942544/6300978111';
+	const adUnitID = !isDev ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 	return (
 		<>
 			<Container
@@ -173,7 +177,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 							<PurchaseButton onPress={() => purchaseSubcription(s?.productId)}>
 								<ButtonLabel>
 									{t(
-										s.productId === '1_monthly_fin_truck'
+										s.productId === PURCHASE_MONTHLY
 											? TranslationsValues.subscribe_monthly
 											: TranslationsValues.subscribe_yearly,
 									)}
@@ -189,8 +193,24 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 			/>
 			<Modal visible={isRewardAdLoding} animationType="fade">
 				<ConainerAd>
+					<AdMobBanner
+						bannerSize="mediumRectangle"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
 					<AdWarning>{t(TranslationsValues.loading)}...</AdWarning>
 					<ActivityIndicator color="#B63B34" size="large" />
+					<AdMobBanner
+						bannerSize="mediumRectangle"
+						adUnitID={adUnitID}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
 				</ConainerAd>
 			</Modal>
 		</>
