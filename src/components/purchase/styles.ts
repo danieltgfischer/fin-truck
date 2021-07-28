@@ -108,7 +108,7 @@ export const ButtonLabel = styled.Text`
 
 export const CloseButton = styled.TouchableOpacity`
 	align-self: flex-end;
-	padding: 5px 15px 0;
+	padding: 25px 15px 0;
 	z-index: 1;
 	top: -15px;
 	position: relative;

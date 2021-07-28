@@ -76,16 +76,14 @@ export const PurchaseTimeline: React.FC<IPurchaseUpgradeProps> = ({
 		);
 		if (isPremium && !showed) {
 			setUpgradeModalOpen(true);
-			await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(true));
 		}
 	}, [isPremium]);
 
 	useEffect(() => {
 		showModalUpgrade();
-	}, [showModalUpgrade]);
+	}, [showModalUpgrade, isPremium]);
 
 	useEffect(() => {
-		// consumeAllItemsAndroid();
 		if (isPurchaseStoreConnected && (subscriptions || [])?.length === 0) {
 			iapService.getSubscriptions(items).then(setSubscriptions);
 		}

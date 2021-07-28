@@ -76,18 +76,18 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 		const showed = Boolean(
 			JSON.parse(await AsyncStorage.getItem('@IsUpgradedShow')),
 		);
+		console.log('after', showed);
+
 		if (isPremium && !showed) {
 			setUpgradeModalOpen(true);
-			await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(true));
 		}
 	}, [isPremium]);
 
 	useEffect(() => {
 		showModalUpgrade();
-	}, [showModalUpgrade]);
+	}, [showModalUpgrade, isPremium]);
 
 	useEffect(() => {
-		// consumeAllItemsAndroid();
 		if (isPurchaseStoreConnected && (subscriptions || [])?.length === 0) {
 			iapService.getSubscriptions(items).then(setSubscriptions);
 		}
@@ -118,9 +118,11 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 		await AdMobRewarded.requestAdAsync();
 		AdMobRewarded.addEventListener('rewardedVideoDidDismiss', () => {
 			setRewardAdLoding(false);
+			props.setIsPurchaselVisible(false);
 		});
 		AdMobRewarded.addEventListener('rewardedVideoDidPresent', () => {
 			setRewardAdLoding(false);
+			props.setIsPurchaselVisible(false);
 		});
 		AdMobRewarded.addEventListener('rewardedVideoUserDidEarnReward', () => {
 			setRewardAdLoding(false);
@@ -195,7 +197,7 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 				<ConainerAd>
 					<CloseButton
 						style={{ top: 15, position: 'absolute' }}
-						onPress={() => setRewardAdLoding(false)}
+						onPress={() => setRewardAdLoding(false)} // TODO set AsyncStoraged show true here!
 					>
 						<AntDesign name="close" size={24} color={theme.colors.text} />
 					</CloseButton>

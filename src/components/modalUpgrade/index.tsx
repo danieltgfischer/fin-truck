@@ -1,5 +1,13 @@
-import React, { Dispatch, useContext } from 'react';
+import React, {
+	Dispatch,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { useWindowDimensions, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Sharing from 'expo-sharing';
 import { ThemeContext } from 'styled-components';
 import LottieView from 'lottie-react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -28,14 +36,24 @@ export const ModalUpgrade: React.FC<IModal> = ({
 	isUpgradeModalOpen,
 	setUpgradeModalOpen,
 }: IModal) => {
+	const [isSharable, setSherable] = useState(false);
 	const { width } = useWindowDimensions();
 	const theme = useContext(ThemeContext);
 	const { t } = useTranslation();
 
+	useEffect(() => {
+		Sharing.isAvailableAsync().then(available => setSherable(available));
+	}, []);
+
+	const closeModal = useCallback(async () => {
+		await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(true));
+		setUpgradeModalOpen(false);
+	}, [setUpgradeModalOpen]);
+
 	return (
 		<Modal visible={isUpgradeModalOpen} animationType="fade">
 			<UpgradeContainer>
-				<CloseButton onPress={() => setUpgradeModalOpen(false)}>
+				<CloseButton onPress={closeModal}>
 					<AntDesign name="close" size={35} color={theme.colors.text} />
 				</CloseButton>
 				<LottieView
@@ -67,18 +85,22 @@ export const ModalUpgrade: React.FC<IModal> = ({
 							{t(TranslationsValues.upgrade_feature1)}
 						</UpgradeLabel>
 					</UpgradeRow>
-					<UpgradeRow>
-						<Dot />
-						<UpgradeLabel>
-							{t(TranslationsValues.upgrade_feature2)}
-						</UpgradeLabel>
-					</UpgradeRow>
-					<UpgradeRow>
-						<Dot />
-						<UpgradeLabel>
-							{t(TranslationsValues.upgrade_feature3)}
-						</UpgradeLabel>
-					</UpgradeRow>
+					{isSharable && (
+						<>
+							<UpgradeRow>
+								<Dot />
+								<UpgradeLabel>
+									{t(TranslationsValues.upgrade_feature2)}
+								</UpgradeLabel>
+							</UpgradeRow>
+							<UpgradeRow>
+								<Dot />
+								<UpgradeLabel>
+									{t(TranslationsValues.upgrade_feature3)}
+								</UpgradeLabel>
+							</UpgradeRow>
+						</>
+					)}
 					<UpgradeRow>
 						<Dot />
 						<UpgradeLabel>

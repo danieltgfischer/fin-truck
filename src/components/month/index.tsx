@@ -8,6 +8,7 @@ import React, {
 import Constants from 'expo-constants';
 import { ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sharing from 'expo-sharing';
 import shortid from 'shortid';
 import { AdMobBanner } from 'expo-ads-admob';
 import { BillingItem } from '@/components/billingItem';
@@ -65,6 +66,7 @@ const MonthTimeline: React.FC<IProps> = ({
 	);
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const [isSharable, setSherable] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const thisYear = new Date();
 	const [isOpen, setIsOpen] = useState(
@@ -120,6 +122,8 @@ const MonthTimeline: React.FC<IProps> = ({
 	}, [billingRepository, current_truck.id, dispatch, monthNumber, year]);
 
 	useEffect(() => {
+		Sharing.isAvailableAsync().then(available => setSherable(available));
+
 		if (!called) {
 			callCurrentMonth();
 			setCalled(true);
@@ -252,12 +256,14 @@ const MonthTimeline: React.FC<IProps> = ({
 			{isOpen && !isLoading && data.length > 0 && (
 				<>
 					<SubHeader>
-						<ButtonDBContainer>
-							<Label>{t(TranslationsValues.share)}</Label>
-							<DatabseExportButton onPress={shareMonthData}>
-								<Entypo name="share" size={30} color={theme.colors.text} />
-							</DatabseExportButton>
-						</ButtonDBContainer>
+						{isSharable && (
+							<ButtonDBContainer>
+								<Label>{t(TranslationsValues.share)}</Label>
+								<DatabseExportButton onPress={shareMonthData}>
+									<Entypo name="share" size={30} color={theme.colors.text} />
+								</DatabseExportButton>
+							</ButtonDBContainer>
+						)}
 						<Label>
 							{t(TranslationsValues.total_gains, { value: month })}:
 						</Label>

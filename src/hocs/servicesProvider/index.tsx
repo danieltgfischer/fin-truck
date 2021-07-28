@@ -25,6 +25,7 @@ import {
 	PurchaseStateAndroid,
 	SubscriptionPurchase,
 } from 'react-native-iap';
+import { setTestDeviceIDAsync } from 'expo-ads-admob';
 
 interface IProps {
 	children: ReactNode;
@@ -45,8 +46,9 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 	const [availablePurchases, setAvailablePurchases] = useState<Purchase[]>([]);
 	const [isPurchaselVisible, setIsPurchaselVisible] = useState(false);
 
-	// ANCHOR init connection with store android|ios
+	// init connection with store android|ios
 	useEffect(() => {
+		setTestDeviceIDAsync('EMULATOR');
 		try {
 			if (netInfo.isConnected)
 				iapService.startConnectionIAP().then(connection => {
@@ -69,6 +71,9 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 		try {
 			const storeAvailablePurchases = await iapService.getAvailablePurchases();
 			if (storeAvailablePurchases) {
+				if (storeAvailablePurchases.length === 0) {
+					await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
+				}
 				setAvailablePurchases(storeAvailablePurchases);
 			}
 		} catch (error) {
@@ -90,8 +95,8 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 	const updatePremiumPlan = useCallback(async () => {
 		if (netInfo.isConnected) {
 			if (availablePurchases?.length === 0) {
+				// is freemium or premium expire date was finished
 				await AsyncStorage.setItem('@PremiumApp', JSON.stringify(false));
-				await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
 				setIsPremium(false);
 				return;
 			}
@@ -99,33 +104,19 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 			await AsyncStorage.setItem('@PremiumApp', JSON.stringify(premiumValue));
 			setIsPremium(premiumValue);
 		}
+		// offline
 		const premiumValue = Boolean(
 			JSON.parse(await AsyncStorage.getItem('@PremiumApp')),
 		);
 		setIsPremium(premiumValue);
 	}, [availablePurchases, netInfo.isConnected]);
 
-	// ANCHOR verify if is premium every time app started
+	// verify if is premium every time app started
 	useEffect(() => {
 		updatePremiumPlan();
 	}, [availablePurchases, updatePremiumPlan]);
 
-	// ANCHOR set if upgraded modal was showed
-	useEffect(() => {
-		(async () => {
-			const premiumValueStoraged = Boolean(
-				JSON.parse(await AsyncStorage.getItem('@PremiumApp')),
-			);
-			const upgradedShowValue = Boolean(
-				JSON.parse(await AsyncStorage.getItem('@IsUpgradedShow')),
-			);
-			if (!premiumValueStoraged && upgradedShowValue) {
-				await AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(false));
-			}
-		})();
-	}, [isPremium]);
-
-	// ANCHOR set premium app on just purchased subscription
+	// set premium app on just purchased subscription
 	useEffect(() => {
 		if (isPurchaseStoreConnected) {
 			try {
@@ -140,7 +131,6 @@ export const ServicesConnectionProvider: React.FC<IProps> = ({
 						if (enableApp) {
 							AsyncStorage.setItem('@PremiumApp', JSON.stringify(true)).then(
 								() => {
-									AsyncStorage.setItem('@IsUpgradedShow', JSON.stringify(true));
 									setIsPremium(true);
 									setIsPurchaselVisible(false);
 								},
