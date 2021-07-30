@@ -7,6 +7,8 @@ export enum routeNames {
 	Timeline = 'Timeline',
 	Welcome = 'Welcome',
 	Donate = 'Donate',
+	License = 'License',
+	LicenseDescription = 'LicenseDescription',
 }
 
 export type RootStackParamList = {
@@ -19,6 +21,11 @@ export type RootStackParamList = {
 	[routeNames.Timeline]: undefined;
 	[routeNames.Welcome]: undefined;
 	[routeNames.Donate]: undefined;
+	[routeNames.License]: undefined;
+	[routeNames.LicenseDescription]: {
+		name: string;
+		description: string;
+	};
 };
 
 export type DrawerParamList = {

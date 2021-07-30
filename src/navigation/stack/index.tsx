@@ -24,7 +24,8 @@ import { AddTruckScreen } from '@/screens/addTruck';
 import { AddOptionScreen } from '@/screens/addOption';
 import { Timeline } from '@/screens/timeline';
 import { Donate } from '@/screens/donate';
-
+import { License } from '@/screens/license';
+import { LicenseDescription } from '@/screens/licenseDescription';
 import { Welcome } from '@/screens/welcome';
 import { DrawerScreen } from '../drawer';
 import { RootStackParamList, routeNames } from '../types';
@@ -167,6 +168,7 @@ export const Navigation: React.FC = () => {
 			<NavigationContainer>
 				<Stack.Navigator
 					initialRouteName={useTerms ? routeNames.Home : routeNames.Welcome}
+					// initialRouteName={routeNames.License}
 				>
 					<Stack.Screen
 						name={routeNames.Welcome}
@@ -208,6 +210,22 @@ export const Navigation: React.FC = () => {
 						component={AddTruckScreen}
 						options={{
 							title: t(TranslationsValues.add_truck_header_title),
+							...options,
+						}}
+					/>
+					<Stack.Screen
+						name={routeNames.License}
+						component={License}
+						options={{
+							title: t(TranslationsValues.licenses),
+							...options,
+						}}
+					/>
+					<Stack.Screen
+						name={routeNames.LicenseDescription}
+						component={LicenseDescription}
+						options={{
+							title: '',
 							...options,
 						}}
 					/>

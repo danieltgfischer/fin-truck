@@ -16,6 +16,8 @@ import { useCallback } from 'react';
 import { useSerivces } from '@/hooks/useServices';
 import { AdMobBanner } from 'expo-ads-admob';
 import { ID_BANNER_PRODUCTION, ID_BANNER_DEV } from 'react-native-dotenv';
+import { useNavigation } from '@react-navigation/native';
+import { routeNames } from '@/navigation/types';
 import { LanguageSwitch } from '../languageSwitch';
 import { ThemeSwitch } from '../themeSwitch';
 import {
@@ -56,6 +58,7 @@ export const Menu: React.FC<IProps> = ({
 		useState(false);
 	const { height } = useWindowDimensions();
 	const { t } = useTranslation();
+	const navigation = useNavigation();
 	const { name, colors } = useContext(ThemeContext);
 	const translateY = useRef(new Animated.Value(height)).current;
 	const rotate = useRef(new Animated.Value(0)).current;
@@ -109,12 +112,18 @@ export const Menu: React.FC<IProps> = ({
 		rotate.setValue(0);
 	}, [height, isModalVisible, rotate, translateY]);
 
-	const dark = name === 'dark';
-
 	const linkTo = useCallback((link: string) => {
 		Linking.openURL(link);
 	}, []);
 
+	const navigate = useCallback(
+		path => {
+			navigation.navigate(path);
+		},
+		[navigation],
+	);
+
+	const dark = name === 'dark';
 	const adUnitID =
 		Constants.isDevice && !__DEV__ ? ID_BANNER_PRODUCTION : ID_BANNER_DEV;
 
@@ -168,7 +177,7 @@ export const Menu: React.FC<IProps> = ({
 						</ButtonLink>
 					</ContainerLink>
 					<ContainerLink>
-						<ButtonLink>
+						<ButtonLink onPress={() => navigate(routeNames.License)}>
 							<Label>{t(TranslationsValues.licenses)}</Label>
 						</ButtonLink>
 					</ContainerLink>
