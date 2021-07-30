@@ -113,6 +113,7 @@ export const DrawerComponent: React.FC = () => {
 			<Menu
 				isModalVisible={isModalVisible}
 				setIsModalVisible={setIsModalVisible}
+				contentWidth={{ width: '90%' }}
 			/>
 		</Container>
 	);

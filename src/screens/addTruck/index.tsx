@@ -167,6 +167,17 @@ export const AddTruckScreen: React.FC<Props> = ({ navigation }: Props) => {
 						next
 					/>
 				</ButtonContainer>
+				{!isPremium && (
+					<AdMobBanner
+						bannerSize="banner"
+						adUnitID={adUnitID}
+						style={{ marginTop: 15 }}
+						servePersonalizedAds
+						onDidFailToReceiveAdWithError={e =>
+							console.log('onDidFailToReceiveAdWithError', e)
+						}
+					/>
+				)}
 			</AddTruckContainer>
 			<Purchase
 				isPurchaselVisible={isPurchaselVisible}

@@ -10,6 +10,7 @@ export const LanguageContainer = styled.View`
 	width: 100%;
 	flex-direction: row;
 	align-items: center;
+	min-width: 265px;
 	justify-content: space-around;
 	background-color: ${({ theme }) =>
 		theme.name === 'dark' ? lighten(0.05, theme.colors.background) : '#fafafa'};

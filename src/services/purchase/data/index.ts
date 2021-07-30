@@ -5,7 +5,7 @@ import RNIap, {
 	Subscription,
 	Purchase,
 } from 'react-native-iap';
-import { IInAppPurchase, ListnerCallback } from '../domain';
+import { IInAppPurchase } from '../domain';
 
 export class IAP implements IInAppPurchase {
 	purchaseUpdateSubscription = null;

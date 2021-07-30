@@ -1,13 +1,25 @@
 import styled from 'styled-components/native';
-import { Dimensions, Animated } from 'react-native';
-import { darken } from 'polished';
+import { Dimensions, Animated, StyleSheet } from 'react-native';
+import { darken, lighten } from 'polished';
 
 const { height, width } = Dimensions.get('window');
 
+export const scrollStyle = StyleSheet.create({
+	content: {
+		width,
+		alignItems: 'flex-start',
+		paddingBottom: 25,
+	},
+});
+
+export const ScrollView = styled.ScrollView``;
+
 export const Container = styled(Animated.View)`
 	position: absolute;
-	height: ${height * 0.75}px;
+	height: 90%;
 	width: 100%;
+	/* width: ${width}px; */
+	z-index: 1;
 	align-items: center;
 	background: ${props => props.theme.colors.background};
 	bottom: 0;
@@ -19,7 +31,7 @@ export const Container = styled(Animated.View)`
 `;
 
 export const ButtonIcon = styled.TouchableOpacity`
-	margin: 0 30px;
+	margin: 0 30px 25px;
 	width: 50px;
 	height: 50px;
 	align-self: flex-end;
@@ -42,8 +54,30 @@ export const Label = styled.Text`
 
 export const ContainerMenu = styled.View`
 	width: 100%;
+	align-items: stretch;
 	padding: 0 5%;
-	/* margin: 1% 0; */
+`;
+export const LabelLink = styled.Text`
+	color: ${({ theme }) => theme.colors.text};
+	font-size: 20px;
+	font-family: Semi_Bold;
+	width: 100%;
+	text-align: center;
+`;
+
+export const ButtonLink = styled.TouchableOpacity`
+	align-items: center;
+	width: 100%;
+	justify-content: center;
+`;
+
+export const ContainerLink = styled.View`
+	width: 100%;
+	min-width: 280px;
+	padding: 5px 5px 15px;
+	margin: 5px 0;
+	background-color: ${({ theme }) =>
+		theme.name === 'dark' ? lighten(0.05, theme.colors.background) : '#fafafa'};
 `;
 
 export const CancelSubscriptionButton = styled.TouchableOpacity`

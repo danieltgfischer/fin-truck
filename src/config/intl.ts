@@ -115,6 +115,8 @@ export enum TranslationsValues {
 	watch_video = 'watch_video',
 	watch = 'watch',
 	loading = 'loading',
+	policy = 'policy',
+	licenses = 'licenses',
 }
 export const translations = {
 	en: {
@@ -262,6 +264,8 @@ export const translations = {
 			'Watch an advertising video and unlock this feature. You must watch the full video.',
 		watch: 'Watch',
 		loading: 'Loading',
+		policy: 'Terms and Privacy Policy',
+		licenses: 'Licenses',
 	},
 	pt: {
 		title_home: 'Caminhões adicionados',
@@ -410,5 +414,7 @@ export const translations = {
 			'Assista a um video de propaganda e desbloqueie esse recurso. É preciso assistir ao vídeo completo.',
 		watch: 'Assistir',
 		loading: 'Carregando',
+		policy: 'Termos e Política de Privacidade',
+		licenses: 'Licenças',
 	},
 };

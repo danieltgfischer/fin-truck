@@ -8,6 +8,7 @@ export const Image = styled.Image`
 
 export const Container = styled.View`
 	width: 100%;
+	min-width: 265px;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;

@@ -67,7 +67,6 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 	const { height } = useWindowDimensions();
 	const { iapService, isPurchaseStoreConnected, isPremium } = useSerivces();
 	const route = useRoute();
-
 	const items = Platform.select({
 		android: [PURCHASE_MONTHLY, PURCHASE_YEARLY],
 	});
@@ -76,8 +75,6 @@ export const PurchaseUpgrade: React.FC<IPurchaseUpgradeProps> = ({
 		const showed = Boolean(
 			JSON.parse(await AsyncStorage.getItem('@IsUpgradedShow')),
 		);
-		console.log('after', showed);
-
 		if (isPremium && !showed) {
 			setUpgradeModalOpen(true);
 		}

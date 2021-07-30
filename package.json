@@ -53,12 +53,14 @@
     "shortid": "^2.2.16",
     "styled-components": "^5.3.0",
     "typeorm": "^0.2.34",
+    "typeorm-test-transactions": "^1.14.2",
     "xlsx": "^0.17.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "@types/i18n-js": "^3.8.1",
+    "@types/jest": "^26.0.24",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/react-redux": "^7.1.16",
@@ -76,6 +78,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "jest-expo": "^42.0.1",
     "prettier": "^2.3.1",
     "typescript": "~4.0.0"
   },
@@ -84,7 +87,14 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ]
   },
   "private": true,
   "name": "expo-fin-truck",

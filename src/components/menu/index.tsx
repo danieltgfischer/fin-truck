@@ -30,17 +30,27 @@ import {
 	CloseButton,
 	SubscriptionTitle,
 	Message,
+	ButtonLink,
+	LabelLink,
+	ContainerLink,
+	scrollStyle,
+	ScrollView,
 } from './styles';
 import { Modal } from '../modal';
 
+type ContentWidth = {
+	width?: string;
+};
 interface IProps {
 	isModalVisible: boolean;
 	setIsModalVisible: Dispatch<SetStateAction<boolean>>;
+	contentWidth?: ContentWidth;
 }
 
 export const Menu: React.FC<IProps> = ({
 	isModalVisible,
 	setIsModalVisible,
+	contentWidth = {},
 }: IProps) => {
 	const [isModalSubscriptionVisible, setModalSubscriptionVisible] =
 		useState(false);
@@ -101,8 +111,8 @@ export const Menu: React.FC<IProps> = ({
 
 	const dark = name === 'dark';
 
-	const cancelSubscription = useCallback(() => {
-		Linking.openURL('https://play.google.com/store/account/subscriptions');
+	const linkTo = useCallback((link: string) => {
+		Linking.openURL(link);
 	}, []);
 
 	const adUnitID =
@@ -134,22 +144,36 @@ export const Menu: React.FC<IProps> = ({
 					/>
 				</Rotate>
 			</ButtonIcon>
-			<Label>{t(TranslationsValues.language)}:</Label>
-			<ContainerMenu>
-				<LanguageSwitch />
-			</ContainerMenu>
-			<Label>{t(TranslationsValues.theme)}:</Label>
-			<ContainerMenu>
-				<ThemeSwitch />
-			</ContainerMenu>
-			{isPremium && (
-				<CancelSubscriptionButton
-					onPress={() => setModalSubscriptionVisible(true)}
-				>
-					<LabelButton>{t(TranslationsValues.unsubscribe)}</LabelButton>
-				</CancelSubscriptionButton>
-			)}
-
+			<ScrollView contentContainerStyle={[scrollStyle.content, contentWidth]}>
+				{isPremium && (
+					<CancelSubscriptionButton
+						onPress={() => setModalSubscriptionVisible(true)}
+					>
+						<LabelLink>{t(TranslationsValues.unsubscribe)}</LabelLink>
+					</CancelSubscriptionButton>
+				)}
+				<Label>{t(TranslationsValues.language)}:</Label>
+				<ContainerMenu>
+					<LanguageSwitch />
+				</ContainerMenu>
+				<Label>{t(TranslationsValues.theme)}:</Label>
+				<ContainerMenu>
+					<ThemeSwitch />
+				</ContainerMenu>
+				<Label>Legal:</Label>
+				<ContainerMenu>
+					<ContainerLink>
+						<ButtonLink onPress={() => linkTo('https://example.com/')}>
+							<Label>{t(TranslationsValues.policy)}</Label>
+						</ButtonLink>
+					</ContainerLink>
+					<ContainerLink>
+						<ButtonLink>
+							<Label>{t(TranslationsValues.licenses)}</Label>
+						</ButtonLink>
+					</ContainerLink>
+				</ContainerMenu>
+			</ScrollView>
 			<Modal visible={isModalSubscriptionVisible} animationType="fade">
 				<CancelSubscriptionContainer>
 					<CloseButton onPress={() => setModalSubscriptionVisible(false)}>
@@ -165,7 +189,11 @@ export const Menu: React.FC<IProps> = ({
 					<Message style={{ paddingTop: 5 }}>
 						{t(TranslationsValues.unsubscribe_message)}
 					</Message>
-					<CancelSubscriptionButton onPress={cancelSubscription}>
+					<CancelSubscriptionButton
+						onPress={() =>
+							linkTo('https://play.google.com/store/account/subscriptions')
+						}
+					>
 						<LabelButton>{t(TranslationsValues.unsubscribe)}</LabelButton>
 					</CancelSubscriptionButton>
 				</CancelSubscriptionContainer>
@@ -175,7 +203,6 @@ export const Menu: React.FC<IProps> = ({
 					style={{
 						paddingTop: 15,
 						maxWidth: '100%',
-						position: 'absolute',
 						bottom: 0,
 					}}
 					bannerSize="banner"
